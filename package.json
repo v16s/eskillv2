@@ -1,0 +1,51 @@
+{
+  "name": "eskill-test-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "antd": "^3.13.0",
+    "axios": "^0.18.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.5.3",
+    "body-parser": "^1.18.3",
+    "bootstrap": "^4.2.1",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "gridfs-stream": "^1.1.1",
+    "http": "^0.0.0",
+    "jsonwebtoken": "^8.4.0",
+    "less": "2.7",
+    "lodash": "^4.17.11",
+    "method-override": "^3.0.0",
+    "mongodb": "^3.1.12",
+    "mongoose": "^5.4.5",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.1",
+    "multer-gridfs-storage": "^3.2.3",
+    "parcel-bundler": "^1.11.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "random-number": "^0.0.9",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-router-dom": "^4.3.1",
+    "serve-favicon": "^2.5.0"
+  },
+  "scripts": {
+    "build": "parcel build ./src/index.html --out-dir build",
+    "client": "parcel ./src/index.html --open",
+    "start": "nodemon ./server/app",
+    "production": "node ./server/app"
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.11.0",
+    "nodemon": "^1.18.9"
+  }
+}
