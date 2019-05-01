@@ -21,7 +21,7 @@ router.post('/register', function (req, res) {
   }
 })
 
-router.post('/admin/login', function (req, res) {
+router.post('/login', function (req, res) {
   User.findOne(
     {
       regNumber: req.body.regNumber
@@ -53,32 +53,5 @@ router.post('/admin/login', function (req, res) {
     }
   )
 })
-router.post('/student/login', function (req, res) {
-  Report.findOne(
-    {
-      username: req.body.regNumber
-    },
-    function (err, user) {
-      if (err) throw err
 
-      if (!user) {
-        res.status(401).send({
-          success: false,
-          msg: 'Authentication failed. User not found.'
-        })
-      } else {
-        if (user.password == req.body.password) {
-          var token = jwt.sign(user.toJSON(), settings.secret)
-          // return the information including token as JSON
-          res.json({ success: true, token: 'JWT ' + token, user: user })
-        } else {
-          res.status(401).send({
-            success: false,
-            msg: 'Authentication failed. Wrong password.'
-          })
-        }
-      }
-    }
-  )
-})
 module.exports = router

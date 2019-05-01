@@ -16,30 +16,16 @@ let getToken = headers => {
   }
 }
 
-router.get(
-  '/admin',
-  passport.authenticate('validate', { session: false }),
-  function (req, res) {
-    var token = getToken(req.headers)
-    if (token) {
-      res.status(200).send({ success: true, user: req.user })
-    } else {
-      return res.status(403).send({ success: false, msg: 'Unauthorized.' })
-    }
+router.get('/', passport.authenticate('validate', { session: false }), function (
+  req,
+  res
+) {
+  var token = getToken(req.headers)
+  if (token) {
+    res.status(200).send({ success: true, user: req.user })
+  } else {
+    return res.status(403).send({ success: false, msg: 'Unauthorized.' })
   }
-)
-router.get(
-  '/student',
-  passport.authenticate('student', { session: false }),
-  function (req, res) {
-    console.log(req.user)
-    var token = getToken(req.headers)
-    if (token) {
-      res.status(200).send({ success: true, user: req.user })
-    } else {
-      return res.status(403).send({ success: false, msg: 'Unauthorized.' })
-    }
-  }
-)
+})
 
 module.exports = router
