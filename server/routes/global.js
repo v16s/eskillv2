@@ -1,5 +1,6 @@
-let router = require('express').Router()
-let { Global, Branch } = require('../models')
+import { Router } from 'express'
+import { Global, Branch } from '../models'
+let router = Router()
 
 router.get('/', (req, res) => {
   Global.findOne({ id: 0 }, (err, doc) => {
@@ -15,4 +16,5 @@ router.get('/branches', async (req, res) => {
     res.json({ success: false, err })
   }
 })
-module.exports = router
+
+export default router

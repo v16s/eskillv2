@@ -1,12 +1,8 @@
-var JwtStrategy = require('passport-jwt').Strategy
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
+import { User, Report } from '../models'
+import settings from './settings'
+import passport from 'passport'
 
-var ExtractJwt = require('passport-jwt').ExtractJwt
-
-// load up the user model
-let { User, Report } = require('../models')
-var settings = require('../config/settings') // get settings file
-
-let passport = require('passport')
 var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt')
 opts.secretOrKey = settings.secret
@@ -86,4 +82,4 @@ passport.use(
   })
 )
 
-module.exports = passport
+export default passport

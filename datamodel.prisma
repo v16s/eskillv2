@@ -1,0 +1,10 @@
+type User {
+  username: ID! @id
+  password: String!
+  name: String!
+  campus: String!
+  department: String!
+  dob: DateTime
+  email: String!
+  level: Int!
+}

@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model } from 'mongoose'
 let Options = new Schema({
   1: String,
   2: String,
@@ -15,4 +15,4 @@ let question = new Schema({
   options: Options
 })
 
-module.exports = model('Question', question)
+export default model('Question', question)

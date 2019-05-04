@@ -1,12 +1,12 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const multer = require('multer')
-const router = require('express').Router()
-const path = require('path')
-const { Question, File } = require('../models')
-const GridFsStorage = require('multer-gridfs-storage')
+import mongoose from 'mongoose'
+import multer from 'multer'
+import { Router } from 'express'
+import path from 'path'
+import { Question, File } from '../models'
+import GridFsStorage from 'multer-gridfs-storage'
+
+let router = Router()
 let gfs
-router.use(express.static('./public'))
 mongoose.connection.on('open', () => {
   gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
     chunkSizeBytes: 1024,
@@ -288,4 +288,4 @@ router.post('/deleteQuestion', async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

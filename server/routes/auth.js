@@ -1,10 +1,8 @@
-let settings = require('../config/settings')
-
-let express = require('express')
-let jwt = require('jsonwebtoken')
-let router = express.Router()
-let { User, Report } = require('../models')
-
+import settings from '../config/settings'
+import jwt from 'jsonwebtoken'
+import { Router } from 'express'
+import { User, Report } from '../models'
+let router = Router()
 router.post('/register', function (req, res) {
   let { regNumber, password, field, college, email, fullName } = req.body
   if (!regNumber || !password || !field || !college || !email || !fullName) {
@@ -54,4 +52,4 @@ router.post('/login', function (req, res) {
   )
 })
 
-module.exports = router
+export default router
