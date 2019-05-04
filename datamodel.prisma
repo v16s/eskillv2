@@ -1,5 +1,5 @@
 type User {
-  username: ID! @id
+  username: String!
   password: String!
   name: String!
   campus: String!
@@ -7,4 +7,13 @@ type User {
   dob: DateTime
   email: String!
   level: Int!
+  id: ID! @id
+}
+type Global {
+  departments: [String]
+  campuses: [String]
+  regs: Boolean @default(value: true)
+  regf: Boolean @default(value: true)
+  id: String! @default(value: "global") @unique
+  _id: ID! @id
 }

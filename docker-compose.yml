@@ -1,5 +1,4 @@
-version: '2.1'
-
+version: '3'
 services:
   # eskill-test-server:
   #   image: eskill-test-server
@@ -12,8 +11,8 @@ services:
     image: prismagraphql/prisma:1.32
     restart: always
     ports:
-      - 4466:4466
-    environment: 
+      - '4466:4466'
+    environment:
       PRISMA_CONFIG: |
         port: 4466
         databases:
@@ -23,12 +22,12 @@ services:
   mongo:
     image: mongo:3.6
     restart: always
-    environment: 
+    environment:
       MONGO_INITDB_ROOT_USERNAME: prisma
       MONGO_INITDB_ROOT_PASSWORD: prisma
-    ports: 
-      - 27017:27017
-    volumes: 
+    ports:
+      - '27017:27017'
+    volumes:
       - mongo:/var/lib/mongo
-volumes: 
+volumes:
   mongo: ~

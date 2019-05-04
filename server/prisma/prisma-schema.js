@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateUser {
+/* GraphQL */ `type AggregateGlobal {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -13,9 +17,166 @@ type BatchPayload {
 
 scalar DateTime
 
+type Global {
+  departments: [String!]!
+  campuses: [String!]!
+  branches: [String!]!
+  regs: Boolean
+  regf: Boolean
+  id: String!
+  _id: ID!
+}
+
+type GlobalConnection {
+  pageInfo: PageInfo!
+  edges: [GlobalEdge]!
+  aggregate: AggregateGlobal!
+}
+
+input GlobalCreatebranchesInput {
+  set: [String!]
+}
+
+input GlobalCreatecampusesInput {
+  set: [String!]
+}
+
+input GlobalCreatedepartmentsInput {
+  set: [String!]
+}
+
+input GlobalCreateInput {
+  departments: GlobalCreatedepartmentsInput
+  campuses: GlobalCreatecampusesInput
+  branches: GlobalCreatebranchesInput
+  regs: Boolean
+  regf: Boolean
+  id: String
+  _id: ID
+}
+
+type GlobalEdge {
+  node: Global!
+  cursor: String!
+}
+
+enum GlobalOrderByInput {
+  regs_ASC
+  regs_DESC
+  regf_ASC
+  regf_DESC
+  id_ASC
+  id_DESC
+  _id_ASC
+  _id_DESC
+}
+
+type GlobalPreviousValues {
+  departments: [String!]!
+  campuses: [String!]!
+  branches: [String!]!
+  regs: Boolean
+  regf: Boolean
+  id: String!
+  _id: ID!
+}
+
+type GlobalSubscriptionPayload {
+  mutation: MutationType!
+  node: Global
+  updatedFields: [String!]
+  previousValues: GlobalPreviousValues
+}
+
+input GlobalSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: GlobalWhereInput
+  AND: [GlobalSubscriptionWhereInput!]
+}
+
+input GlobalUpdatebranchesInput {
+  set: [String!]
+}
+
+input GlobalUpdatecampusesInput {
+  set: [String!]
+}
+
+input GlobalUpdatedepartmentsInput {
+  set: [String!]
+}
+
+input GlobalUpdateInput {
+  departments: GlobalUpdatedepartmentsInput
+  campuses: GlobalUpdatecampusesInput
+  branches: GlobalUpdatebranchesInput
+  regs: Boolean
+  regf: Boolean
+  id: String
+}
+
+input GlobalUpdateManyMutationInput {
+  departments: GlobalUpdatedepartmentsInput
+  campuses: GlobalUpdatecampusesInput
+  branches: GlobalUpdatebranchesInput
+  regs: Boolean
+  regf: Boolean
+  id: String
+}
+
+input GlobalWhereInput {
+  regs: Boolean
+  regs_not: Boolean
+  regf: Boolean
+  regf_not: Boolean
+  id: String
+  id_not: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_lt: String
+  id_lte: String
+  id_gt: String
+  id_gte: String
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_not_starts_with: String
+  id_ends_with: String
+  id_not_ends_with: String
+  _id: ID
+  _id_not: ID
+  _id_in: [ID!]
+  _id_not_in: [ID!]
+  _id_lt: ID
+  _id_lte: ID
+  _id_gt: ID
+  _id_gte: ID
+  _id_contains: ID
+  _id_not_contains: ID
+  _id_starts_with: ID
+  _id_not_starts_with: ID
+  _id_ends_with: ID
+  _id_not_ends_with: ID
+  AND: [GlobalWhereInput!]
+}
+
+input GlobalWhereUniqueInput {
+  id: String
+  _id: ID
+}
+
 scalar Long
 
 type Mutation {
+  createGlobal(data: GlobalCreateInput!): Global!
+  updateGlobal(data: GlobalUpdateInput!, where: GlobalWhereUniqueInput!): Global
+  updateManyGlobals(data: GlobalUpdateManyMutationInput!, where: GlobalWhereInput): BatchPayload!
+  upsertGlobal(where: GlobalWhereUniqueInput!, create: GlobalCreateInput!, update: GlobalUpdateInput!): Global!
+  deleteGlobal(where: GlobalWhereUniqueInput!): Global
+  deleteManyGlobals(where: GlobalWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -42,6 +203,9 @@ type PageInfo {
 }
 
 type Query {
+  global(where: GlobalWhereUniqueInput!): Global
+  globals(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Global]!
+  globalsConnection(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GlobalConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -49,11 +213,12 @@ type Query {
 }
 
 type Subscription {
+  global(where: GlobalSubscriptionWhereInput): GlobalSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type User {
-  username: ID!
+  username: String!
   password: String!
   name: String!
   campus: String!
@@ -61,6 +226,7 @@ type User {
   dob: DateTime
   email: String!
   level: Int!
+  id: ID!
 }
 
 type UserConnection {
@@ -70,7 +236,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  username: ID
+  username: String!
   password: String!
   name: String!
   campus: String!
@@ -78,6 +244,7 @@ input UserCreateInput {
   dob: DateTime
   email: String!
   level: Int!
+  id: ID
 }
 
 type UserEdge {
@@ -102,10 +269,12 @@ enum UserOrderByInput {
   email_DESC
   level_ASC
   level_DESC
+  id_ASC
+  id_DESC
 }
 
 type UserPreviousValues {
-  username: ID!
+  username: String!
   password: String!
   name: String!
   campus: String!
@@ -113,6 +282,7 @@ type UserPreviousValues {
   dob: DateTime
   email: String!
   level: Int!
+  id: ID!
 }
 
 type UserSubscriptionPayload {
@@ -132,6 +302,7 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
+  username: String
   password: String
   name: String
   campus: String
@@ -142,6 +313,7 @@ input UserUpdateInput {
 }
 
 input UserUpdateManyMutationInput {
+  username: String
   password: String
   name: String
   campus: String
@@ -152,20 +324,20 @@ input UserUpdateManyMutationInput {
 }
 
 input UserWhereInput {
-  username: ID
-  username_not: ID
-  username_in: [ID!]
-  username_not_in: [ID!]
-  username_lt: ID
-  username_lte: ID
-  username_gt: ID
-  username_gte: ID
-  username_contains: ID
-  username_not_contains: ID
-  username_starts_with: ID
-  username_not_starts_with: ID
-  username_ends_with: ID
-  username_not_ends_with: ID
+  username: String
+  username_not: String
+  username_in: [String!]
+  username_not_in: [String!]
+  username_lt: String
+  username_lte: String
+  username_gt: String
+  username_gte: String
+  username_contains: String
+  username_not_contains: String
+  username_starts_with: String
+  username_not_starts_with: String
+  username_ends_with: String
+  username_not_ends_with: String
   password: String
   password_not: String
   password_in: [String!]
@@ -252,11 +424,25 @@ input UserWhereInput {
   level_lte: Int
   level_gt: Int
   level_gte: Int
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
   AND: [UserWhereInput!]
 }
 
 input UserWhereUniqueInput {
-  username: ID
+  id: ID
 }
 `
       }

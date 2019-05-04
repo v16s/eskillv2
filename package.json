@@ -41,7 +41,7 @@
   "scripts": {
     "start": "nodemon -w ./server/ -e js,gql -x \" yarn dev-server\"",
     "build": "babel ./server --out-dir bin",
-    "dev-server": "rm -rf ./node_modules/.cache && babel-node ./server",
+    "dev-server": "babel-node ./server",
     "production": "npm run build && node bin"
   },
   "devDependencies": {

@@ -8,9 +8,9 @@
       {
         "root": ["./"],
         "alias": {
-          "dist": "./dist",
-          "c": "./client",
-          "s": "./server"
+          "prisma": "./server/prisma",
+          "models": "./server/models",
+          "config": "./server/config"
         }
       }
     ]
