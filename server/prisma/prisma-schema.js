@@ -18,9 +18,8 @@ type BatchPayload {
 scalar DateTime
 
 type Global {
-  departments: [String!]!
-  campuses: [String!]!
-  branches: [String!]!
+  departments: [Tag!]
+  campuses: [Tag!]
   regs: Boolean
   regf: Boolean
   id: String!
@@ -33,22 +32,9 @@ type GlobalConnection {
   aggregate: AggregateGlobal!
 }
 
-input GlobalCreatebranchesInput {
-  set: [String!]
-}
-
-input GlobalCreatecampusesInput {
-  set: [String!]
-}
-
-input GlobalCreatedepartmentsInput {
-  set: [String!]
-}
-
 input GlobalCreateInput {
-  departments: GlobalCreatedepartmentsInput
-  campuses: GlobalCreatecampusesInput
-  branches: GlobalCreatebranchesInput
+  departments: TagCreateManyInput
+  campuses: TagCreateManyInput
   regs: Boolean
   regf: Boolean
   id: String
@@ -72,9 +58,6 @@ enum GlobalOrderByInput {
 }
 
 type GlobalPreviousValues {
-  departments: [String!]!
-  campuses: [String!]!
-  branches: [String!]!
   regs: Boolean
   regf: Boolean
   id: String!
@@ -97,37 +80,27 @@ input GlobalSubscriptionWhereInput {
   AND: [GlobalSubscriptionWhereInput!]
 }
 
-input GlobalUpdatebranchesInput {
-  set: [String!]
-}
-
-input GlobalUpdatecampusesInput {
-  set: [String!]
-}
-
-input GlobalUpdatedepartmentsInput {
-  set: [String!]
-}
-
 input GlobalUpdateInput {
-  departments: GlobalUpdatedepartmentsInput
-  campuses: GlobalUpdatecampusesInput
-  branches: GlobalUpdatebranchesInput
+  departments: TagUpdateManyInput
+  campuses: TagUpdateManyInput
   regs: Boolean
   regf: Boolean
   id: String
 }
 
 input GlobalUpdateManyMutationInput {
-  departments: GlobalUpdatedepartmentsInput
-  campuses: GlobalUpdatecampusesInput
-  branches: GlobalUpdatebranchesInput
   regs: Boolean
   regf: Boolean
   id: String
 }
 
 input GlobalWhereInput {
+  departments_some: TagWhereInput
+  departments_every: TagRestrictedWhereInput
+  departments_none: TagRestrictedWhereInput
+  campuses_some: TagWhereInput
+  campuses_every: TagRestrictedWhereInput
+  campuses_none: TagRestrictedWhereInput
   regs: Boolean
   regs_not: Boolean
   regf: Boolean
@@ -215,6 +188,89 @@ type Query {
 type Subscription {
   global(where: GlobalSubscriptionWhereInput): GlobalSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Tag {
+  name: String!
+}
+
+input TagCreateInput {
+  name: String!
+}
+
+input TagCreateManyInput {
+  create: [TagCreateInput!]
+}
+
+input TagRestrictedWhereInput {
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [TagRestrictedWhereInput!]
+}
+
+input TagScalarWhereInput {
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [TagScalarWhereInput!]
+  OR: [TagScalarWhereInput!]
+  NOT: [TagScalarWhereInput!]
+}
+
+input TagUpdateManyDataInput {
+  name: String
+}
+
+input TagUpdateManyInput {
+  create: [TagCreateInput!]
+  deleteMany: [TagScalarWhereInput!]
+  updateMany: [TagUpdateManyWithWhereNestedInput!]
+}
+
+input TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput!
+  data: TagUpdateManyDataInput!
+}
+
+input TagWhereInput {
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [TagWhereInput!]
 }
 
 type User {

@@ -11,6 +11,10 @@ var models = [
   {
     name: "Global",
     embedded: false
+  },
+  {
+    name: "Tag",
+    embedded: true
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
