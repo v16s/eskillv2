@@ -21,19 +21,37 @@ export default gql`
     dob: Date
     email: String!
     level: Int!
+    jwt: String
   }
   type Tag {
     name: String!
+    id: String!
   }
   type Mutation {
     toggleStudentRegistration: ToggleResult
     toggleFacultyRegistration: ToggleResult
-    addDepartment(name: String): Global
-    removeDepartment(name: String): Global
+    addDepartment(tag: TagInput): Global
+    removeDepartment(id: String): Global
     updateDepartment(update: UpdateTag): Global
-    addCampus(name: String): Global
-    removeCampus(name: String): Global
+    addCampus(tag: TagInput): Global
+    removeCampus(id: String): Global
     updateCampus(update: UpdateTag): Global
+    login(user: LoginInput): User
+    register(user: RegisterInput): User
+  }
+  input LoginInput {
+    username: String!
+    password: String!
+  }
+  input RegisterInput {
+    username: String!
+    password: String!
+    name: String!
+    campus: String!
+    department: String!
+    dob: Date
+    email: String!
+    type: Boolean!
   }
   input UpdateTag {
     where: TagInput!
@@ -41,6 +59,7 @@ export default gql`
   }
   input TagInput {
     name: String!
+    id: String
   }
   input UserInput {
     username: String

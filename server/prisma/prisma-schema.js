@@ -192,10 +192,12 @@ type Subscription {
 
 type Tag {
   name: String!
+  id: String!
 }
 
 input TagCreateInput {
   name: String!
+  id: String!
 }
 
 input TagCreateManyInput {
@@ -217,6 +219,20 @@ input TagRestrictedWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  id: String
+  id_not: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_lt: String
+  id_lte: String
+  id_gt: String
+  id_gte: String
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_not_starts_with: String
+  id_ends_with: String
+  id_not_ends_with: String
   AND: [TagRestrictedWhereInput!]
 }
 
@@ -235,6 +251,20 @@ input TagScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  id: String
+  id_not: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_lt: String
+  id_lte: String
+  id_gt: String
+  id_gte: String
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_not_starts_with: String
+  id_ends_with: String
+  id_not_ends_with: String
   AND: [TagScalarWhereInput!]
   OR: [TagScalarWhereInput!]
   NOT: [TagScalarWhereInput!]
@@ -242,6 +272,7 @@ input TagScalarWhereInput {
 
 input TagUpdateManyDataInput {
   name: String
+  id: String
 }
 
 input TagUpdateManyInput {
@@ -270,6 +301,20 @@ input TagWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  id: String
+  id_not: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_lt: String
+  id_lte: String
+  id_gt: String
+  id_gte: String
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_not_starts_with: String
+  id_ends_with: String
+  id_not_ends_with: String
   AND: [TagWhereInput!]
 }
 
@@ -498,6 +543,7 @@ input UserWhereInput {
 }
 
 input UserWhereUniqueInput {
+  username: String
   id: ID
 }
 `

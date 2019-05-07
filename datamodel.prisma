@@ -1,5 +1,5 @@
 type User {
-  username: String!
+  username: String! @unique
   password: String!
   name: String!
   campus: String!
@@ -19,4 +19,5 @@ type Global {
 }
 type Tag @embedded {
   name: String!
+  id: String!
 }

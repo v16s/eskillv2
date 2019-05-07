@@ -1,4 +1,6 @@
 import { prisma } from 'prisma'
+import bcrypt from 'bcrypt-nodejs'
+import { promisify } from 'util'
 export default {
   toggleStudentRegistration: (parent, args, ctx, info) => {
     return new Promise(async resolve => {
@@ -28,33 +30,49 @@ export default {
       }
     })
   },
-  addDepartment: (parent, { name }, ctx, info) => {
+  addDepartment: (parent, { tag }, ctx, info) => {
     return new Promise(async (resolve, reject) => {
       try {
+        let { campuses } = await prisma.global({ id: 'global' })
+        let salt = await promisify(bcrypt.genSalt)(10)
+        let hash = await promisify(bcrypt.hash)('password', salt, null)
+        campuses.map(async ({ id, name }) => {
+          await prisma.createUser({
+            username: `${id}-${tag.id}-admin`,
+            password: hash,
+            name: `${name} ${tag.name} Admin`,
+            campus: id,
+            department: tag.id,
+            email: '',
+            level: 0
+          })
+        })
         resolve(
           await prisma.updateGlobal({
             where: { id: 'global' },
             data: {
               departments: {
-                create: [{ name }]
+                create: [tag]
               }
             }
           })
         )
       } catch (e) {
+        console.log(e)
         reject()
       }
     })
   },
-  removeDepartment: (parent, { name }, ctx, info) => {
+  removeDepartment: (parent, { id }, ctx, info) => {
     return new Promise(async (resolve, reject) => {
       try {
+        await prisma.deleteManyUsers({ level: 0, department: id })
         resolve(
           await prisma.updateGlobal({
             where: { id: 'global' },
             data: {
               departments: {
-                deleteMany: { name }
+                deleteMany: { id }
               }
             }
           })
@@ -82,7 +100,7 @@ export default {
       }
     })
   },
-  addCampus: (parent, { name }, ctx, info) => {
+  addCampus: (parent, { tag }, ctx, info) => {
     return new Promise(async (resolve, reject) => {
       try {
         resolve(
@@ -90,7 +108,7 @@ export default {
             where: { id: 'global' },
             data: {
               campuses: {
-                create: [{ name }]
+                create: [tag]
               }
             }
           })
@@ -100,7 +118,7 @@ export default {
       }
     })
   },
-  removeCampus: (parent, { name }, ctx, info) => {
+  removeCampus: (parent, { id }, ctx, info) => {
     return new Promise(async (resolve, reject) => {
       try {
         resolve(
@@ -108,7 +126,7 @@ export default {
             where: { id: 'global' },
             data: {
               campuses: {
-                deleteMany: { name }
+                deleteMany: { id }
               }
             }
           })

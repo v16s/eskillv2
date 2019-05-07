@@ -1,14 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import {
-  admin,
-  student,
-  validate,
-  auth,
-  global,
-  faculty,
-  coordinator
-} from './routes'
+import { validate, auth } from './routes'
 import cors from 'cors'
 import http from 'http'
 import passport from './config/passport'
@@ -23,7 +15,8 @@ const port = process.env.PORT || 5000
 async function init (callback) {
   const apollo = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: ({ req }) => ({ user: req.user })
   })
 
   app.use(cors())
@@ -32,28 +25,13 @@ async function init (callback) {
   app.use(bodyParser.urlencoded({ extended: 'false' }))
 
   app.use('/api/auth', auth)
-  app.use('/api/global', global)
-  app.use(
-    '/api/faculty',
-    passport.authenticate('faculty', { session: false }),
-    faculty
-  )
-  app.use(
-    '/api/admin',
-    passport.authenticate('admin', { session: false }),
-    admin
-  )
-  app.use(
-    '/api/coordinator',
-    passport.authenticate('coordinator', { session: false }),
-    coordinator
-  )
-  app.use(
-    '/api/student',
-    passport.authenticate('student', { session: false }),
-    student
-  )
   app.use('/api/validate', validate)
+  app.use('/graphql', (req, res, next) => {
+    passport.authenticate('auth', { session: false }, (err, user) => {
+      req.user = user
+      next()
+    })(req, res, next)
+  })
   await apollo.applyMiddleware({
     app
   })

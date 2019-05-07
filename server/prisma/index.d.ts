@@ -174,6 +174,7 @@ export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export interface TagUpdateManyDataInput {
   name?: Maybe<String>;
+  id?: Maybe<String>;
 }
 
 export interface GlobalCreateInput {
@@ -186,7 +187,8 @@ export interface GlobalCreateInput {
 }
 
 export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
+  username: Maybe<String>;
+  id?: Maybe<ID_Input>;
 }>;
 
 export type GlobalWhereUniqueInput = AtLeastOne<{
@@ -209,6 +211,20 @@ export interface TagScalarWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  id?: Maybe<String>;
+  id_not?: Maybe<String>;
+  id_in?: Maybe<String[] | String>;
+  id_not_in?: Maybe<String[] | String>;
+  id_lt?: Maybe<String>;
+  id_lte?: Maybe<String>;
+  id_gt?: Maybe<String>;
+  id_gte?: Maybe<String>;
+  id_contains?: Maybe<String>;
+  id_not_contains?: Maybe<String>;
+  id_starts_with?: Maybe<String>;
+  id_not_starts_with?: Maybe<String>;
+  id_ends_with?: Maybe<String>;
+  id_not_ends_with?: Maybe<String>;
   AND?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
   OR?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
   NOT?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
@@ -279,6 +295,20 @@ export interface TagRestrictedWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  id?: Maybe<String>;
+  id_not?: Maybe<String>;
+  id_in?: Maybe<String[] | String>;
+  id_not_in?: Maybe<String[] | String>;
+  id_lt?: Maybe<String>;
+  id_lte?: Maybe<String>;
+  id_gt?: Maybe<String>;
+  id_gte?: Maybe<String>;
+  id_contains?: Maybe<String>;
+  id_not_contains?: Maybe<String>;
+  id_starts_with?: Maybe<String>;
+  id_not_starts_with?: Maybe<String>;
+  id_ends_with?: Maybe<String>;
+  id_not_ends_with?: Maybe<String>;
   AND?: Maybe<TagRestrictedWhereInput[] | TagRestrictedWhereInput>;
 }
 
@@ -437,6 +467,7 @@ export interface TagCreateManyInput {
 
 export interface TagCreateInput {
   name: String;
+  id: String;
 }
 
 export interface GlobalUpdateInput {
@@ -462,6 +493,20 @@ export interface TagWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  id?: Maybe<String>;
+  id_not?: Maybe<String>;
+  id_in?: Maybe<String[] | String>;
+  id_not_in?: Maybe<String[] | String>;
+  id_lt?: Maybe<String>;
+  id_lte?: Maybe<String>;
+  id_gt?: Maybe<String>;
+  id_gte?: Maybe<String>;
+  id_contains?: Maybe<String>;
+  id_not_contains?: Maybe<String>;
+  id_starts_with?: Maybe<String>;
+  id_not_starts_with?: Maybe<String>;
+  id_ends_with?: Maybe<String>;
+  id_not_ends_with?: Maybe<String>;
   AND?: Maybe<TagWhereInput[] | TagWhereInput>;
 }
 
@@ -666,20 +711,24 @@ export interface UserConnectionSubscription
 
 export interface Tag {
   name: String;
+  id: String;
 }
 
 export interface TagPromise extends Promise<Tag>, Fragmentable {
   name: () => Promise<String>;
+  id: () => Promise<String>;
 }
 
 export interface TagSubscription
   extends Promise<AsyncIterator<Tag>>,
     Fragmentable {
   name: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<String>>;
 }
 
 export interface TagNullablePromise extends Promise<Tag | null>, Fragmentable {
   name: () => Promise<String>;
+  id: () => Promise<String>;
 }
 
 export interface GlobalSubscriptionPayload {
