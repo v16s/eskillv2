@@ -28,14 +28,14 @@ export default {
       try {
         let salt = await promisify(bcrypt.genSalt)(10)
         let hash = await promisify(bcrypt.hash)(user.password, salt, null)
-        let user = await prisma.createUser({
+        let dbuser = await prisma.createUser({
           ...user,
           type: undefined,
           level: user.type ? 3 : 4,
           password: hash
         })
-        let token = jwt.sign(user, 'eskill@care')
-        resolve({ ...user, jwt: token })
+        let token = jwt.sign(dbuser, 'eskill@care')
+        resolve({ ...dbuser, jwt: token })
       } catch (e) {
         reject(e)
       }
