@@ -4,7 +4,7 @@ import settings from './settings'
 import passport from 'passport'
 
 var opts = {}
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt')
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('Bearer')
 opts.secretOrKey = settings.secret
 passport.use(
   'auth',

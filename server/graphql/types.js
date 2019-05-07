@@ -5,6 +5,7 @@ export default gql`
   type Query {
     global: Global
     user(user: UserInput!): User
+    branches: [Branch]
   }
   type Global {
     regs: Boolean!
@@ -38,10 +39,25 @@ export default gql`
     updateCampus(update: UpdateTag): Global
     login(user: LoginInput): User
     register(user: RegisterInput): User
+    addBranch(name: String): Branch
+    removeBranch(name: String): [Branch]
+    updateBranch(branch: BranchUpdateInput): Branch
+    addCourse(course: CourseInput): Branch
+    removeCourse(course: CourseInput): Branch
+    updateCourse(course: CourseInput): Branch
+  }
+  input CourseInput {
+    branch: String!
+    name: String!
+    update: String
   }
   input LoginInput {
     username: String!
     password: String!
+  }
+  input BranchUpdateInput {
+    where: String!
+    name: String!
   }
   input RegisterInput {
     username: String!
@@ -68,5 +84,9 @@ export default gql`
   type ToggleResult {
     success: Boolean!
     result: Boolean!
+  }
+  type Branch {
+    name: String!
+    courses: [Tag]
   }
 `

@@ -44,7 +44,7 @@ export default {
             campus: id,
             department: tag.id,
             email: '',
-            level: 0
+            level: 1
           })
         })
         resolve(
@@ -66,7 +66,7 @@ export default {
   removeDepartment: (parent, { id }, ctx, info) => {
     return new Promise(async (resolve, reject) => {
       try {
-        await prisma.deleteManyUsers({ level: 0, department: id })
+        await prisma.deleteManyUsers({ level: 1, department: id })
         resolve(
           await prisma.updateGlobal({
             where: { id: 'global' },

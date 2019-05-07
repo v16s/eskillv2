@@ -17,6 +17,11 @@ type Global {
   id: String! @default(value: "global") @unique
   _id: ID! @id
 }
+type Branch {
+  name: String! @unique
+  _id: ID! @id
+  courses: [Tag] @relation(name: "BranchCourseRelation")
+}
 type Tag @embedded {
   name: String!
   id: String!

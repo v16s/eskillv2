@@ -14,7 +14,7 @@ export default {
         bcrypt.compare(user.password, dbuser.password, (err, isMatch) => {
           if (isMatch) {
             let token = jwt.sign(dbuser, 'eskill@care')
-            resolve({ ...dbuser, jwt: token })
+            resolve({ ...dbuser, jwt: `Bearer ${token}` })
           }
           reject(new AuthenticationError('wrong password'))
         })
@@ -35,7 +35,7 @@ export default {
           password: hash
         })
         let token = jwt.sign(dbuser, 'eskill@care')
-        resolve({ ...dbuser, jwt: token })
+        resolve({ ...dbuser, jwt: `Bearer ${token}` })
       } catch (e) {
         reject(e)
       }

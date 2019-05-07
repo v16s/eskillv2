@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateGlobal {
+/* GraphQL */ `type AggregateBranch {
+  count: Int!
+}
+
+type AggregateGlobal {
   count: Int!
 }
 
@@ -13,6 +17,106 @@ type AggregateUser {
 
 type BatchPayload {
   count: Long!
+}
+
+type Branch {
+  name: String!
+  _id: ID!
+  courses: [Tag!]
+}
+
+type BranchConnection {
+  pageInfo: PageInfo!
+  edges: [BranchEdge]!
+  aggregate: AggregateBranch!
+}
+
+input BranchCreateInput {
+  name: String!
+  _id: ID
+  courses: TagCreateManyInput
+}
+
+type BranchEdge {
+  node: Branch!
+  cursor: String!
+}
+
+enum BranchOrderByInput {
+  name_ASC
+  name_DESC
+  _id_ASC
+  _id_DESC
+}
+
+type BranchPreviousValues {
+  name: String!
+  _id: ID!
+}
+
+type BranchSubscriptionPayload {
+  mutation: MutationType!
+  node: Branch
+  updatedFields: [String!]
+  previousValues: BranchPreviousValues
+}
+
+input BranchSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: BranchWhereInput
+  AND: [BranchSubscriptionWhereInput!]
+}
+
+input BranchUpdateInput {
+  name: String
+  courses: TagUpdateManyInput
+}
+
+input BranchUpdateManyMutationInput {
+  name: String
+}
+
+input BranchWhereInput {
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  _id: ID
+  _id_not: ID
+  _id_in: [ID!]
+  _id_not_in: [ID!]
+  _id_lt: ID
+  _id_lte: ID
+  _id_gt: ID
+  _id_gte: ID
+  _id_contains: ID
+  _id_not_contains: ID
+  _id_starts_with: ID
+  _id_not_starts_with: ID
+  _id_ends_with: ID
+  _id_not_ends_with: ID
+  courses_some: TagWhereInput
+  courses_every: TagRestrictedWhereInput
+  courses_none: TagRestrictedWhereInput
+  AND: [BranchWhereInput!]
+}
+
+input BranchWhereUniqueInput {
+  name: String
+  _id: ID
 }
 
 scalar DateTime
@@ -144,6 +248,12 @@ input GlobalWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createBranch(data: BranchCreateInput!): Branch!
+  updateBranch(data: BranchUpdateInput!, where: BranchWhereUniqueInput!): Branch
+  updateManyBranches(data: BranchUpdateManyMutationInput!, where: BranchWhereInput): BatchPayload!
+  upsertBranch(where: BranchWhereUniqueInput!, create: BranchCreateInput!, update: BranchUpdateInput!): Branch!
+  deleteBranch(where: BranchWhereUniqueInput!): Branch
+  deleteManyBranches(where: BranchWhereInput): BatchPayload!
   createGlobal(data: GlobalCreateInput!): Global!
   updateGlobal(data: GlobalUpdateInput!, where: GlobalWhereUniqueInput!): Global
   updateManyGlobals(data: GlobalUpdateManyMutationInput!, where: GlobalWhereInput): BatchPayload!
@@ -176,6 +286,9 @@ type PageInfo {
 }
 
 type Query {
+  branch(where: BranchWhereUniqueInput!): Branch
+  branches(where: BranchWhereInput, orderBy: BranchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Branch]!
+  branchesConnection(where: BranchWhereInput, orderBy: BranchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BranchConnection!
   global(where: GlobalWhereUniqueInput!): Global
   globals(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Global]!
   globalsConnection(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GlobalConnection!
@@ -186,6 +299,7 @@ type Query {
 }
 
 type Subscription {
+  branch(where: BranchSubscriptionWhereInput): BranchSubscriptionPayload
   global(where: GlobalSubscriptionWhereInput): GlobalSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
