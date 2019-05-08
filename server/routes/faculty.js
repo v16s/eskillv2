@@ -1,4 +1,4 @@
-let router = require('express').Router()
-let { Report, Test, Question } = require('../models')
-
-module.exports = router
+import { Router } from 'express'
+import { Report, Test, Question } from '../models'
+let router = Router()
+export default router

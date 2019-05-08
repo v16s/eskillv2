@@ -1,0 +1,28 @@
+type User {
+  username: String! @unique
+  password: String!
+  name: String!
+  campus: String!
+  department: String!
+  dob: DateTime
+  email: String!
+  level: Int!
+  id: ID! @id
+}
+type Global {
+  departments: [Tag] @relation(name: "DepartmentRelation")
+  campuses: [Tag] @relation(name: "CampusRelation")
+  regs: Boolean @default(value: true)
+  regf: Boolean @default(value: true)
+  id: String! @default(value: "global") @unique
+  _id: ID! @id
+}
+type Branch {
+  name: String! @unique
+  _id: ID! @id
+  courses: [Tag] @relation(name: "BranchCourseRelation")
+}
+type Tag @embedded {
+  name: String!
+  id: String!
+}

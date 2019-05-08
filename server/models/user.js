@@ -1,6 +1,5 @@
-let mongoose = require('mongoose')
-let Schema = mongoose.Schema
-let bcrypt = require('bcrypt-nodejs')
+import { Schema, model } from 'mongoose'
+import bcrypt from 'bcrypt-nodejs'
 let Test = new Schema({
   testID: { type: String, required: true },
   branch: { type: String, required: true },
@@ -48,4 +47,4 @@ UserSchema.methods.comparePassword = function (passw, cb) {
   })
 }
 
-module.exports = mongoose.model('User', UserSchema)
+export default model('User', UserSchema)

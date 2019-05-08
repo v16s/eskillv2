@@ -1,5 +1,5 @@
-const { Schema, model } = require('mongoose')
-let { reject, remove, map, findIndex } = require('lodash')
+import { Schema, model } from 'mongoose'
+import { reject, remove, map } from 'lodash'
 let Course = new Schema({
   name: { type: String, required: true },
   session: [String]
@@ -52,4 +52,4 @@ branchSchema.methods.editSession = function (name, session, nSession, callback) 
   return this.save()
 }
 
-module.exports = model('branch', branchSchema)
+export default model('branch', branchSchema)

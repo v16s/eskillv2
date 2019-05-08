@@ -1,5 +1,5 @@
-let { Schema, model } = require('mongoose')
-const Question = require('./question')
+import { Schema, model } from 'mongoose'
+import Question from './question'
 function shuffle (array) {
   var currentIndex = array.length
 
@@ -65,4 +65,4 @@ Report.pre('save', async function (next) {
   return next()
 })
 
-module.exports = model('Report', Report)
+export default model('Report', Report)

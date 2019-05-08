@@ -1,4 +1,4 @@
-let { model, Schema } = require('mongoose')
+import { model, Schema } from 'mongoose'
 let Test = new Schema({
   testID: { type: String, required: true },
   branch: { type: String, required: true },
@@ -8,4 +8,4 @@ let Test = new Schema({
   status: { type: Number, default: 0 }
 })
 Test.index({ department: 1, branch: 1, testID: 1 }, { unique: true })
-module.exports = model('Test', Test)
+export default model('Test', Test)

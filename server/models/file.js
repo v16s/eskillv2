@@ -1,7 +1,6 @@
-const mongoose = require('mongoose')
-const FileSchema = new mongoose.Schema(
+import { Schema, model } from 'mongoose'
+const FileSchema = new Schema(
   {},
   { strict: false, collection: 'questions.files' }
 )
-const File = mongoose.model('File', FileSchema, 'questions.files')
-module.exports = File
+export default model('File', FileSchema, 'questions.files')

@@ -1,148 +1,14 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const multer = require('multer')
-const router = require('express').Router()
-const path = require('path')
-const { Question, File } = require('../models')
-const GridFsStorage = require('multer-gridfs-storage')
-let gfs
-router.use(express.static('./public'))
-mongoose.connection.on('open', () => {
-  gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-    chunkSizeBytes: 1024,
-    bucketName: 'questions'
-  })
-})
+import multer from 'multer'
+import { Router } from 'express'
+import path from 'path'
+import { Question, File } from '../models'
+import GridFsStorage from 'multer-gridfs-storage'
 
-let storage = new GridFsStorage({
-  url: 'mongodb://admin:password1@ds031947.mlab.com:31947/eskill-test',
-  file: (req, file) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let n = await Question.countDocuments({
-          branch: req.body.branch,
-          course: req.body.course
-        }).exec()
-        let question = new Question({
-          ...req.body,
-          n: n,
-          options: JSON.parse(req.body.options),
-          answer: parseInt(req.body.answer)
-        })
-        await question.save()
-        const filename = `${req.body.branch}_${req.body.course}_${n}`
-        const fileInfo = {
-          filename: filename,
-          bucketName: 'questions'
-        }
-        resolve(fileInfo)
-      } catch (err) {
-        console.log(err)
-        reject(err)
-      }
-    })
-  }
-})
-let edit = new GridFsStorage({
-  url: 'mongodb://admin:password1@ds031947.mlab.com:31947/eskill-test',
-  file: (req, file) => {
-    return new Promise(async (resolve, reject) => {
-      let { n, branch, course } = req.body
-      console.log(branch, course, n)
-      n = parseInt(n)
-      const filename = `${branch}_${course}_${n}`
-      console.log(filename)
-      const fileInfo = {
-        filename: filename,
-        bucketName: 'questions'
-      }
-      try {
-        let file = await File.findOne({ filename })
-        if (file) {
-          gfs.delete(file._id, async err => {
-            console.log(err)
-            let question = await Question.findOne({
-              branch,
-              course,
-              n
-            })
-            question = {
-              ...question.toObject(),
-              ...req.body,
-              options: JSON.parse(req.body.options)
-            }
-            await Question.findOneAndUpdate(
-              {
-                branch,
-                course,
-                n
-              },
-              question
-            )
-            resolve(fileInfo)
-          })
-        } else {
-          let question = await Question.findOne({
-            branch,
-            course,
-            n
-          })
-          question = {
-            ...question.toObject(),
-            ...req.body,
-            options: JSON.parse(req.body.options)
-          }
-          await Question.findOneAndUpdate(
-            {
-              branch,
-              course,
-              n
-            },
-            question
-          )
-          resolve(fileInfo)
-        }
-      } catch (err) {
-        reject(err)
-      }
-    })
-  }
-})
-let del = filename => {
-  console.log(filename)
-  return new Promise(async (resolve, reject) => {
-    let file = await File.findOne({ filename })
-    if (file) {
-      gfs.delete(file._id, err => {
-        console.log('deleting')
-        resolve()
-      })
-    } else {
-      reject()
-    }
-  })
-}
-let upload = null
+let router = Router()
+let gfs
 
 let editupload = null
 
-storage.on('connection', db => {
-  ;('connected')
-  upload = multer({
-    storage: storage,
-    limits: { fileSize: 1000000 },
-    fileFilter: function (req, file, cb) {
-      checkFileType(file, cb)
-    }
-  }).single('image')
-  editupload = multer({
-    storage: edit,
-    limits: { fileSize: 1000000 },
-    fileFilter: function (req, file, cb) {
-      checkFileType(file, cb)
-    }
-  }).single('image')
-})
 
 function checkFileType (file, cb) {
   const ficonstypes = /jpeg|jpg|png|gif/
@@ -288,4 +154,4 @@ router.post('/deleteQuestion', async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

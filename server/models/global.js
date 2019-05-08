@@ -1,6 +1,5 @@
-let mongoose = require('mongoose')
-let Schema = mongoose.Schema
-let { reject } = require('lodash')
+import { Schema, model } from 'mongoose'
+import { reject } from 'lodash'
 
 const GlobalSchema = new Schema({
   id: {
@@ -69,4 +68,4 @@ GlobalSchema.methods.editDepartment = function (dept_name, new_name, callback) {
     callback(err, nModified.departments)
   })
 }
-module.exports = mongoose.model('Global', GlobalSchema)
+export default model('Global', GlobalSchema)

@@ -1,7 +1,7 @@
-let express = require('express')
-let router = express.Router()
+import { Router } from 'express'
 
-const passport = require('../config/passport')
+import passport from '../config/passport'
+let router = Router()
 
 let getToken = headers => {
   if (headers && headers.authorization) {
@@ -28,4 +28,4 @@ router.get('/', passport.authenticate('validate', { session: false }), function 
   }
 })
 
-module.exports = router
+export default router

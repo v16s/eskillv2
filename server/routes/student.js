@@ -1,6 +1,7 @@
-let router = require('express').Router()
-let mongoose = require('mongoose')
-let { Report, Question, File } = require('../models')
+import { Router } from 'express'
+import mongoose from 'mongoose'
+import { Report, Question, File } from '../models'
+let router = Router()
 
 let gfs
 mongoose.connection.on('open', () => {
@@ -81,4 +82,4 @@ router.post('/endtest', async function (req, res) {
     res.status(400).send({ err })
   }
 })
-module.exports = router
+export default router

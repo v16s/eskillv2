@@ -1,6 +1,8 @@
-let router = require('express').Router()
-let { Branch } = require('../models')
-let { findIndex } = require('lodash')
+import { Router } from 'express'
+import { Branch } from '../models'
+import { findIndex } from 'lodash'
+
+let router = Router()
 
 router.post('/addBranch', function (req, res) {
   let newBranch = new Branch(req.body)
@@ -122,4 +124,4 @@ router.post('/removeSession', async function (req, res) {
   }
 })
 
-module.exports = router
+export default router
