@@ -16,7 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
-  branch: (where?: BranchWhereInput) => Promise<boolean>;
+  campus: (where?: CampusWhereInput) => Promise<boolean>;
   global: (where?: GlobalWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -40,25 +40,25 @@ export interface Prisma {
    * Queries
    */
 
-  branch: (where: BranchWhereUniqueInput) => BranchNullablePromise;
-  branches: (args?: {
-    where?: BranchWhereInput;
-    orderBy?: BranchOrderByInput;
+  campus: (where: CampusWhereUniqueInput) => CampusNullablePromise;
+  campuses: (args?: {
+    where?: CampusWhereInput;
+    orderBy?: CampusOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => FragmentableArray<Branch>;
-  branchesConnection: (args?: {
-    where?: BranchWhereInput;
-    orderBy?: BranchOrderByInput;
+  }) => FragmentableArray<Campus>;
+  campusesConnection: (args?: {
+    where?: CampusWhereInput;
+    orderBy?: CampusOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => BranchConnectionPromise;
+  }) => CampusConnectionPromise;
   global: (where: GlobalWhereUniqueInput) => GlobalNullablePromise;
   globals: (args?: {
     where?: GlobalWhereInput;
@@ -103,22 +103,22 @@ export interface Prisma {
    * Mutations
    */
 
-  createBranch: (data: BranchCreateInput) => BranchPromise;
-  updateBranch: (args: {
-    data: BranchUpdateInput;
-    where: BranchWhereUniqueInput;
-  }) => BranchPromise;
-  updateManyBranches: (args: {
-    data: BranchUpdateManyMutationInput;
-    where?: BranchWhereInput;
+  createCampus: (data: CampusCreateInput) => CampusPromise;
+  updateCampus: (args: {
+    data: CampusUpdateInput;
+    where: CampusWhereUniqueInput;
+  }) => CampusPromise;
+  updateManyCampuses: (args: {
+    data: CampusUpdateManyMutationInput;
+    where?: CampusWhereInput;
   }) => BatchPayloadPromise;
-  upsertBranch: (args: {
-    where: BranchWhereUniqueInput;
-    create: BranchCreateInput;
-    update: BranchUpdateInput;
-  }) => BranchPromise;
-  deleteBranch: (where: BranchWhereUniqueInput) => BranchPromise;
-  deleteManyBranches: (where?: BranchWhereInput) => BatchPayloadPromise;
+  upsertCampus: (args: {
+    where: CampusWhereUniqueInput;
+    create: CampusCreateInput;
+    update: CampusUpdateInput;
+  }) => CampusPromise;
+  deleteCampus: (where: CampusWhereUniqueInput) => CampusPromise;
+  deleteManyCampuses: (where?: CampusWhereInput) => BatchPayloadPromise;
   createGlobal: (data: GlobalCreateInput) => GlobalPromise;
   updateGlobal: (args: {
     data: GlobalUpdateInput;
@@ -160,9 +160,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
-  branch: (
-    where?: BranchSubscriptionWhereInput
-  ) => BranchSubscriptionPayloadSubscription;
+  campus: (
+    where?: CampusSubscriptionWhereInput
+  ) => CampusSubscriptionPayloadSubscription;
   global: (
     where?: GlobalSubscriptionWhereInput
   ) => GlobalSubscriptionPayloadSubscription;
@@ -179,11 +179,13 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type BranchOrderByInput =
+export type CampusOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "admin_id_ASC"
+  | "admin_id_DESC"
   | "name_ASC"
-  | "name_DESC"
-  | "_id_ASC"
-  | "_id_DESC";
+  | "name_DESC";
 
 export type GlobalOrderByInput =
   | "regs_ASC"
@@ -217,33 +219,103 @@ export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC";
 
-export interface GlobalCreateInput {
-  departments?: Maybe<TagCreateManyInput>;
-  campuses?: Maybe<TagCreateManyInput>;
-  regs?: Maybe<Boolean>;
-  regf?: Maybe<Boolean>;
-  id?: Maybe<String>;
-  _id?: Maybe<ID_Input>;
-}
-
-export interface BranchCreateInput {
-  name: String;
-  _id?: Maybe<ID_Input>;
-  courses?: Maybe<TagCreateManyInput>;
-}
-
-export interface BranchUpdateManyMutationInput {
+export interface BranchUpdateManyDataInput {
   name?: Maybe<String>;
 }
 
-export type BranchWhereUniqueInput = AtLeastOne<{
-  name: Maybe<String>;
-  _id?: Maybe<ID_Input>;
+export interface CourseCreateManyInput {
+  create?: Maybe<CourseCreateInput[] | CourseCreateInput>;
+}
+
+export interface BranchUpdateManyWithWhereNestedInput {
+  where: BranchScalarWhereInput;
+  data: BranchUpdateManyDataInput;
+}
+
+export type CampusWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  name?: Maybe<String>;
 }>;
 
-export interface TagUpdateManyDataInput {
+export interface BranchScalarWhereInput {
   name?: Maybe<String>;
-  id?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<BranchScalarWhereInput[] | BranchScalarWhereInput>;
+  OR?: Maybe<BranchScalarWhereInput[] | BranchScalarWhereInput>;
+  NOT?: Maybe<BranchScalarWhereInput[] | BranchScalarWhereInput>;
+}
+
+export interface CampusWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  admin_id?: Maybe<String>;
+  admin_id_not?: Maybe<String>;
+  admin_id_in?: Maybe<String[] | String>;
+  admin_id_not_in?: Maybe<String[] | String>;
+  admin_id_lt?: Maybe<String>;
+  admin_id_lte?: Maybe<String>;
+  admin_id_gt?: Maybe<String>;
+  admin_id_gte?: Maybe<String>;
+  admin_id_contains?: Maybe<String>;
+  admin_id_not_contains?: Maybe<String>;
+  admin_id_starts_with?: Maybe<String>;
+  admin_id_not_starts_with?: Maybe<String>;
+  admin_id_ends_with?: Maybe<String>;
+  admin_id_not_ends_with?: Maybe<String>;
+  departments_some?: Maybe<TagWhereInput>;
+  departments_every?: Maybe<TagRestrictedWhereInput>;
+  departments_none?: Maybe<TagRestrictedWhereInput>;
+  branches_some?: Maybe<BranchWhereInput>;
+  branches_every?: Maybe<BranchRestrictedWhereInput>;
+  branches_none?: Maybe<BranchRestrictedWhereInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<CampusWhereInput[] | CampusWhereInput>;
+}
+
+export interface BranchUpdateManyInput {
+  create?: Maybe<BranchCreateInput[] | BranchCreateInput>;
+  deleteMany?: Maybe<BranchScalarWhereInput[] | BranchScalarWhereInput>;
+  updateMany?: Maybe<
+    | BranchUpdateManyWithWhereNestedInput[]
+    | BranchUpdateManyWithWhereNestedInput
+  >;
 }
 
 export interface TagRestrictedWhereInput {
@@ -278,37 +350,26 @@ export interface TagRestrictedWhereInput {
   AND?: Maybe<TagRestrictedWhereInput[] | TagRestrictedWhereInput>;
 }
 
-export interface TagUpdateManyWithWhereNestedInput {
-  where: TagScalarWhereInput;
-  data: TagUpdateManyDataInput;
-}
-
-export interface BranchSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<BranchWhereInput>;
-  AND?: Maybe<BranchSubscriptionWhereInput[] | BranchSubscriptionWhereInput>;
-}
-
 export type UserWhereUniqueInput = AtLeastOne<{
   username: Maybe<String>;
   id?: Maybe<ID_Input>;
 }>;
 
-export interface UserUpdateInput {
-  username?: Maybe<String>;
-  password?: Maybe<String>;
-  name?: Maybe<String>;
-  campus?: Maybe<String>;
-  department?: Maybe<String>;
-  dob?: Maybe<DateTimeInput>;
-  email?: Maybe<String>;
-  level?: Maybe<Int>;
-}
-
-export interface TagScalarWhereInput {
+export interface CourseWhereInput {
+  coordinator_id?: Maybe<String>;
+  coordinator_id_not?: Maybe<String>;
+  coordinator_id_in?: Maybe<String[] | String>;
+  coordinator_id_not_in?: Maybe<String[] | String>;
+  coordinator_id_lt?: Maybe<String>;
+  coordinator_id_lte?: Maybe<String>;
+  coordinator_id_gt?: Maybe<String>;
+  coordinator_id_gte?: Maybe<String>;
+  coordinator_id_contains?: Maybe<String>;
+  coordinator_id_not_contains?: Maybe<String>;
+  coordinator_id_starts_with?: Maybe<String>;
+  coordinator_id_not_starts_with?: Maybe<String>;
+  coordinator_id_ends_with?: Maybe<String>;
+  coordinator_id_not_ends_with?: Maybe<String>;
   name?: Maybe<String>;
   name_not?: Maybe<String>;
   name_in?: Maybe<String[] | String>;
@@ -323,43 +384,50 @@ export interface TagScalarWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
-  id?: Maybe<String>;
-  id_not?: Maybe<String>;
-  id_in?: Maybe<String[] | String>;
-  id_not_in?: Maybe<String[] | String>;
-  id_lt?: Maybe<String>;
-  id_lte?: Maybe<String>;
-  id_gt?: Maybe<String>;
-  id_gte?: Maybe<String>;
-  id_contains?: Maybe<String>;
-  id_not_contains?: Maybe<String>;
-  id_starts_with?: Maybe<String>;
-  id_not_starts_with?: Maybe<String>;
-  id_ends_with?: Maybe<String>;
-  id_not_ends_with?: Maybe<String>;
-  AND?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
-  OR?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
-  NOT?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+  AND?: Maybe<CourseWhereInput[] | CourseWhereInput>;
 }
 
-export interface GlobalUpdateManyMutationInput {
-  regs?: Maybe<Boolean>;
-  regf?: Maybe<Boolean>;
+export interface TagUpdateManyDataInput {
+  name?: Maybe<String>;
   id?: Maybe<String>;
 }
 
-export interface TagUpdateManyInput {
-  create?: Maybe<TagCreateInput[] | TagCreateInput>;
-  deleteMany?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
-  updateMany?: Maybe<
-    TagUpdateManyWithWhereNestedInput[] | TagUpdateManyWithWhereNestedInput
-  >;
+export interface BranchRestrictedWhereInput {
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  courses_every?: Maybe<CourseRestrictedWhereInput>;
+  courses_some?: Maybe<CourseRestrictedWhereInput>;
+  courses_none?: Maybe<CourseRestrictedWhereInput>;
+  AND?: Maybe<BranchRestrictedWhereInput[] | BranchRestrictedWhereInput>;
 }
 
-export type GlobalWhereUniqueInput = AtLeastOne<{
-  id: Maybe<String>;
-  _id?: Maybe<ID_Input>;
-}>;
+export interface TagUpdateManyWithWhereNestedInput {
+  where: TagScalarWhereInput;
+  data: TagUpdateManyDataInput;
+}
+
+export interface UserUpdateInput {
+  username?: Maybe<String>;
+  password?: Maybe<String>;
+  name?: Maybe<String>;
+  campus?: Maybe<String>;
+  department?: Maybe<String>;
+  dob?: Maybe<DateTimeInput>;
+  email?: Maybe<String>;
+  level?: Maybe<Int>;
+}
 
 export interface UserWhereInput {
   username?: Maybe<String>;
@@ -479,13 +547,76 @@ export interface UserWhereInput {
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export interface GlobalUpdateManyMutationInput {
+  regs?: Maybe<Boolean>;
+  regf?: Maybe<Boolean>;
+  id?: Maybe<String>;
+}
+
+export interface GlobalSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<GlobalWhereInput>;
+  AND?: Maybe<GlobalSubscriptionWhereInput[] | GlobalSubscriptionWhereInput>;
+}
+
+export interface GlobalCreateInput {
+  regs?: Maybe<Boolean>;
+  regf?: Maybe<Boolean>;
+  id?: Maybe<String>;
+  _id?: Maybe<ID_Input>;
+}
+
+export interface TagScalarWhereInput {
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  id?: Maybe<String>;
+  id_not?: Maybe<String>;
+  id_in?: Maybe<String[] | String>;
+  id_not_in?: Maybe<String[] | String>;
+  id_lt?: Maybe<String>;
+  id_lte?: Maybe<String>;
+  id_gt?: Maybe<String>;
+  id_gte?: Maybe<String>;
+  id_contains?: Maybe<String>;
+  id_not_contains?: Maybe<String>;
+  id_starts_with?: Maybe<String>;
+  id_not_starts_with?: Maybe<String>;
+  id_ends_with?: Maybe<String>;
+  id_not_ends_with?: Maybe<String>;
+  AND?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+  OR?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+  NOT?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+}
+
+export type GlobalWhereUniqueInput = AtLeastOne<{
+  id: Maybe<String>;
+  _id?: Maybe<ID_Input>;
+}>;
+
+export interface TagUpdateManyInput {
+  create?: Maybe<TagCreateInput[] | TagCreateInput>;
+  deleteMany?: Maybe<TagScalarWhereInput[] | TagScalarWhereInput>;
+  updateMany?: Maybe<
+    TagUpdateManyWithWhereNestedInput[] | TagUpdateManyWithWhereNestedInput
+  >;
+}
+
 export interface GlobalWhereInput {
-  departments_some?: Maybe<TagWhereInput>;
-  departments_every?: Maybe<TagRestrictedWhereInput>;
-  departments_none?: Maybe<TagRestrictedWhereInput>;
-  campuses_some?: Maybe<TagWhereInput>;
-  campuses_every?: Maybe<TagRestrictedWhereInput>;
-  campuses_none?: Maybe<TagRestrictedWhereInput>;
   regs?: Maybe<Boolean>;
   regs_not?: Maybe<Boolean>;
   regf?: Maybe<Boolean>;
@@ -521,13 +652,11 @@ export interface GlobalWhereInput {
   AND?: Maybe<GlobalWhereInput[] | GlobalWhereInput>;
 }
 
-export interface GlobalSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<GlobalWhereInput>;
-  AND?: Maybe<GlobalSubscriptionWhereInput[] | GlobalSubscriptionWhereInput>;
+export interface CampusUpdateInput {
+  admin_id?: Maybe<String>;
+  departments?: Maybe<TagUpdateManyInput>;
+  branches?: Maybe<BranchUpdateManyInput>;
+  name?: Maybe<String>;
 }
 
 export interface TagWhereInput {
@@ -562,20 +691,75 @@ export interface TagWhereInput {
   AND?: Maybe<TagWhereInput[] | TagWhereInput>;
 }
 
+export interface CourseCreateInput {
+  coordinator_id: String;
+  name: String;
+}
+
+export interface CourseRestrictedWhereInput {
+  coordinator_id?: Maybe<String>;
+  coordinator_id_not?: Maybe<String>;
+  coordinator_id_in?: Maybe<String[] | String>;
+  coordinator_id_not_in?: Maybe<String[] | String>;
+  coordinator_id_lt?: Maybe<String>;
+  coordinator_id_lte?: Maybe<String>;
+  coordinator_id_gt?: Maybe<String>;
+  coordinator_id_gte?: Maybe<String>;
+  coordinator_id_contains?: Maybe<String>;
+  coordinator_id_not_contains?: Maybe<String>;
+  coordinator_id_starts_with?: Maybe<String>;
+  coordinator_id_not_starts_with?: Maybe<String>;
+  coordinator_id_ends_with?: Maybe<String>;
+  coordinator_id_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<CourseRestrictedWhereInput[] | CourseRestrictedWhereInput>;
+}
+
+export interface CampusCreateInput {
+  id?: Maybe<ID_Input>;
+  admin_id: String;
+  departments?: Maybe<TagCreateManyInput>;
+  branches?: Maybe<BranchCreateManyInput>;
+  name: String;
+}
+
 export interface UserCreateInput {
   username: String;
   password: String;
   name: String;
-  campus: String;
-  department: String;
+  campus?: Maybe<String>;
+  department?: Maybe<String>;
   dob?: Maybe<DateTimeInput>;
   email: String;
   level: Int;
   id?: Maybe<ID_Input>;
 }
 
-export interface TagCreateManyInput {
-  create?: Maybe<TagCreateInput[] | TagCreateInput>;
+export interface CampusUpdateManyMutationInput {
+  admin_id?: Maybe<String>;
+  name?: Maybe<String>;
+}
+
+export interface BranchCreateInput {
+  name: String;
+  courses?: Maybe<CourseCreateManyInput>;
+}
+
+export interface BranchCreateManyInput {
+  create?: Maybe<BranchCreateInput[] | BranchCreateInput>;
 }
 
 export interface TagCreateInput {
@@ -583,14 +767,20 @@ export interface TagCreateInput {
   id: String;
 }
 
-export interface BranchUpdateInput {
-  name?: Maybe<String>;
-  courses?: Maybe<TagUpdateManyInput>;
+export interface TagCreateManyInput {
+  create?: Maybe<TagCreateInput[] | TagCreateInput>;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
 export interface GlobalUpdateInput {
-  departments?: Maybe<TagUpdateManyInput>;
-  campuses?: Maybe<TagUpdateManyInput>;
   regs?: Maybe<Boolean>;
   regf?: Maybe<Boolean>;
   id?: Maybe<String>;
@@ -622,113 +812,100 @@ export interface BranchWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
-  _id?: Maybe<ID_Input>;
-  _id_not?: Maybe<ID_Input>;
-  _id_in?: Maybe<ID_Input[] | ID_Input>;
-  _id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  _id_lt?: Maybe<ID_Input>;
-  _id_lte?: Maybe<ID_Input>;
-  _id_gt?: Maybe<ID_Input>;
-  _id_gte?: Maybe<ID_Input>;
-  _id_contains?: Maybe<ID_Input>;
-  _id_not_contains?: Maybe<ID_Input>;
-  _id_starts_with?: Maybe<ID_Input>;
-  _id_not_starts_with?: Maybe<ID_Input>;
-  _id_ends_with?: Maybe<ID_Input>;
-  _id_not_ends_with?: Maybe<ID_Input>;
-  courses_some?: Maybe<TagWhereInput>;
-  courses_every?: Maybe<TagRestrictedWhereInput>;
-  courses_none?: Maybe<TagRestrictedWhereInput>;
+  courses_some?: Maybe<CourseWhereInput>;
+  courses_every?: Maybe<CourseRestrictedWhereInput>;
+  courses_none?: Maybe<CourseRestrictedWhereInput>;
   AND?: Maybe<BranchWhereInput[] | BranchWhereInput>;
 }
 
-export interface UserSubscriptionWhereInput {
+export interface CampusSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<UserWhereInput>;
-  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  node?: Maybe<CampusWhereInput>;
+  AND?: Maybe<CampusSubscriptionWhereInput[] | CampusSubscriptionWhereInput>;
 }
 
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface AggregateBranch {
-  count: Int;
-}
-
-export interface AggregateBranchPromise
-  extends Promise<AggregateBranch>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateBranchSubscription
-  extends Promise<AsyncIterator<AggregateBranch>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Branch {
-  name: String;
+export interface GlobalPreviousValues {
+  regs?: Boolean;
+  regf?: Boolean;
+  id: String;
   _id: ID_Output;
-  courses?: <T = FragmentableArray<Tag>>() => T;
 }
 
-export interface BranchPromise extends Promise<Branch>, Fragmentable {
-  name: () => Promise<String>;
-  _id: () => Promise<ID_Output>;
-  courses: <T = FragmentableArray<Tag>>() => T;
-}
-
-export interface BranchSubscription
-  extends Promise<AsyncIterator<Branch>>,
+export interface GlobalPreviousValuesPromise
+  extends Promise<GlobalPreviousValues>,
     Fragmentable {
-  name: () => Promise<AsyncIterator<String>>;
+  regs: () => Promise<Boolean>;
+  regf: () => Promise<Boolean>;
+  id: () => Promise<String>;
+  _id: () => Promise<ID_Output>;
+}
+
+export interface GlobalPreviousValuesSubscription
+  extends Promise<AsyncIterator<GlobalPreviousValues>>,
+    Fragmentable {
+  regs: () => Promise<AsyncIterator<Boolean>>;
+  regf: () => Promise<AsyncIterator<Boolean>>;
+  id: () => Promise<AsyncIterator<String>>;
   _id: () => Promise<AsyncIterator<ID_Output>>;
-  courses: <T = Promise<AsyncIterator<TagSubscription>>>() => T;
 }
 
-export interface BranchNullablePromise
-  extends Promise<Branch | null>,
-    Fragmentable {
+export interface Campus {
+  id: ID_Output;
+  admin_id: String;
+  departments?: <T = FragmentableArray<Tag>>() => T;
+  branches?: <T = FragmentableArray<Branch>>() => T;
+  name: String;
+}
+
+export interface CampusPromise extends Promise<Campus>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  admin_id: () => Promise<String>;
+  departments: <T = FragmentableArray<Tag>>() => T;
+  branches: <T = FragmentableArray<Branch>>() => T;
   name: () => Promise<String>;
-  _id: () => Promise<ID_Output>;
-  courses: <T = FragmentableArray<Tag>>() => T;
 }
 
-export interface BranchEdge {
-  node: Branch;
+export interface CampusSubscription
+  extends Promise<AsyncIterator<Campus>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  admin_id: () => Promise<AsyncIterator<String>>;
+  departments: <T = Promise<AsyncIterator<TagSubscription>>>() => T;
+  branches: <T = Promise<AsyncIterator<BranchSubscription>>>() => T;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CampusNullablePromise
+  extends Promise<Campus | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  admin_id: () => Promise<String>;
+  departments: <T = FragmentableArray<Tag>>() => T;
+  branches: <T = FragmentableArray<Branch>>() => T;
+  name: () => Promise<String>;
+}
+
+export interface CampusEdge {
+  node: Campus;
   cursor: String;
 }
 
-export interface BranchEdgePromise extends Promise<BranchEdge>, Fragmentable {
-  node: <T = BranchPromise>() => T;
+export interface CampusEdgePromise extends Promise<CampusEdge>, Fragmentable {
+  node: <T = CampusPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface BranchEdgeSubscription
-  extends Promise<AsyncIterator<BranchEdge>>,
+export interface CampusEdgeSubscription
+  extends Promise<AsyncIterator<CampusEdge>>,
     Fragmentable {
-  node: <T = BranchSubscription>() => T;
+  node: <T = CampusSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -736,8 +913,8 @@ export interface UserPreviousValues {
   username: String;
   password: String;
   name: String;
-  campus: String;
-  department: String;
+  campus?: String;
+  department?: String;
   dob?: DateTimeOutput;
   email: String;
   level: Int;
@@ -772,46 +949,41 @@ export interface UserPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
 }
 
-export interface UserEdge {
-  node: User;
-  cursor: String;
+export interface AggregateUser {
+  count: Int;
 }
 
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
     Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  count: () => Promise<Int>;
 }
 
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
     Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
     Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -837,259 +1009,12 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateGlobal {
-  count: Int;
-}
-
-export interface AggregateGlobalPromise
-  extends Promise<AggregateGlobal>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateGlobalSubscription
-  extends Promise<AsyncIterator<AggregateGlobal>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface BranchConnection {
-  pageInfo: PageInfo;
-  edges: BranchEdge[];
-}
-
-export interface BranchConnectionPromise
-  extends Promise<BranchConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<BranchEdge>>() => T;
-  aggregate: <T = AggregateBranchPromise>() => T;
-}
-
-export interface BranchConnectionSubscription
-  extends Promise<AsyncIterator<BranchConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<BranchEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateBranchSubscription>() => T;
-}
-
-export interface GlobalConnection {
-  pageInfo: PageInfo;
-  edges: GlobalEdge[];
-}
-
-export interface GlobalConnectionPromise
-  extends Promise<GlobalConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<GlobalEdge>>() => T;
-  aggregate: <T = AggregateGlobalPromise>() => T;
-}
-
-export interface GlobalConnectionSubscription
-  extends Promise<AsyncIterator<GlobalConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<GlobalEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateGlobalSubscription>() => T;
-}
-
-export interface GlobalPreviousValues {
-  regs?: Boolean;
-  regf?: Boolean;
-  id: String;
-  _id: ID_Output;
-}
-
-export interface GlobalPreviousValuesPromise
-  extends Promise<GlobalPreviousValues>,
-    Fragmentable {
-  regs: () => Promise<Boolean>;
-  regf: () => Promise<Boolean>;
-  id: () => Promise<String>;
-  _id: () => Promise<ID_Output>;
-}
-
-export interface GlobalPreviousValuesSubscription
-  extends Promise<AsyncIterator<GlobalPreviousValues>>,
-    Fragmentable {
-  regs: () => Promise<AsyncIterator<Boolean>>;
-  regf: () => Promise<AsyncIterator<Boolean>>;
-  id: () => Promise<AsyncIterator<String>>;
-  _id: () => Promise<AsyncIterator<ID_Output>>;
-}
-
-export interface BranchPreviousValues {
-  name: String;
-  _id: ID_Output;
-}
-
-export interface BranchPreviousValuesPromise
-  extends Promise<BranchPreviousValues>,
-    Fragmentable {
-  name: () => Promise<String>;
-  _id: () => Promise<ID_Output>;
-}
-
-export interface BranchPreviousValuesSubscription
-  extends Promise<AsyncIterator<BranchPreviousValues>>,
-    Fragmentable {
-  name: () => Promise<AsyncIterator<String>>;
-  _id: () => Promise<AsyncIterator<ID_Output>>;
-}
-
-export interface BranchSubscriptionPayload {
-  mutation: MutationType;
-  node: Branch;
-  updatedFields: String[];
-  previousValues: BranchPreviousValues;
-}
-
-export interface BranchSubscriptionPayloadPromise
-  extends Promise<BranchSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = BranchPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = BranchPreviousValuesPromise>() => T;
-}
-
-export interface BranchSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<BranchSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = BranchSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = BranchPreviousValuesSubscription>() => T;
-}
-
-export interface Tag {
-  name: String;
-  id: String;
-}
-
-export interface TagPromise extends Promise<Tag>, Fragmentable {
-  name: () => Promise<String>;
-  id: () => Promise<String>;
-}
-
-export interface TagSubscription
-  extends Promise<AsyncIterator<Tag>>,
-    Fragmentable {
-  name: () => Promise<AsyncIterator<String>>;
-  id: () => Promise<AsyncIterator<String>>;
-}
-
-export interface TagNullablePromise extends Promise<Tag | null>, Fragmentable {
-  name: () => Promise<String>;
-  id: () => Promise<String>;
-}
-
-export interface GlobalSubscriptionPayload {
-  mutation: MutationType;
-  node: Global;
-  updatedFields: String[];
-  previousValues: GlobalPreviousValues;
-}
-
-export interface GlobalSubscriptionPayloadPromise
-  extends Promise<GlobalSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = GlobalPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = GlobalPreviousValuesPromise>() => T;
-}
-
-export interface GlobalSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<GlobalSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = GlobalSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = GlobalPreviousValuesSubscription>() => T;
-}
-
-export interface Global {
-  departments?: <T = FragmentableArray<Tag>>() => T;
-  campuses?: <T = FragmentableArray<Tag>>() => T;
-  regs?: Boolean;
-  regf?: Boolean;
-  id: String;
-  _id: ID_Output;
-}
-
-export interface GlobalPromise extends Promise<Global>, Fragmentable {
-  departments: <T = FragmentableArray<Tag>>() => T;
-  campuses: <T = FragmentableArray<Tag>>() => T;
-  regs: () => Promise<Boolean>;
-  regf: () => Promise<Boolean>;
-  id: () => Promise<String>;
-  _id: () => Promise<ID_Output>;
-}
-
-export interface GlobalSubscription
-  extends Promise<AsyncIterator<Global>>,
-    Fragmentable {
-  departments: <T = Promise<AsyncIterator<TagSubscription>>>() => T;
-  campuses: <T = Promise<AsyncIterator<TagSubscription>>>() => T;
-  regs: () => Promise<AsyncIterator<Boolean>>;
-  regf: () => Promise<AsyncIterator<Boolean>>;
-  id: () => Promise<AsyncIterator<String>>;
-  _id: () => Promise<AsyncIterator<ID_Output>>;
-}
-
-export interface GlobalNullablePromise
-  extends Promise<Global | null>,
-    Fragmentable {
-  departments: <T = FragmentableArray<Tag>>() => T;
-  campuses: <T = FragmentableArray<Tag>>() => T;
-  regs: () => Promise<Boolean>;
-  regf: () => Promise<Boolean>;
-  id: () => Promise<String>;
-  _id: () => Promise<ID_Output>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface GlobalEdge {
-  node: Global;
-  cursor: String;
-}
-
-export interface GlobalEdgePromise extends Promise<GlobalEdge>, Fragmentable {
-  node: <T = GlobalPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface GlobalEdgeSubscription
-  extends Promise<AsyncIterator<GlobalEdge>>,
-    Fragmentable {
-  node: <T = GlobalSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
 export interface User {
   username: String;
   password: String;
   name: String;
-  campus: String;
-  department: String;
+  campus?: String;
+  department?: String;
   dob?: DateTimeOutput;
   email: String;
   level: Int;
@@ -1136,25 +1061,327 @@ export interface UserNullablePromise
   id: () => Promise<ID_Output>;
 }
 
-export interface UserConnection {
+export interface CampusConnection {
   pageInfo: PageInfo;
-  edges: UserEdge[];
+  edges: CampusEdge[];
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
+export interface CampusConnectionPromise
+  extends Promise<CampusConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
+  edges: <T = FragmentableArray<CampusEdge>>() => T;
+  aggregate: <T = AggregateCampusPromise>() => T;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface CampusConnectionSubscription
+  extends Promise<AsyncIterator<CampusConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CampusEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCampusSubscription>() => T;
+}
+
+export interface GlobalEdge {
+  node: Global;
+  cursor: String;
+}
+
+export interface GlobalEdgePromise extends Promise<GlobalEdge>, Fragmentable {
+  node: <T = GlobalPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface GlobalEdgeSubscription
+  extends Promise<AsyncIterator<GlobalEdge>>,
+    Fragmentable {
+  node: <T = GlobalSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface GlobalSubscriptionPayload {
+  mutation: MutationType;
+  node: Global;
+  updatedFields: String[];
+  previousValues: GlobalPreviousValues;
+}
+
+export interface GlobalSubscriptionPayloadPromise
+  extends Promise<GlobalSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = GlobalPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = GlobalPreviousValuesPromise>() => T;
+}
+
+export interface GlobalSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<GlobalSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = GlobalSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = GlobalPreviousValuesSubscription>() => T;
+}
+
+export interface Global {
+  regs?: Boolean;
+  regf?: Boolean;
+  id: String;
+  _id: ID_Output;
+}
+
+export interface GlobalPromise extends Promise<Global>, Fragmentable {
+  regs: () => Promise<Boolean>;
+  regf: () => Promise<Boolean>;
+  id: () => Promise<String>;
+  _id: () => Promise<ID_Output>;
+}
+
+export interface GlobalSubscription
+  extends Promise<AsyncIterator<Global>>,
+    Fragmentable {
+  regs: () => Promise<AsyncIterator<Boolean>>;
+  regf: () => Promise<AsyncIterator<Boolean>>;
+  id: () => Promise<AsyncIterator<String>>;
+  _id: () => Promise<AsyncIterator<ID_Output>>;
+}
+
+export interface GlobalNullablePromise
+  extends Promise<Global | null>,
+    Fragmentable {
+  regs: () => Promise<Boolean>;
+  regf: () => Promise<Boolean>;
+  id: () => Promise<String>;
+  _id: () => Promise<ID_Output>;
+}
+
+export interface Course {
+  coordinator_id: String;
+  name: String;
+}
+
+export interface CoursePromise extends Promise<Course>, Fragmentable {
+  coordinator_id: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface CourseSubscription
+  extends Promise<AsyncIterator<Course>>,
+    Fragmentable {
+  coordinator_id: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CourseNullablePromise
+  extends Promise<Course | null>,
+    Fragmentable {
+  coordinator_id: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface CampusPreviousValues {
+  id: ID_Output;
+  admin_id: String;
+  name: String;
+}
+
+export interface CampusPreviousValuesPromise
+  extends Promise<CampusPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  admin_id: () => Promise<String>;
+  name: () => Promise<String>;
+}
+
+export interface CampusPreviousValuesSubscription
+  extends Promise<AsyncIterator<CampusPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  admin_id: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CampusSubscriptionPayload {
+  mutation: MutationType;
+  node: Campus;
+  updatedFields: String[];
+  previousValues: CampusPreviousValues;
+}
+
+export interface CampusSubscriptionPayloadPromise
+  extends Promise<CampusSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CampusPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CampusPreviousValuesPromise>() => T;
+}
+
+export interface CampusSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CampusSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CampusSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CampusPreviousValuesSubscription>() => T;
+}
+
+export interface Tag {
+  name: String;
+  id: String;
+}
+
+export interface TagPromise extends Promise<Tag>, Fragmentable {
+  name: () => Promise<String>;
+  id: () => Promise<String>;
+}
+
+export interface TagSubscription
+  extends Promise<AsyncIterator<Tag>>,
+    Fragmentable {
+  name: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<AsyncIterator<String>>;
+}
+
+export interface TagNullablePromise extends Promise<Tag | null>, Fragmentable {
+  name: () => Promise<String>;
+  id: () => Promise<String>;
+}
+
+export interface Branch {
+  name: String;
+  courses?: <T = FragmentableArray<Course>>() => T;
+}
+
+export interface BranchPromise extends Promise<Branch>, Fragmentable {
+  name: () => Promise<String>;
+  courses: <T = FragmentableArray<Course>>() => T;
+}
+
+export interface BranchSubscription
+  extends Promise<AsyncIterator<Branch>>,
+    Fragmentable {
+  name: () => Promise<AsyncIterator<String>>;
+  courses: <T = Promise<AsyncIterator<CourseSubscription>>>() => T;
+}
+
+export interface BranchNullablePromise
+  extends Promise<Branch | null>,
+    Fragmentable {
+  name: () => Promise<String>;
+  courses: <T = FragmentableArray<Course>>() => T;
+}
+
+export interface AggregateGlobal {
+  count: Int;
+}
+
+export interface AggregateGlobalPromise
+  extends Promise<AggregateGlobal>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateGlobalSubscription
+  extends Promise<AsyncIterator<AggregateGlobal>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCampus {
+  count: Int;
+}
+
+export interface AggregateCampusPromise
+  extends Promise<AggregateCampus>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCampusSubscription
+  extends Promise<AsyncIterator<AggregateCampus>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface GlobalConnection {
+  pageInfo: PageInfo;
+  edges: GlobalEdge[];
+}
+
+export interface GlobalConnectionPromise
+  extends Promise<GlobalConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<GlobalEdge>>() => T;
+  aggregate: <T = AggregateGlobalPromise>() => T;
+}
+
+export interface GlobalConnectionSubscription
+  extends Promise<AsyncIterator<GlobalConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<GlobalEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateGlobalSubscription>() => T;
 }
 
 /*
@@ -1163,9 +1390,10 @@ The `Boolean` scalar type represents `true` or `false`.
 export type Boolean = boolean;
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
-export type String = string;
+export type ID_Input = string | number;
+export type ID_Output = string;
 
 /*
 DateTime scalar input type, allowing Date
@@ -1178,10 +1406,9 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
-The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
-export type ID_Input = string | number;
-export type ID_Output = string;
+export type String = string;
 
 export type Long = string;
 
@@ -1204,11 +1431,19 @@ export const models: Model[] = [
     embedded: false
   },
   {
-    name: "Branch",
+    name: "Tag",
+    embedded: true
+  },
+  {
+    name: "Campus",
     embedded: false
   },
   {
-    name: "Tag",
+    name: "Branch",
+    embedded: true
+  },
+  {
+    name: "Course",
     embedded: true
   }
 ];

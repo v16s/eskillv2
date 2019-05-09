@@ -13,11 +13,19 @@ var models = [
     embedded: false
   },
   {
-    name: "Branch",
+    name: "Tag",
+    embedded: true
+  },
+  {
+    name: "Campus",
     embedded: false
   },
   {
-    name: "Tag",
+    name: "Branch",
+    embedded: true
+  },
+  {
+    name: "Course",
     embedded: true
   }
 ];

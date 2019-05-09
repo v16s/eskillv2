@@ -28,13 +28,27 @@ export default gql`
     name: String!
     id: String!
   }
+  type Branch {
+    name: String!
+    courses: [Course]
+  }
+  type Course {
+    name: String!
+    coordinator_id: String!
+  }
+  type Campus {
+    admin_id: String!
+    departments: [Tag]
+    branches: [Branch]
+    name: String!
+  }
   type Mutation {
     toggleStudentRegistration: ToggleResult
     toggleFacultyRegistration: ToggleResult
     addDepartment(tag: TagInput): Global
     removeDepartment(id: String): Global
     updateDepartment(update: UpdateTag): Global
-    addCampus(tag: TagInput): Global
+    addCampus(name: String): Campus
     removeCampus(id: String): Global
     updateCampus(update: UpdateTag): Global
     login(user: LoginInput): User
@@ -84,9 +98,5 @@ export default gql`
   type ToggleResult {
     success: Boolean!
     result: Boolean!
-  }
-  type Branch {
-    name: String!
-    courses: [Tag]
   }
 `

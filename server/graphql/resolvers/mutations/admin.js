@@ -1,92 +1,59 @@
 import { prisma } from 'prisma'
+import bcrypt from 'bcrypt-nodejs'
+import { promisify } from 'util'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
 export default {
-  addBranch: async (parent, { name }, ctx) => {
-    if (ctx.user.level <= 1) {
-      return await prisma.createBranch({ name })
-    }
-    throw new AuthenticationError('Not Authorized')
-  },
-  removeBranch: async (parent, { name }, ctx) => {
-    if (ctx.user.level <= 1) {
+  toggleStudentRegistration: async (p, a, { user }) => {
+    if (user.level < 1) {
       try {
-        await prisma.deleteBranch({ name })
-        return await prisma.branches()
-      } catch (e) {
-        throw new ValidationError('Error Deleting Branch')
-      }
-    }
-    throw new AuthenticationError('Not Authorized')
-  },
-  updateBranch: async (parent, { branch }, ctx) => {
-    if (ctx.user.level <= 1) {
-      try {
-        return await prisma.updateBranch({
-          where: { name: branch.where },
-          data: { name: branch.name }
+        let global = await prisma.global({ id: 'global' })
+        await prisma.updateGlobal({
+          data: { regs: !global.regs },
+          where: { id: 'global' }
         })
+        return { result: !global.regs }
       } catch (e) {
-        console.log(e)
-        throw new ValidationError('Error Updating Branch')
+        throw new ValidationError(e.toString())
       }
+    } else {
+      throw new AuthenticationError('Unauthorized')
     }
-    throw new AuthenticationError('Not Authorized')
   },
-  addCourse: async (parent, { course }, ctx) => {
-    if (ctx.user.level <= 1) {
-      return await prisma.updateBranch({
-        where: {
-          name: course.branch
-        },
-        data: {
-          courses: {
-            create: [{ name: course.name, id: 'course' }]
-          }
-        }
-      })
-    }
-    throw new AuthenticationError('Not Authorized')
-  },
-  removeCourse: async (parent, { course }, ctx) => {
-    if (ctx.user.level <= 1) {
+  toggleFacultyRegistration: async (p, a, { user }) => {
+    if (user.level < 1) {
       try {
-        return await prisma.updateBranch({
-          where: {
-            name: course.branch
-          },
-          data: {
-            courses: {
-              deleteMany: { name: course.name }
-            }
-          }
+        let global = await prisma.global({ id: 'global' })
+        await prisma.updateGlobal({
+          data: { regf: !global.regf },
+          where: { id: 'global' }
         })
+        return { result: !global.regs }
       } catch (e) {
-        throw new ValidationError('Error Deleting Course')
+        throw new ValidationError(e.toString())
       }
+    } else {
+      throw new AuthenticationError('Unauthorized')
     }
-    throw new AuthenticationError('Not Authorized')
   },
-  updateCourse: async (parent, { course }, ctx) => {
-    if (ctx.user.level <= 1) {
+  addCampus: async (parent, { name }, { user }) => {
+    if (user.level < 1) {
       try {
-        return await prisma.updateBranch({
-          where: {
-            name: course.branch
-          },
-          data: {
-            courses: {
-              updateMany: {
-                where: { name: course.name },
-                data: { name: course.update }
-              }
-            }
-          }
+        let salt = await promisify(bcrypt.genSalt)(10)
+        let hash = await promisify(bcrypt.hash)('password', salt, null)
+        let { username } = await prisma.createUser({
+          username: `${name.replace(/ /g, '-')}-Admin`,
+          password: hash,
+          name: `${name} Admin`,
+          campus: name,
+          email: '',
+          level: 1
         })
+        return await prisma.createCampus({ name, admin_id: username })
       } catch (e) {
-        console.log(e)
-        throw new ValidationError('Error Updating Branch')
+        throw new ValidationError(e.toString())
       }
+    } else {
+      throw new AuthenticationError('Unauthorized')
     }
-    throw new AuthenticationError('Not Authorized')
   }
 }

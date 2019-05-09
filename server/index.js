@@ -8,6 +8,8 @@ import logger from 'morgan'
 import { ApolloServer } from 'apollo-server-express'
 import { prisma } from './prisma'
 import { typeDefs, resolvers } from './graphql'
+import bcrypt from 'bcrypt-nodejs'
+import { promisify } from 'util'
 
 const app = express()
 const port = process.env.PORT || 5000

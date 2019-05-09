@@ -3,7 +3,7 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateBranch {
+/* GraphQL */ `type AggregateCampus {
   count: Int!
 }
 
@@ -21,62 +21,72 @@ type BatchPayload {
 
 type Branch {
   name: String!
-  _id: ID!
-  courses: [Tag!]
-}
-
-type BranchConnection {
-  pageInfo: PageInfo!
-  edges: [BranchEdge]!
-  aggregate: AggregateBranch!
+  courses: [Course!]
 }
 
 input BranchCreateInput {
   name: String!
-  _id: ID
-  courses: TagCreateManyInput
+  courses: CourseCreateManyInput
 }
 
-type BranchEdge {
-  node: Branch!
-  cursor: String!
+input BranchCreateManyInput {
+  create: [BranchCreateInput!]
 }
 
-enum BranchOrderByInput {
-  name_ASC
-  name_DESC
-  _id_ASC
-  _id_DESC
-}
-
-type BranchPreviousValues {
-  name: String!
-  _id: ID!
-}
-
-type BranchSubscriptionPayload {
-  mutation: MutationType!
-  node: Branch
-  updatedFields: [String!]
-  previousValues: BranchPreviousValues
-}
-
-input BranchSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: BranchWhereInput
-  AND: [BranchSubscriptionWhereInput!]
-}
-
-input BranchUpdateInput {
+input BranchRestrictedWhereInput {
   name: String
-  courses: TagUpdateManyInput
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  courses_every: CourseRestrictedWhereInput
+  courses_some: CourseRestrictedWhereInput
+  courses_none: CourseRestrictedWhereInput
+  AND: [BranchRestrictedWhereInput!]
 }
 
-input BranchUpdateManyMutationInput {
+input BranchScalarWhereInput {
   name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [BranchScalarWhereInput!]
+  OR: [BranchScalarWhereInput!]
+  NOT: [BranchScalarWhereInput!]
+}
+
+input BranchUpdateManyDataInput {
+  name: String
+}
+
+input BranchUpdateManyInput {
+  create: [BranchCreateInput!]
+  deleteMany: [BranchScalarWhereInput!]
+  updateMany: [BranchUpdateManyWithWhereNestedInput!]
+}
+
+input BranchUpdateManyWithWhereNestedInput {
+  where: BranchScalarWhereInput!
+  data: BranchUpdateManyDataInput!
 }
 
 input BranchWhereInput {
@@ -94,36 +104,220 @@ input BranchWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  _id: ID
-  _id_not: ID
-  _id_in: [ID!]
-  _id_not_in: [ID!]
-  _id_lt: ID
-  _id_lte: ID
-  _id_gt: ID
-  _id_gte: ID
-  _id_contains: ID
-  _id_not_contains: ID
-  _id_starts_with: ID
-  _id_not_starts_with: ID
-  _id_ends_with: ID
-  _id_not_ends_with: ID
-  courses_some: TagWhereInput
-  courses_every: TagRestrictedWhereInput
-  courses_none: TagRestrictedWhereInput
+  courses_some: CourseWhereInput
+  courses_every: CourseRestrictedWhereInput
+  courses_none: CourseRestrictedWhereInput
   AND: [BranchWhereInput!]
 }
 
-input BranchWhereUniqueInput {
+type Campus {
+  id: ID!
+  admin_id: String!
+  departments: [Tag!]
+  branches: [Branch!]
+  name: String!
+}
+
+type CampusConnection {
+  pageInfo: PageInfo!
+  edges: [CampusEdge]!
+  aggregate: AggregateCampus!
+}
+
+input CampusCreateInput {
+  id: ID
+  admin_id: String!
+  departments: TagCreateManyInput
+  branches: BranchCreateManyInput
+  name: String!
+}
+
+type CampusEdge {
+  node: Campus!
+  cursor: String!
+}
+
+enum CampusOrderByInput {
+  id_ASC
+  id_DESC
+  admin_id_ASC
+  admin_id_DESC
+  name_ASC
+  name_DESC
+}
+
+type CampusPreviousValues {
+  id: ID!
+  admin_id: String!
+  name: String!
+}
+
+type CampusSubscriptionPayload {
+  mutation: MutationType!
+  node: Campus
+  updatedFields: [String!]
+  previousValues: CampusPreviousValues
+}
+
+input CampusSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CampusWhereInput
+  AND: [CampusSubscriptionWhereInput!]
+}
+
+input CampusUpdateInput {
+  admin_id: String
+  departments: TagUpdateManyInput
+  branches: BranchUpdateManyInput
   name: String
-  _id: ID
+}
+
+input CampusUpdateManyMutationInput {
+  admin_id: String
+  name: String
+}
+
+input CampusWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  admin_id: String
+  admin_id_not: String
+  admin_id_in: [String!]
+  admin_id_not_in: [String!]
+  admin_id_lt: String
+  admin_id_lte: String
+  admin_id_gt: String
+  admin_id_gte: String
+  admin_id_contains: String
+  admin_id_not_contains: String
+  admin_id_starts_with: String
+  admin_id_not_starts_with: String
+  admin_id_ends_with: String
+  admin_id_not_ends_with: String
+  departments_some: TagWhereInput
+  departments_every: TagRestrictedWhereInput
+  departments_none: TagRestrictedWhereInput
+  branches_some: BranchWhereInput
+  branches_every: BranchRestrictedWhereInput
+  branches_none: BranchRestrictedWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [CampusWhereInput!]
+}
+
+input CampusWhereUniqueInput {
+  id: ID
+  name: String
+}
+
+type Course {
+  coordinator_id: String!
+  name: String!
+}
+
+input CourseCreateInput {
+  coordinator_id: String!
+  name: String!
+}
+
+input CourseCreateManyInput {
+  create: [CourseCreateInput!]
+}
+
+input CourseRestrictedWhereInput {
+  coordinator_id: String
+  coordinator_id_not: String
+  coordinator_id_in: [String!]
+  coordinator_id_not_in: [String!]
+  coordinator_id_lt: String
+  coordinator_id_lte: String
+  coordinator_id_gt: String
+  coordinator_id_gte: String
+  coordinator_id_contains: String
+  coordinator_id_not_contains: String
+  coordinator_id_starts_with: String
+  coordinator_id_not_starts_with: String
+  coordinator_id_ends_with: String
+  coordinator_id_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [CourseRestrictedWhereInput!]
+}
+
+input CourseWhereInput {
+  coordinator_id: String
+  coordinator_id_not: String
+  coordinator_id_in: [String!]
+  coordinator_id_not_in: [String!]
+  coordinator_id_lt: String
+  coordinator_id_lte: String
+  coordinator_id_gt: String
+  coordinator_id_gte: String
+  coordinator_id_contains: String
+  coordinator_id_not_contains: String
+  coordinator_id_starts_with: String
+  coordinator_id_not_starts_with: String
+  coordinator_id_ends_with: String
+  coordinator_id_not_ends_with: String
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [CourseWhereInput!]
 }
 
 scalar DateTime
 
 type Global {
-  departments: [Tag!]
-  campuses: [Tag!]
   regs: Boolean
   regf: Boolean
   id: String!
@@ -137,8 +331,6 @@ type GlobalConnection {
 }
 
 input GlobalCreateInput {
-  departments: TagCreateManyInput
-  campuses: TagCreateManyInput
   regs: Boolean
   regf: Boolean
   id: String
@@ -185,8 +377,6 @@ input GlobalSubscriptionWhereInput {
 }
 
 input GlobalUpdateInput {
-  departments: TagUpdateManyInput
-  campuses: TagUpdateManyInput
   regs: Boolean
   regf: Boolean
   id: String
@@ -199,12 +389,6 @@ input GlobalUpdateManyMutationInput {
 }
 
 input GlobalWhereInput {
-  departments_some: TagWhereInput
-  departments_every: TagRestrictedWhereInput
-  departments_none: TagRestrictedWhereInput
-  campuses_some: TagWhereInput
-  campuses_every: TagRestrictedWhereInput
-  campuses_none: TagRestrictedWhereInput
   regs: Boolean
   regs_not: Boolean
   regf: Boolean
@@ -248,12 +432,12 @@ input GlobalWhereUniqueInput {
 scalar Long
 
 type Mutation {
-  createBranch(data: BranchCreateInput!): Branch!
-  updateBranch(data: BranchUpdateInput!, where: BranchWhereUniqueInput!): Branch
-  updateManyBranches(data: BranchUpdateManyMutationInput!, where: BranchWhereInput): BatchPayload!
-  upsertBranch(where: BranchWhereUniqueInput!, create: BranchCreateInput!, update: BranchUpdateInput!): Branch!
-  deleteBranch(where: BranchWhereUniqueInput!): Branch
-  deleteManyBranches(where: BranchWhereInput): BatchPayload!
+  createCampus(data: CampusCreateInput!): Campus!
+  updateCampus(data: CampusUpdateInput!, where: CampusWhereUniqueInput!): Campus
+  updateManyCampuses(data: CampusUpdateManyMutationInput!, where: CampusWhereInput): BatchPayload!
+  upsertCampus(where: CampusWhereUniqueInput!, create: CampusCreateInput!, update: CampusUpdateInput!): Campus!
+  deleteCampus(where: CampusWhereUniqueInput!): Campus
+  deleteManyCampuses(where: CampusWhereInput): BatchPayload!
   createGlobal(data: GlobalCreateInput!): Global!
   updateGlobal(data: GlobalUpdateInput!, where: GlobalWhereUniqueInput!): Global
   updateManyGlobals(data: GlobalUpdateManyMutationInput!, where: GlobalWhereInput): BatchPayload!
@@ -286,9 +470,9 @@ type PageInfo {
 }
 
 type Query {
-  branch(where: BranchWhereUniqueInput!): Branch
-  branches(where: BranchWhereInput, orderBy: BranchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Branch]!
-  branchesConnection(where: BranchWhereInput, orderBy: BranchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BranchConnection!
+  campus(where: CampusWhereUniqueInput!): Campus
+  campuses(where: CampusWhereInput, orderBy: CampusOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Campus]!
+  campusesConnection(where: CampusWhereInput, orderBy: CampusOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CampusConnection!
   global(where: GlobalWhereUniqueInput!): Global
   globals(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Global]!
   globalsConnection(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GlobalConnection!
@@ -299,7 +483,7 @@ type Query {
 }
 
 type Subscription {
-  branch(where: BranchSubscriptionWhereInput): BranchSubscriptionPayload
+  campus(where: CampusSubscriptionWhereInput): CampusSubscriptionPayload
   global(where: GlobalSubscriptionWhereInput): GlobalSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -436,8 +620,8 @@ type User {
   username: String!
   password: String!
   name: String!
-  campus: String!
-  department: String!
+  campus: String
+  department: String
   dob: DateTime
   email: String!
   level: Int!
@@ -454,8 +638,8 @@ input UserCreateInput {
   username: String!
   password: String!
   name: String!
-  campus: String!
-  department: String!
+  campus: String
+  department: String
   dob: DateTime
   email: String!
   level: Int!
@@ -492,8 +676,8 @@ type UserPreviousValues {
   username: String!
   password: String!
   name: String!
-  campus: String!
-  department: String!
+  campus: String
+  department: String
   dob: DateTime
   email: String!
   level: Int!
