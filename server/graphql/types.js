@@ -6,6 +6,7 @@ export default gql`
     global: Global
     user(user: UserInput!): User
     branches: [Branch]
+    validate: User
   }
   type Global {
     regs: Boolean!
@@ -17,8 +18,8 @@ export default gql`
     username: String!
     password: String!
     name: String!
-    campus: String!
-    department: String!
+    campus: String
+    department: String
     dob: Date
     email: String!
     level: Int!

@@ -1,4 +1,5 @@
 import { prisma } from 'prisma'
+import { async } from 'q'
 export default {
   global: async (parent, args, ctx, info) => {
     console.log(ctx)
@@ -6,5 +7,11 @@ export default {
   },
   branches: async () => {
     return await prisma.branches()
+  },
+  validate: async (parent, args, { user }) => {
+    if (user) {
+      return user
+    }
+    return null
   }
 }

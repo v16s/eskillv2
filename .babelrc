@@ -2,6 +2,7 @@
   "presets": ["@babel/preset-env"],
   "plugins": [
     ["@babel/plugin-proposal-class-properties"],
+    ["styled-jsx/babel", { "plugins": ["styled-jsx-plugin-sass"] }],
     ["@babel/proposal-object-rest-spread", false, "transform-rest-spread"],
     [
       "module-resolver",
