@@ -7,6 +7,7 @@ export default gql`
     user(user: UserInput!): User
     branches: [Branch]
     validate: User
+    campuses: [Campus]
   }
   type Global {
     regs: Boolean!

@@ -13,5 +13,8 @@ export default {
       return user
     }
     return null
+  },
+  campuses: async () => {
+    return await prisma.campuses()
   }
 }
