@@ -3,7 +3,7 @@ import { Router as BrowserRouter, Route, Switch } from 'react-router-dom'
 import { history } from './util'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
-import { Login } from './views'
+import { Login, Register } from './views'
 
 const GET_USER = gql`
   {
@@ -24,6 +24,7 @@ export default class Router extends React.Component {
             <BrowserRouter history={history}>
               {data.loggedIn == false && (
                 <Switch>
+                  <Route path='/register' component={() => <Register />} />
                   <Route path='/' component={() => <Login />} />
                 </Switch>
               )}

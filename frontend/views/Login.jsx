@@ -7,6 +7,7 @@ import {
   Button,
   NavigationIcon
 } from '@material-ui/core'
+import { history } from '../util'
 
 const styles = theme => ({
   root: {
@@ -43,51 +44,55 @@ const styles = theme => ({
   }
 })
 
-function AutoGridNoWrap (props) {
-  const { classes } = props
+class Login extends React.Component {
+  render () {
+    const { classes } = this.props
 
-  return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Typography color='primary' variant='h5' className={classes.heading}>
-          eSkill
-        </Typography>
-        <div className={classes.input}>
-          <TextField
-            className={classes.input}
-            variant='outlined'
-            id='username'
-            type='text'
-            label='Username'
-          />
+    return (
+      <div className={classes.root}>
+        <Paper className={classes.paper}>
+          <Typography color='primary' variant='h5' className={classes.heading}>
+            eSkill
+          </Typography>
+          <div className={classes.input}>
+            <TextField
+              className={classes.input}
+              variant='outlined'
+              id='username'
+              type='text'
+              label='Register Number'
+            />
 
-          <TextField
-            className={classes.input}
-            id='password'
-            type='password'
+            <TextField
+              className={classes.input}
+              id='password'
+              type='password'
+              variant='outlined'
+              label='Password'
+            />
+          </div>
+          <Button
+            variant='contained'
+            color='primary'
+            size='medium'
+            className={`${classes.button} ${classes.login}`}
+          >
+            Login
+          </Button>
+          <Button
             variant='outlined'
-            label='Password'
-          />
-        </div>
-        <Button
-          variant='contained'
-          color='primary'
-          size='medium'
-          className={`${classes.button} ${classes.login}`}
-        >
-          Login
-        </Button>
-        <Button
-          variant='outlined'
-          size='medium'
-          color='primary'
-          className={classes.button}
-        >
-          Register
-        </Button>
-      </Paper>
-    </div>
-  )
+            size='medium'
+            color='primary'
+            className={classes.button}
+            onClick={e => {
+              history.push('/register')
+            }}
+          >
+            Register
+          </Button>
+        </Paper>
+      </div>
+    )
+  }
 }
-
-export default withStyles(styles)(AutoGridNoWrap)
+export default withStyles(styles)(Login)
