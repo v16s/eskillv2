@@ -29,12 +29,8 @@ const authLink = setContext((_, { headers }) => {
   }
 }).concat(httpLink)
 
-const stateLink = withClientState({
-  cache
-})
-
 const client = new ApolloClient({
-  link: ApolloLink.from([stateLink, authLink]),
+  link: authLink,
   cache
 })
 const GET_USER = gql`
@@ -52,7 +48,7 @@ const GET_USER = gql`
   }
 `
 client.writeData({ data: { loggedIn: null } })
-client.query({ query: GET_USER }).then(({ data: {validate} }) => {
+client.query({ query: GET_USER }).then(({ data: { validate } }) => {
   client.writeData({
     data: { loggedIn: validate != null, details: validate }
   })

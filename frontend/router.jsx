@@ -30,7 +30,7 @@ export default class Router extends React.Component {
               )}
               {data.loggedIn == true && (
                 <Switch>
-                  <Route path='/' component={() => <Login />} />
+                  <Route path='/' component={() => <div>logged in hehe</div>} />
                 </Switch>
               )}
             </BrowserRouter>

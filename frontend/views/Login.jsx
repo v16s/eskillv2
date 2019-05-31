@@ -1,13 +1,25 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import {
-  TextField,
-  Typography,
-  Paper,
-  Button,
-  NavigationIcon
-} from '@material-ui/core'
+import { TextField, Typography, Paper, Button } from '@material-ui/core'
+import gql from 'graphql-tag'
+import { graphql, withApollo, compose } from 'react-apollo'
 import { history } from '../util'
+
+const LOGIN = gql`
+  mutation Login($username: String!, $password: String!) {
+    login(user: { username: $username, password: $password }) {
+      username
+      password
+      name
+      email
+      level
+      department
+      dob
+      jwt
+      campus
+    }
+  }
+`
 
 const styles = theme => ({
   root: {
@@ -45,40 +57,69 @@ const styles = theme => ({
 })
 
 class Login extends React.Component {
+  state = {
+    username: '',
+    password: ''
+  }
+  onInputChange = e => {
+    let newstate = this.state
+    newstate[e.target.id] = e.target.value
+    this.setState(newstate)
+  }
+  onLogin = e => {
+    e.preventDefault()
+    let { client } = this.props
+    this.props
+      .mutate({ variables: this.state })
+      .then(({ data: { login } }) => {
+        localStorage.setItem('jwtToken', login.jwt)
+        client.writeData({ data: { loggedIn: !!login.jwt, details: login } })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
   render () {
     const { classes } = this.props
-
+    const { username, password } = this.state
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
           <Typography color='primary' variant='h5' className={classes.heading}>
             eSkill
           </Typography>
-          <div className={classes.input}>
-            <TextField
-              className={classes.input}
-              variant='outlined'
-              id='username'
-              type='text'
-              label='Register Number'
-            />
+          <form onSubmit={this.onLogin}>
+            <div className={classes.input}>
+              <TextField
+                className={classes.input}
+                variant='outlined'
+                id='username'
+                type='text'
+                onChange={this.onInputChange}
+                label='Register Number'
+                value={username}
+              />
 
-            <TextField
-              className={classes.input}
-              id='password'
-              type='password'
-              variant='outlined'
-              label='Password'
-            />
-          </div>
-          <Button
-            variant='contained'
-            color='primary'
-            size='medium'
-            className={`${classes.button} ${classes.login}`}
-          >
-            Login
-          </Button>
+              <TextField
+                className={classes.input}
+                id='password'
+                type='password'
+                variant='outlined'
+                onChange={this.onInputChange}
+                label='Password'
+                value={password}
+              />
+            </div>
+            <Button
+              variant='contained'
+              color='primary'
+              size='medium'
+              className={`${classes.button} ${classes.login}`}
+              type='submit'
+            >
+              Login
+            </Button>
+          </form>
           <Button
             variant='outlined'
             size='medium'
@@ -95,4 +136,8 @@ class Login extends React.Component {
     )
   }
 }
-export default withStyles(styles)(Login)
+Login = withStyles(styles)(Login)
+export default compose(
+  withApollo,
+  graphql(LOGIN)
+)(Login)
