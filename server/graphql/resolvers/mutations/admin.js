@@ -55,5 +55,19 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
+  },
+  removeCampus: async (parent, { name }, { user }) => {
+    if (user.level < 1) {
+      try {
+        let { admin_id } = await prisma.campus({ name })
+        await prisma.deleteUser({ username: admin_id })
+        return await prisma.deleteCampus({ name })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
   }
 }

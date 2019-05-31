@@ -1,0 +1,109 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Shrirup\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\cmder\vendor\conemu-maximus5\ConEmu\Scripts;C:\K;C:\ProgramData\Anaconda3\Library\mingw-w64\bin;C:\ProgramData\Anaconda3\Library\usr\bin;C:\ProgramData\Anaconda3\Library\bin;C:\ProgramData\Anaconda3\Scripts;C:\Program Files (x86)\Intel\iCLS Client\;C:\ProgramData\Oracle\Java\javapath;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\WINDOWS\System32\OpenSSH\;C:\Users\Shrirup\AppData\Local\Programs\Python\Python37;C:\Program Files\nodejs\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\MongoDB\Server\4.0\bin\mongo.exe;C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe;C:\Program Files\MongoDB\Server\4.0\bin;C:\Android;C:\Windows\System32;C:\ProgramData\chocolatey\bin;C:\Users\Shrirup\.windows-build-tools\python27\;C:\Users\Shrirup\AppData\Local\Temp\yarn--1548824101500-0.009384586000079409;C:\Users\Shrirup\AppData\Local\Yarn\Data\global\node_modules\windows-build-tools\node_modules\.bin;C:\Users\Shrirup\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\Shrirup\AppData\Local\Yarn\Data\global\node_modules\windows-build-tools\node_modules\.bin;C:\Users\Shrirup\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\Shrirup\AppData\Local\Yarn\bin;C:\Program Files\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs;C:\cmder\bin;C:\cmder\vendor\conemu-maximus5\ConEmu\Scripts;C:\cmder\vendor\conemu-maximus5;C:\cmder\vendor\conemu-maximus5\ConEmu;C:\ProgramData\Anaconda3;C:\ProgramData\Anaconda3\Library\mingw-w64\bin;C:\ProgramData\Anaconda3\Library\usr\bin;C:\ProgramData\Anaconda3\Library\bin;C:\ProgramData\Anaconda3\Scripts;C:\Program Files (x86)\Intel\iCLS Client\;C:\ProgramData\Oracle\Java\javapath;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\WINDOWS\System32\OpenSSH\;C:\Users\Shrirup\AppData\Local\Programs\Python\Python37;C:\Program Files\nodejs\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\MongoDB\Server\4.0\bin\mongo.exe;C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe;C:\Program Files\MongoDB\Server\4.0\bin;C:\Android;C:\Windows\System32;C:\Users\Shrirup\Anaconda2;C:\Users\Shrirup\Anaconda2\Library\mingw-w64\bin;C:\Users\Shrirup\Anaconda2\Library\usr\bin;C:\Users\Shrirup\Anaconda2\Library\bin;C:\Users\Shrirup\Anaconda2\Scripts;C:\Users\Shrirup\AppData\Local\Microsoft\WindowsApps;C:\Users\Shrirup\AppData\Roaming\npm;C:\Users\Shrirup\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Shrirup\AppData\Local\GitHubDesktop\bin;C:\cmder;C:\Program Files\Git\mingw64
+
+Yarn version: 
+  1.13.0
+
+Node version: 
+  10.9.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.0.1.tgz: ESOCKETTIMEDOUT
+      at ClientRequest.<anonymous> (C:\Users\Shrirup\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:130024:19)
+      at Object.onceWrapper (events.js:273:13)
+      at ClientRequest.emit (events.js:182:13)
+      at TLSSocket.emitRequestTimeout (_http_client.js:661:40)
+      at Object.onceWrapper (events.js:273:13)
+      at TLSSocket.emit (events.js:182:13)
+      at TLSSocket.Socket._onTimeout (net.js:448:8)
+      at ontimeout (timers.js:424:11)
+      at tryOnTimeout (timers.js:288:5)
+      at listOnTimeout (timers.js:251:5)
+
+npm manifest: 
+  {
+    "name": "eskill-test-server",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "dependencies": {
+      "@babel/cli": "^7.2.3",
+      "@babel/core": "^7.2.2",
+      "@babel/node": "^7.2.2",
+      "@babel/plugin-proposal-class-properties": "^7.3.0",
+      "@babel/polyfill": "^7.4.4",
+      "@babel/preset-env": "^7.3.1",
+      "@babel/preset-react": "^7.0.0",
+      "@babel/preset-stage-0": "^7.0.0",
+      "@babel/preset-typescript": "^7.1.0",
+      "@material-ui/icons": "^4.0.1",
+      "apollo-link": "^1.2.11",
+      "apollo-server-express": "^2.4.8",
+      "babel-plugin-import-graphql": "^2.6.2",
+      "babel-plugin-module-resolver": "^3.1.3",
+      "bcrypt-nodejs": "0.0.3",
+      "bluebird": "^3.5.3",
+      "body-parser": "^1.18.3",
+      "cors": "^2.8.5",
+      "express": "^4.16.4",
+      "graphql": "^14.2.1",
+      "graphql-tag": "^2.10.1",
+      "gridfs-stream": "^1.1.1",
+      "http": "^0.0.0",
+      "import-graphql": "^1.0.1",
+      "jsonwebtoken": "^8.4.0",
+      "lodash": "^4.17.11",
+      "method-override": "^3.0.0",
+      "mongodb": "^3.1.12",
+      "mongoose": "^5.4.5",
+      "morgan": "^1.9.1",
+      "multer": "^1.4.1",
+      "multer-gridfs-storage": "^3.2.3",
+      "parcel-bundler": "^1.12.3",
+      "passport": "^0.4.0",
+      "passport-jwt": "^4.0.0",
+      "prisma-client-lib": "^1.30.4",
+      "random-number": "^0.0.9",
+      "react": "^16.8.0",
+      "react-dom": "^16.8.0",
+      "views": "^1.0.2"
+    },
+    "scripts": {
+      "start": "nodemon -w ./server/ -e js,gql -x \" yarn dev-server\"",
+      "build": "babel ./server --out-dir bin",
+      "dev-server": "babel-node ./server",
+      "production": "npm run build && node bin",
+      "frontend": "parcel ./frontend/index.html --open"
+    },
+    "devDependencies": {
+      "@material-ui/core": "^4.0.1",
+      "@material-ui/styles": "^4.0.1",
+      "apollo-boost": "^0.4.0",
+      "apollo-cache-inmemory": "^1.6.0",
+      "apollo-client": "^2.6.0",
+      "apollo-link-context": "^1.0.17",
+      "apollo-link-state": "^0.4.2",
+      "apollo-upload-client": "^10.0.1",
+      "clsx": "^1.0.4",
+      "node-sass": "^4.12.0",
+      "nodemon": "^1.18.9",
+      "react-apollo": "^2.5.6",
+      "react-router-dom": "^5.0.0",
+      "react-select": "^3.0.3",
+      "rmwc": "^5.5.2",
+      "styled-jsx": "^3.2.1",
+      "styled-jsx-plugin-sass": "^1.0.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

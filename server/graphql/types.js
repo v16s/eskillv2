@@ -50,7 +50,7 @@ export default gql`
     removeDepartment(id: String): Global
     updateDepartment(update: UpdateTag): Global
     addCampus(name: String): Campus
-    removeCampus(id: String): Global
+    removeCampus(name: String!): Campus
     updateCampus(update: UpdateTag): Global
     login(user: LoginInput): User
     register(user: RegisterInput): User
