@@ -50,15 +50,15 @@ export default gql`
     addDepartment(tag: TagInput): Global
     removeDepartment(id: String): Global
     updateDepartment(update: UpdateTag): Global
-    addCampus(name: String): Campus
+    addCampus(name: String!): Campus
     removeCampus(name: String!): Campus
     updateCampus(update: UpdateTag): Global
     login(user: LoginInput): User
     register(user: RegisterInput): User
-    addBranch(name: String): Branch
-    removeBranch(name: String): [Branch]
+    addBranch(name: String!): Branch
+    removeBranch(name: String!): [Branch]
     updateBranch(branch: BranchUpdateInput): Branch
-    addCourse(course: CourseInput): Branch
+    addCourse(course: CourseInput): Course
     removeCourse(course: CourseInput): Branch
     updateCourse(course: CourseInput): Branch
   }
