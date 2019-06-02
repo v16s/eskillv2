@@ -22,7 +22,7 @@ var models = [
   },
   {
     name: "Branch",
-    embedded: true
+    embedded: false
   },
   {
     name: "Course",

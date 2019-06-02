@@ -308,6 +308,7 @@ class Register extends React.Component {
               size='medium'
               className={`${classes.button} ${classes.login}`}
               type='submit'
+              style={{color: '#fff'}}
             >
               Register
             </Button>

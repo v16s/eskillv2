@@ -69,5 +69,30 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
+  },
+  addBranch: async (parent, { name }, { user }) => {
+    if (user.level < 1) {
+      try {
+        return await prisma.createBranch({ name })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  removeBranch: async (parent, { name }, { user }) => {
+    if (user.level < 2) {
+      try {
+        return await prisma.deleteBranch({ name })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
   }
 }

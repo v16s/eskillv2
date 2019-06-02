@@ -55,7 +55,7 @@ const styles = theme => ({
   },
   button: {
     width: '100%',
-    marginTop: '10px'
+    marginTop: '10px',
   },
   login: {
     background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${
@@ -139,6 +139,7 @@ class Login extends React.Component {
             size='medium'
             className={`${classes.button} ${classes.login}`}
             type='submit'
+            style={{color: '#fff'}}
           >
             Login
           </Button>

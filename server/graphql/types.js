@@ -56,8 +56,8 @@ export default gql`
     login(user: LoginInput): User
     register(user: RegisterInput): User
     addBranch(name: String!): Branch
-    removeBranch(name: String!): [Branch]
-    updateBranch(branch: BranchUpdateInput): Branch
+    removeBranch(name: String!): Branch
+    updateBranch(update: UpdateTag): Branch
     addCourse(course: CourseInput): Course
     removeCourse(course: CourseInput): Branch
     updateCourse(course: CourseInput): Branch
