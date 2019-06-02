@@ -1,20 +1,22 @@
 import React from 'react'
 import MaterialTable from 'material-table'
-import AddBox from '@material-ui/icons/AddBox'
-import ArrowUpward from '@material-ui/icons/ArrowUpward'
-import Check from '@material-ui/icons/Check'
-import ChevronLeft from '@material-ui/icons/ChevronLeft'
-import ChevronRight from '@material-ui/icons/ChevronRight'
-import Clear from '@material-ui/icons/Clear'
-import DeleteOutline from '@material-ui/icons/DeleteOutline'
-import Edit from '@material-ui/icons/Edit'
-import FilterList from '@material-ui/icons/FilterList'
-import FirstPage from '@material-ui/icons/FirstPage'
-import LastPage from '@material-ui/icons/LastPage'
-import Remove from '@material-ui/icons/Remove'
-import SaveAlt from '@material-ui/icons/SaveAlt'
-import Search from '@material-ui/icons/Search'
-import ViewColumn from '@material-ui/icons/ViewColumn'
+import {
+  AddBox,
+  ArrowUpward,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Clear,
+  DeleteOutline,
+  Edit,
+  FilterList,
+  FirstPage,
+  LastPage,
+  Remove,
+  SaveAlt,
+  Search,
+  ViewColumn
+} from '@material-ui/icons'
 
 const tableIcons = {
   Add: AddBox,
@@ -35,34 +37,43 @@ const tableIcons = {
   ThirdStateCheck: Remove,
   ViewColumn: ViewColumn
 }
-export default function MaterialTableDemo (props) {
+export default function Table ({
+  title,
+  columns,
+  data,
+  table,
+  detailPanel,
+  onRowAdd,
+  onRowDelete,
+  onRowUpdate
+}) {
   return (
     <MaterialTable
-      title={props.title}
-      columns={props.columns}
+      title={title}
+      columns={columns}
       icons={tableIcons}
-      data={props.data}
+      data={data}
       editable={{
         onRowAdd: newData =>
           new Promise(resolve => {
-            props.onRowAdd(newData, props.table).then(() => {
+            onRowAdd(newData, table).then(() => {
               resolve()
             })
           }),
         onRowUpdate: (newData, oldData) =>
           new Promise(resolve => {
-            props.onRowUpdate(newData, oldData, props.table).then(() => {
+            onRowUpdate(newData, oldData, table).then(() => {
               resolve()
             })
           }),
         onRowDelete: oldData =>
           new Promise(resolve => {
-            props.onRowDelete(oldData, props.table).then(() => {
+            onRowDelete(oldData, table).then(() => {
               resolve()
             })
           })
       }}
-      detailPanel={props.detailPanel}
+      detailPanel={detailPanel}
     />
   )
 }

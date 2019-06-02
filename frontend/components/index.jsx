@@ -1,4 +1,5 @@
 import Dropdown from './Dropdown'
 import AppBar from './AppBar'
 import Table from './Table'
-export { Dropdown, AppBar, Table }
+import List from './List'
+export { Dropdown, AppBar, Table, List }

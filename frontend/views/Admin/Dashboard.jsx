@@ -1,14 +1,28 @@
 import React from 'react'
-import { Table } from '../../components'
-import { Paper } from '@material-ui/core'
-export default class Dashboard extends React.Component {
+import { Table, List } from '../../components'
+import gql from 'graphql-tag'
+import { compose, graphql } from 'react-apollo'
+
+const CAMPUSES = gql`
+  {
+    campuses {
+      departments {
+        name
+        id
+      }
+      admin_id
+      name
+    }
+  }
+`
+class Dashboard extends React.Component {
   state = {
-    table: {
-      columns: [{ title: 'ID', field: 'id' }, { title: 'Name', field: 'name' }],
-      data: [
-        { id: 'ktr', name: 'katankkulathur' },
-        { id: 'vdp', name: 'vadapalani' }
-      ]
+    campuses: {
+      columns: [
+        { title: 'Name', field: 'name' },
+        { title: 'Admin ID', field: 'admin_id' }
+      ],
+      data: []
     }
   }
   add = (newData, table) => {
@@ -35,7 +49,14 @@ export default class Dashboard extends React.Component {
       this.setState(newstate)
     })
   }
+  componentDidMount () {}
+  componentWillUpdate (nextProps, nextState) {
+    if (nextProps.data.loading == false) {
+      nextState.campuses.data = nextProps.data.campuses
+    }
+  }
   render () {
+    console.log(this.props.data)
     return (
       <div>
         <div style={{ width: '50%', padding: '20px' }}>
@@ -43,13 +64,27 @@ export default class Dashboard extends React.Component {
             onRowAdd={this.add}
             onRowDelete={this.delete}
             onRowUpdate={this.update}
-            data={this.state.table.data}
-            columns={this.state.table.columns}
-            table='table'
+            data={this.state.campuses.data}
+            columns={this.state.campuses.columns}
+            table='campuses'
             title='Campuses'
+            detailPanel={({ departments }) => {
+              if (departments.length > 0) {
+                return (
+                  <div style={{ padding: '20px' }}>
+                    <List
+                      title='Departments'
+                      data={departments.map(d => d.name)}
+                    />
+                  </div>
+                )
+              }
+              return undefined
+            }}
           />
         </div>
       </div>
     )
   }
 }
+export default graphql(CAMPUSES)(Dashboard)
