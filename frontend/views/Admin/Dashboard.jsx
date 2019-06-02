@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, List } from '../../components'
+import { Table, List, RegisterControl } from '../../components'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
 
@@ -158,55 +158,58 @@ class Dashboard extends React.Component {
   render () {
     console.log(this.props.data)
     return (
-      <div
-        style={{
-          display: 'flex'
-        }}
-      >
-        <div style={{ width: '50%', padding: '20px' }}>
-          <Table
-            onRowAdd={this.add}
-            onRowDelete={this.delete}
-            onRowUpdate={this.update}
-            data={this.state.campuses.data}
-            columns={this.state.campuses.columns}
-            table='campuses'
-            title='Campuses'
-            detailPanel={({ departments }) => {
-              if (departments.length > 0) {
-                return (
-                  <div style={{ padding: '20px' }}>
-                    <List
-                      title='Departments'
-                      data={departments.map(d => d.name)}
-                    />
-                  </div>
-                )
-              }
-              return undefined
-            }}
-          />
-        </div>
-        <div style={{ width: '50%', padding: '20px' }}>
-          <Table
-            onRowAdd={this.add}
-            onRowDelete={this.delete}
-            onRowUpdate={this.update}
-            data={this.state.branches.data}
-            columns={this.state.branches.columns}
-            table='branches'
-            title='Branches'
-            detailPanel={({ courses }) => {
-              if (courses.length > 0) {
-                return (
-                  <div style={{ padding: '20px' }}>
-                    <List title='Courses' data={courses.map(d => d.name)} />
-                  </div>
-                )
-              }
-              return undefined
-            }}
-          />
+      <div>
+        <RegisterControl />
+        <div
+          style={{
+            display: 'flex'
+          }}
+        >
+          <div style={{ width: '50%', padding: '20px' }}>
+            <Table
+              onRowAdd={this.add}
+              onRowDelete={this.delete}
+              onRowUpdate={this.update}
+              data={this.state.campuses.data}
+              columns={this.state.campuses.columns}
+              table='campuses'
+              title='Campuses'
+              detailPanel={({ departments }) => {
+                if (departments.length > 0) {
+                  return (
+                    <div style={{ padding: '20px' }}>
+                      <List
+                        title='Departments'
+                        data={departments.map(d => d.name)}
+                      />
+                    </div>
+                  )
+                }
+                return undefined
+              }}
+            />
+          </div>
+          <div style={{ width: '50%', padding: '20px' }}>
+            <Table
+              onRowAdd={this.add}
+              onRowDelete={this.delete}
+              onRowUpdate={this.update}
+              data={this.state.branches.data}
+              columns={this.state.branches.columns}
+              table='branches'
+              title='Branches'
+              detailPanel={({ courses }) => {
+                if (courses.length > 0) {
+                  return (
+                    <div style={{ padding: '20px' }}>
+                      <List title='Courses' data={courses.map(d => d.name)} />
+                    </div>
+                  )
+                }
+                return undefined
+              }}
+            />
+          </div>
         </div>
       </div>
     )
