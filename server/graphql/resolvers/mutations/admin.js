@@ -70,6 +70,21 @@ export default {
       throw new AuthenticationError('Unauthorized')
     }
   },
+
+  updateCampus: async (parent, { name, newName }, { user }) => {
+    if (user.level < 1) {
+      try {
+        return await prisma.updateCampus({
+          where: { name },data: {name: newName}})
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
   addBranch: async (parent, { name }, { user }) => {
     if (user.level < 1) {
       try {
@@ -84,9 +99,25 @@ export default {
   },
 
   removeBranch: async (parent, { name }, { user }) => {
-    if (user.level < 2) {
+    if (user.level < 1) {
       try {
         return await prisma.deleteBranch({ name })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  updateBranch: async (parent, { name, newName }, { user }) => {
+    if (user.level < 1) {
+      try {
+        return await prisma.updateBranch({
+          where: { name },
+          data:  { name: newName }
+        })
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())

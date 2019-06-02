@@ -52,12 +52,12 @@ export default gql`
     updateDepartment(update: UpdateTag): Global
     addCampus(name: String!): Campus
     removeCampus(name: String!): Campus
-    updateCampus(update: UpdateTag): Global
+    updateCampus(name: String!, newName: String!): Campus
     login(user: LoginInput): User
     register(user: RegisterInput): User
     addBranch(name: String!): Branch
     removeBranch(name: String!): Branch
-    updateBranch(update: UpdateTag): Branch
+    updateBranch(name: String!, newName: String!): Branch
     addCourse(course: CourseInput): Course
     removeCourse(course: CourseInput): Branch
     updateCourse(course: CourseInput): Branch
