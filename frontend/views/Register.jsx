@@ -27,6 +27,14 @@ const GET_CAMPUSES = gql`
     }
   }
 `
+const GET_REGISTER_PERMIT = gql`
+  {
+    global {
+      regs
+      regf
+    }
+  }
+`
 const GET_DARK = gql`
   {
     dark @client
@@ -206,6 +214,12 @@ class Register extends React.Component {
     departments = departments
       ? departments.map(k => ({ label: k.name, value: k.id }))
       : []
+  let regs=false, regf=false
+    if (this.props.registerPermit.global) {
+      regs = this.props.registerPermit.global.regs
+      regf =  this.props.registerPermit.global.regf
+       }
+    console.log(this.props.registerPermit)
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
@@ -226,93 +240,105 @@ class Register extends React.Component {
               <Tonality />
             </IconButton>
           </div>
-          <Tabs
-            value={tab}
-            indicatorColor='primary'
-            textColor='primary'
-            onChange={this.handleTabChange}
-          >
-            <Tab label='Student' />
-            <Tab label='Faculty' />
-          </Tabs>
-          <form onSubmit={this.onSubmit}>
-            <div className={classes.input}>
-              <TextField
-                className={classes.input}
-                variant='outlined'
-                id='username'
-                type='text'
-                label={tab == 0 ? 'Register Number' : 'Faculty ID'}
-                onChange={this.onInputChange}
-                value={username}
-              />
-
-              <Dropdown
-                className={classes.input}
-                options={campuses}
-                onChange={this.onDropdownChange}
-                value={campus}
-                placeholder={'Select your campus'}
-                label='College Campus'
-                name='campus'
-              />
-              <Dropdown
-                className={classes.input}
-                options={departments}
-                onChange={this.onDropdownChange}
-                value={department}
-                placeholder={'Select your department'}
-                label='College Department'
-                name='department'
-              />
-              <TextField
-                className={classes.input}
-                variant='outlined'
-                id='name'
-                type='text'
-                label='Name'
-                onChange={this.onInputChange}
-                value={name}
-              />
-              <TextField
-                className={classes.input}
-                variant='outlined'
-                id='email'
-                type='text'
-                label='Email'
-                onChange={this.onInputChange}
-                value={email}
-              />
-              <TextField
-                className={classes.input}
-                id='password'
-                type='password'
-                variant='outlined'
-                label='Password'
-                onChange={this.onInputChange}
-                value={password}
-              />
-              <TextField
-                className={classes.input}
-                id='confirm'
-                type='password'
-                variant='outlined'
-                label='Confirm Password'
-                onChange={this.onInputChange}
-                value={confirm}
-              />
-            </div>
-            <Button
-              variant='contained'
-              color='primary'
-              size='medium'
-              className={`${classes.button} ${classes.login}`}
-              type='submit'
-              style={{color: '#fff'}}
+          {(regs == true || regf == true) && (
+            <Tabs
+              value={tab}
+              indicatorColor='primary'
+              textColor='primary'
+              onChange={this.handleTabChange}
             >
-              Register
-            </Button>
-          </form>
+              {regs == true && <Tab value={0} label='Student' />}
+              {regf == true && <Tab value={1} label='Faculty' />}
+            </Tabs>
+          )}
+          {(regs == true || regf == true) ? (
+            <form onSubmit={this.onSubmit}>
+              <div className={classes.input}>
+                <TextField
+                  className={classes.input}
+                  variant='outlined'
+                  id='username'
+                  type='text'
+                  label={tab == 0 ? 'Register Number' : 'Faculty ID'}
+                  onChange={this.onInputChange}
+                  value={username}
+                />
+
+                <Dropdown
+                  className={classes.input}
+                  options={campuses}
+                  onChange={this.onDropdownChange}
+                  value={campus}
+                  placeholder={'Select your campus'}
+                  label='College Campus'
+                  name='campus'
+                />
+                <Dropdown
+                  className={classes.input}
+                  options={departments}
+                  onChange={this.onDropdownChange}
+                  value={department}
+                  placeholder={'Select your department'}
+                  label='College Department'
+                  name='department'
+                />
+                <TextField
+                  className={classes.input}
+                  variant='outlined'
+                  id='name'
+                  type='text'
+                  label='Name'
+                  onChange={this.onInputChange}
+                  value={name}
+                />
+                <TextField
+                  className={classes.input}
+                  variant='outlined'
+                  id='email'
+                  type='text'
+                  label='Email'
+                  onChange={this.onInputChange}
+                  value={email}
+                />
+                <TextField
+                  className={classes.input}
+                  id='password'
+                  type='password'
+                  variant='outlined'
+                  label='Password'
+                  onChange={this.onInputChange}
+                  value={password}
+                />
+                <TextField
+                  className={classes.input}
+                  id='confirm'
+                  type='password'
+                  variant='outlined'
+                  label='Confirm Password'
+                  onChange={this.onInputChange}
+                  value={confirm}
+                />
+              </div>
+              <Button
+                variant='contained'
+                color='primary'
+                size='medium'
+                className={`${classes.button} ${classes.login}`}
+                type='submit'
+                style={{ color: '#fff' }}
+              >
+                Register
+              </Button>
+            </form>
+          ) : (
+              <Typography color='primary'
+              variant='p'
+                className={classes.heading}
+              style={{padding: '20px 0',justifyContent: 'center', width: '100%', display: 'flex'}}
+              >
+                Registrations are currently closed
+              </Typography>
+          )}
         </Paper>
         <Button
           size='medium'
@@ -333,5 +359,6 @@ export default compose(
   graphql(GET_CAMPUSES),
   graphql(REGISTER),
   graphql(GET_DARK, { name: 'dark' }),
-  graphql(CHANGE_DARK, { name: 'changeDark' })
+  graphql(CHANGE_DARK, { name: 'changeDark' }),
+  graphql(GET_REGISTER_PERMIT, { name: 'registerPermit' })
 )(Register)

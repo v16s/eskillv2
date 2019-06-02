@@ -32,6 +32,14 @@ const GET_DARK = gql`
     dark @client
   }
 `
+const GET_REGISTER_PERMIT = gql`
+  {
+    global {
+      regs
+      regf
+    }
+  }
+`
 const CHANGE_DARK = gql`
   mutation ChangeDark($dark: Boolean!) {
     changeDark(dark: $dark) @client
@@ -55,7 +63,7 @@ const styles = theme => ({
   },
   button: {
     width: '100%',
-    marginTop: '10px',
+    marginTop: '10px'
   },
   login: {
     background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${
@@ -94,7 +102,7 @@ class Login extends React.Component {
       })
   }
   render () {
-    const { classes, dark, client } = this.props
+    const { classes, dark, client, registerPermit } = this.props
     const { username, password } = this.state
     return (
       <Paper className={classes.paper}>
@@ -139,22 +147,25 @@ class Login extends React.Component {
             size='medium'
             className={`${classes.button} ${classes.login}`}
             type='submit'
-            style={{color: '#fff'}}
+            style={{ color: '#fff' }}
           >
             Login
           </Button>
         </form>
-        <Button
-          variant='outlined'
-          size='medium'
-          color='primary'
-          className={classes.button}
-          onClick={e => {
-            history.push('/register')
-          }}
-        >
-          Register
-        </Button>
+        {registerPermit.global &&
+          (registerPermit.global.regs || registerPermit.global.regf) && (
+          <Button
+            variant='outlined'
+            size='medium'
+            color='primary'
+            className={classes.button}
+            onClick={e => {
+              history.push('/register')
+            }}
+          >
+              Register
+          </Button>
+        )}
       </Paper>
     )
   }
@@ -164,5 +175,6 @@ export default compose(
   withApollo,
   graphql(LOGIN),
   graphql(GET_DARK, { name: 'dark' }),
-  graphql(CHANGE_DARK, { name: 'changeDark' })
+  graphql(CHANGE_DARK, { name: 'changeDark' }),
+  graphql(GET_REGISTER_PERMIT, { name: 'registerPermit' })
 )(Login)
