@@ -4,5 +4,15 @@ export const typeDefs = gql`
     loggedIn: Boolean!
     details: User!
   }
+  extend type Mutation {
+    changeDark(dark: Boolean!): Boolean
+  }
 `
-export const resolvers = {}
+export const resolvers = {
+  Mutation: {
+    changeDark: (_, { dark }, { cache }) => {
+      cache.writeData({ data: { dark } })
+      return dark
+    }
+  }
+}

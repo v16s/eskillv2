@@ -104,31 +104,29 @@ class Dashboard extends React.Component {
   render () {
     console.log(this.props.data)
     return (
-      <div>
-        <div style={{ width: '50%', padding: '20px' }}>
-          <Table
-            onRowAdd={this.add}
-            onRowDelete={this.delete}
-            onRowUpdate={this.update}
-            data={this.state.campuses.data}
-            columns={this.state.campuses.columns}
-            table='campuses'
-            title='Campuses'
-            detailPanel={({ departments }) => {
-              if (departments.length > 0) {
-                return (
-                  <div style={{ padding: '20px' }}>
-                    <List
-                      title='Departments'
-                      data={departments.map(d => d.name)}
-                    />
-                  </div>
-                )
-              }
-              return undefined
-            }}
-          />
-        </div>
+      <div style={{ width: '50%', padding: '20px' }}>
+        <Table
+          onRowAdd={this.add}
+          onRowDelete={this.delete}
+          onRowUpdate={this.update}
+          data={this.state.campuses.data}
+          columns={this.state.campuses.columns}
+          table='campuses'
+          title='Campuses'
+          detailPanel={({ departments }) => {
+            if (departments.length > 0) {
+              return (
+                <div style={{ padding: '20px' }}>
+                  <List
+                    title='Departments'
+                    data={departments.map(d => d.name)}
+                  />
+                </div>
+              )
+            }
+            return undefined
+          }}
+        />
       </div>
     )
   }

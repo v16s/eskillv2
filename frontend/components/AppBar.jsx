@@ -1,4 +1,6 @@
 import React from 'react'
+import gql from 'graphql-tag'
+import { compose, graphql } from 'react-apollo'
 import {
   AppBar,
   Toolbar,
@@ -9,14 +11,25 @@ import {
   Menu
 } from '@material-ui/core'
 import {
-  AccountCircle,
   Mail as MailIcon,
   Notifications as NotificationsIcon,
   MoreVert as MoreIcon,
-  ExitToAppRounded as LogoutIcon
+  ExitToAppRounded as LogoutIcon,
+  Tonality
 } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-import { fade } from '@material-ui/core/styles/colorManipulator'
+
+const GET_DARK = gql`
+  {
+    dark @client
+  }
+`
+const CHANGE_DARK = gql`
+  mutation ChangeDark($dark: Boolean!) {
+    changeDark(dark: $dark) @client
+  }
+`
+
 const useStyles = makeStyles(theme => ({
   grow: {
     flexGrow: 1
@@ -25,10 +38,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block'
-    }
+    display: 'block'
   },
   inputRoot: {
     color: 'inherit'
@@ -59,7 +69,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.main
   }
 }))
-function PrimarySearchAppBar () {
+function PrimarySearchAppBar ({ dark, changeDark }) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
@@ -93,12 +103,15 @@ function PrimarySearchAppBar () {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton color='inherit'>
-          <Badge badgeContent={4} color='secondary'>
-            <MailIcon />
-          </Badge>
+        <IconButton
+          color='inherit'
+          onClick={e => {
+            changeDark({ variables: { dark: !dark.dark } })
+          }}
+        >
+          <Tonality />
         </IconButton>
-        <p>Messages</p>
+        <p>Mode</p>
       </MenuItem>
       <MenuItem>
         <IconButton color='inherit'>
@@ -108,11 +121,16 @@ function PrimarySearchAppBar () {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem
+        onClick={e => {
+          localStorage.removeItem('jwtToken')
+          window.location.reload()
+        }}
+      >
         <IconButton color='inherit'>
-          <AccountCircle />
+          <LogoutIcon />
         </IconButton>
-        <p>Profile</p>
+        <p>Logout</p>
       </MenuItem>
     </Menu>
   )
@@ -126,10 +144,13 @@ function PrimarySearchAppBar () {
 
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton color='inherit'>
-              <Badge badgeContent={4} color='secondary'>
-                <MailIcon />
-              </Badge>
+            <IconButton
+              color='primary'
+              onClick={e => {
+                changeDark({ variables: { dark: !dark.dark } })
+              }}
+            >
+              <Tonality />
             </IconButton>
             <IconButton color='inherit'>
               <Badge badgeContent={17} color='secondary'>
@@ -163,4 +184,7 @@ function PrimarySearchAppBar () {
   )
 }
 
-export default PrimarySearchAppBar
+export default compose(
+  graphql(GET_DARK, { name: 'dark' }),
+  graphql(CHANGE_DARK, { name: 'changeDark' })
+)(PrimarySearchAppBar)

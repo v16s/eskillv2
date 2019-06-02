@@ -6,13 +6,15 @@ import {
   Paper,
   Button,
   Tabs,
-  Tab
+  Tab,
+  IconButton
 } from '@material-ui/core'
 import { history } from '../util'
 import { Dropdown } from '../components'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { find } from 'lodash'
+import { Tonality } from '@material-ui/icons'
 
 const GET_CAMPUSES = gql`
   query Campus {
@@ -23,6 +25,16 @@ const GET_CAMPUSES = gql`
         id
       }
     }
+  }
+`
+const GET_DARK = gql`
+  {
+    dark @client
+  }
+`
+const CHANGE_DARK = gql`
+  mutation ChangeDark($dark: Boolean!) {
+    changeDark(dark: $dark) @client
   }
 `
 const REGISTER = gql`
@@ -90,6 +102,12 @@ const styles = theme => ({
   textButton: {
     width: '80%',
     maxWidth: 400
+  },
+  titleBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 })
 
@@ -168,7 +186,7 @@ class Register extends React.Component {
     }
   }
   render () {
-    const { classes } = this.props
+    const { classes, dark } = this.props
     const {
       campus,
       tab,
@@ -191,9 +209,23 @@ class Register extends React.Component {
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
-          <Typography color='primary' variant='h5' className={classes.heading}>
-            Register
-          </Typography>
+          <div className={classes.titleBar}>
+            <Typography
+              color='primary'
+              variant='h5'
+              className={classes.heading}
+            >
+              Register
+            </Typography>
+            <IconButton
+              color='primary'
+              onClick={e => {
+                this.props.changeDark({ variables: { dark: !dark.dark } })
+              }}
+            >
+              <Tonality />
+            </IconButton>
+          </div>
           <Tabs
             value={tab}
             indicatorColor='primary'
@@ -298,5 +330,7 @@ class Register extends React.Component {
 Register = withStyles(styles)(Register)
 export default compose(
   graphql(GET_CAMPUSES),
-  graphql(REGISTER)
+  graphql(REGISTER),
+  graphql(GET_DARK, { name: 'dark' }),
+  graphql(CHANGE_DARK, { name: 'changeDark' })
 )(Register)

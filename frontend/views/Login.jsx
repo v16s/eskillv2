@@ -1,9 +1,16 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { TextField, Typography, Paper, Button } from '@material-ui/core'
+import {
+  TextField,
+  Typography,
+  Paper,
+  Button,
+  IconButton
+} from '@material-ui/core'
 import gql from 'graphql-tag'
 import { graphql, withApollo, compose } from 'react-apollo'
 import { history } from '../util'
+import { Tonality } from '@material-ui/icons'
 
 const LOGIN = gql`
   mutation Login($username: String!, $password: String!) {
@@ -20,18 +27,17 @@ const LOGIN = gql`
     }
   }
 `
-
+const GET_DARK = gql`
+  {
+    dark @client
+  }
+`
+const CHANGE_DARK = gql`
+  mutation ChangeDark($dark: Boolean!) {
+    changeDark(dark: $dark) @client
+  }
+`
 const styles = theme => ({
-  root: {
-    overflow: 'hidden',
-    padding: theme.spacing(0, 3),
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    boxSizing: 'border-box'
-  },
   paper: {
     width: '80%',
     maxWidth: 400,
@@ -55,6 +61,12 @@ const styles = theme => ({
     background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${
       theme.palette.primary.dark
     } 100%)`
+  },
+  titleBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 })
 
@@ -82,64 +94,74 @@ class Login extends React.Component {
       })
   }
   render () {
-    const { classes } = this.props
+    const { classes, dark, client } = this.props
     const { username, password } = this.state
     return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
+      <Paper className={classes.paper}>
+        <div className={classes.titleBar}>
           <Typography color='primary' variant='h5' className={classes.heading}>
             eSkill
           </Typography>
-          <form onSubmit={this.onLogin}>
-            <div className={classes.input}>
-              <TextField
-                className={classes.input}
-                variant='outlined'
-                id='username'
-                type='text'
-                onChange={this.onInputChange}
-                label='Register Number'
-                value={username}
-              />
-
-              <TextField
-                className={classes.input}
-                id='password'
-                type='password'
-                variant='outlined'
-                onChange={this.onInputChange}
-                label='Password'
-                value={password}
-              />
-            </div>
-            <Button
-              variant='contained'
-              color='primary'
-              size='medium'
-              className={`${classes.button} ${classes.login}`}
-              type='submit'
-            >
-              Login
-            </Button>
-          </form>
-          <Button
-            variant='outlined'
-            size='medium'
+          <IconButton
             color='primary'
-            className={classes.button}
             onClick={e => {
-              history.push('/register')
+              this.props.changeDark({ variables: { dark: !dark.dark } })
             }}
           >
-            Register
+            <Tonality />
+          </IconButton>
+        </div>
+        <form onSubmit={this.onLogin}>
+          <div className={classes.input}>
+            <TextField
+              className={classes.input}
+              variant='outlined'
+              id='username'
+              type='text'
+              onChange={this.onInputChange}
+              label='Register Number'
+              value={username}
+            />
+
+            <TextField
+              className={classes.input}
+              id='password'
+              type='password'
+              variant='outlined'
+              onChange={this.onInputChange}
+              label='Password'
+              value={password}
+            />
+          </div>
+          <Button
+            variant='contained'
+            color='primary'
+            size='medium'
+            className={`${classes.button} ${classes.login}`}
+            type='submit'
+          >
+            Login
           </Button>
-        </Paper>
-      </div>
+        </form>
+        <Button
+          variant='outlined'
+          size='medium'
+          color='primary'
+          className={classes.button}
+          onClick={e => {
+            history.push('/register')
+          }}
+        >
+          Register
+        </Button>
+      </Paper>
     )
   }
 }
 Login = withStyles(styles)(Login)
 export default compose(
   withApollo,
-  graphql(LOGIN)
+  graphql(LOGIN),
+  graphql(GET_DARK, { name: 'dark' }),
+  graphql(CHANGE_DARK, { name: 'changeDark' })
 )(Login)
