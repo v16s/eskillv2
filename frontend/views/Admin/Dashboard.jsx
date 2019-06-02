@@ -3,7 +3,7 @@ import { Table, List } from '../../components'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
 
-const CAMPUSES = gql`
+const CAMPUSES_AND_BRANCHES = gql`
   {
     campuses {
       departments {
@@ -12,6 +12,13 @@ const CAMPUSES = gql`
       }
       admin_id
       name
+    }
+    branches {
+      name
+      courses {
+        name
+        coordinator_id
+      }
     }
   }
 `
@@ -29,6 +36,20 @@ const REMOVE_CAMPUS = gql`
     }
   }
 `
+const ADD_BRANCH = gql`
+  mutation AddBranch($name: String!) {
+    addBranch(name: $name) {
+      name
+    }
+  }
+`
+const REMOVE_BRANCH = gql`
+  mutation RemoveBranch($name: String!) {
+    removeBranch(name: $name) {
+      name
+    }
+  }
+`
 class Dashboard extends React.Component {
   state = {
     campuses: {
@@ -37,6 +58,10 @@ class Dashboard extends React.Component {
         { title: 'Admin ID', field: 'admin_id' }
       ],
       data: []
+    },
+    branches: {
+      columns: [{ title: 'Name', field: 'name' }],
+      data: []
     }
   }
   add = (newData, table) => {
@@ -44,6 +69,17 @@ class Dashboard extends React.Component {
       if (table == 'campuses') {
         this.props
           .addCampus({ variables: { name: newData.name } })
+          .then(data => {
+            this.props.data.refetch()
+            resolve()
+          })
+          .catch(err => {
+            reject()
+          })
+      }
+      if (table == 'branches') {
+        this.props
+          .addBranch({ variables: { name: newData.name } })
           .then(data => {
             this.props.data.refetch()
             resolve()
@@ -88,6 +124,23 @@ class Dashboard extends React.Component {
             reject()
           })
       }
+      if (table == 'branches') {
+        this.props
+          .removeBranch({ variables: { name: oldData.name } })
+          .then(data => {
+            this.props.data
+              .refetch()
+              .then(data => {
+                resolve()
+              })
+              .catch(err => {
+                reject()
+              })
+          })
+          .catch(err => {
+            reject()
+          })
+      }
       resolve()
       let newstate = this.state
       newstate[table].data.splice(newstate[table].data.indexOf(oldData), 1)
@@ -99,34 +152,62 @@ class Dashboard extends React.Component {
   componentWillUpdate (nextProps, nextState) {
     if (nextProps.data.loading == false) {
       nextState.campuses.data = nextProps.data.campuses
+      nextState.branches.data = nextProps.data.branches
     }
   }
   render () {
     console.log(this.props.data)
     return (
-      <div style={{ width: '50%', padding: '20px' }}>
-        <Table
-          onRowAdd={this.add}
-          onRowDelete={this.delete}
-          onRowUpdate={this.update}
-          data={this.state.campuses.data}
-          columns={this.state.campuses.columns}
-          table='campuses'
-          title='Campuses'
-          detailPanel={({ departments }) => {
-            if (departments.length > 0) {
-              return (
-                <div style={{ padding: '20px' }}>
-                  <List
-                    title='Departments'
-                    data={departments.map(d => d.name)}
-                  />
-                </div>
-              )
-            }
-            return undefined
-          }}
-        />
+      <div
+        style={{
+          display: 'flex'
+        }}
+      >
+        <div style={{ width: '50%', padding: '20px' }}>
+          <Table
+            onRowAdd={this.add}
+            onRowDelete={this.delete}
+            onRowUpdate={this.update}
+            data={this.state.campuses.data}
+            columns={this.state.campuses.columns}
+            table='campuses'
+            title='Campuses'
+            detailPanel={({ departments }) => {
+              if (departments.length > 0) {
+                return (
+                  <div style={{ padding: '20px' }}>
+                    <List
+                      title='Departments'
+                      data={departments.map(d => d.name)}
+                    />
+                  </div>
+                )
+              }
+              return undefined
+            }}
+          />
+        </div>
+        <div style={{ width: '50%', padding: '20px' }}>
+          <Table
+            onRowAdd={this.add}
+            onRowDelete={this.delete}
+            onRowUpdate={this.update}
+            data={this.state.branches.data}
+            columns={this.state.branches.columns}
+            table='branches'
+            title='Branches'
+            detailPanel={({ courses }) => {
+              if (courses.length > 0) {
+                return (
+                  <div style={{ padding: '20px' }}>
+                    <List title='Courses' data={courses.map(d => d.name)} />
+                  </div>
+                )
+              }
+              return undefined
+            }}
+          />
+        </div>
       </div>
     )
   }
@@ -134,5 +215,7 @@ class Dashboard extends React.Component {
 export default compose(
   graphql(REMOVE_CAMPUS, { name: 'removeCampus' }),
   graphql(ADD_CAMPUS, { name: 'addCampus' }),
-  graphql(CAMPUSES)
+  graphql(REMOVE_BRANCH, { name: 'removeBranch' }),
+  graphql(ADD_BRANCH, { name: 'addBranch' }),
+  graphql(CAMPUSES_AND_BRANCHES)
 )(Dashboard)

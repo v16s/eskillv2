@@ -16,5 +16,8 @@ export default {
   },
   campuses: async () => {
     return await prisma.campuses()
+  },
+  branches: async () => {
+    return await prisma.branches()
   }
 }
