@@ -15,6 +15,20 @@ const CAMPUSES = gql`
     }
   }
 `
+const ADD_CAMPUS = gql`
+  mutation AddCampus($name: String!) {
+    addCampus(name: $name) {
+      name
+    }
+  }
+`
+const REMOVE_CAMPUS = gql`
+  mutation RemoveCampus($name: String!) {
+    removeCampus(name: $name) {
+      name
+    }
+  }
+`
 class Dashboard extends React.Component {
   state = {
     campuses: {
@@ -26,11 +40,25 @@ class Dashboard extends React.Component {
     }
   }
   add = (newData, table) => {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+      if (table == 'campuses') {
+        this.props
+          .addCampus({ variables: { name: newData.name } })
+          .then(data => {
+            this.props.data.refetch()
+            resolve()
+          })
+          .catch(err => {
+            reject()
+          })
+      }
       resolve()
       let newstate = this.state
       newstate[table].data.push(newData)
       this.setState(newstate)
+
+      // newstate[table].data.push(newData)
+      // this.setState(newstate)
     })
   }
   update = (newData, oldData, table) => {
@@ -43,12 +71,30 @@ class Dashboard extends React.Component {
   }
   delete = (oldData, table) => {
     return new Promise(resolve => {
+      if (table == 'campuses') {
+        this.props
+          .removeCampus({ variables: { name: oldData.name } })
+          .then(data => {
+            this.props.data
+              .refetch()
+              .then(data => {
+                resolve()
+              })
+              .catch(err => {
+                reject()
+              })
+          })
+          .catch(err => {
+            reject()
+          })
+      }
       resolve()
       let newstate = this.state
       newstate[table].data.splice(newstate[table].data.indexOf(oldData), 1)
       this.setState(newstate)
     })
   }
+
   componentDidMount () {}
   componentWillUpdate (nextProps, nextState) {
     if (nextProps.data.loading == false) {
@@ -87,4 +133,8 @@ class Dashboard extends React.Component {
     )
   }
 }
-export default graphql(CAMPUSES)(Dashboard)
+export default compose(
+  graphql(REMOVE_CAMPUS, { name: 'removeCampus' }),
+  graphql(ADD_CAMPUS, { name: 'addCampus' }),
+  graphql(CAMPUSES)
+)(Dashboard)
