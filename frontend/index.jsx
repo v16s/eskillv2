@@ -7,9 +7,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from 'react-apollo'
 import { endpoints } from './util'
 import { createUploadLink } from 'apollo-upload-client'
-import { withClientState } from 'apollo-link-state'
 import Router from './router'
-import { ApolloLink } from 'apollo-link'
+import { typeDefs, resolvers } from './types'
 
 const cache = new InMemoryCache()
 
@@ -31,7 +30,9 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: authLink,
-  cache
+  cache,
+  typeDefs,
+  resolvers
 })
 const GET_USER = gql`
   {

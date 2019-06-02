@@ -83,7 +83,9 @@ const styles = theme => ({
     marginTop: '10px'
   },
   login: {
-    background: 'linear-gradient( 135deg, #130CB7 10%, #3F51B5 100%)'
+    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${
+      theme.palette.primary.dark
+    } 100%)`
   },
   textButton: {
     width: '80%',
