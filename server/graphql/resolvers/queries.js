@@ -2,7 +2,6 @@ import { prisma } from 'prisma'
 import { async } from 'q'
 export default {
   global: async (parent, args, ctx, info) => {
-    console.log(ctx)
     return await prisma.global({ id: 'global' })
   },
   branches: async () => {

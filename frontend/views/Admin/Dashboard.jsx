@@ -3,7 +3,8 @@ import { Table, List, RegisterControl } from '../../components'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
 
-const CAMPUSES_AND_BRANCHES = gql`
+const CAMPUSES =
+gql`
   {
     campuses {
       departments {
@@ -13,6 +14,9 @@ const CAMPUSES_AND_BRANCHES = gql`
       admin_id
       name
     }
+  }`
+const BRANCHES = gql`
+  {
     branches {
       name
       courses {
@@ -28,6 +32,13 @@ const ADD_CAMPUS = gql`
       name
     }
   }
+`
+const UPDATE_BRANCH = gql`
+mutation UpdateBranch($name: String!, $newName: String!) {
+  updateBranch(name: $name, newName: $newName){
+    name
+  }
+}
 `
 const REMOVE_CAMPUS = gql`
   mutation RemoveCampus($name: String!) {
@@ -70,7 +81,7 @@ class Dashboard extends React.Component {
         this.props
           .addCampus({ variables: { name: newData.name } })
           .then(data => {
-            this.props.data.refetch()
+            this.props.campuses.refetch()
             resolve()
           })
           .catch(err => {
@@ -81,7 +92,7 @@ class Dashboard extends React.Component {
         this.props
           .addBranch({ variables: { name: newData.name } })
           .then(data => {
-            this.props.data.refetch()
+            this.props.branches.refetch()
             resolve()
           })
           .catch(err => {
@@ -98,7 +109,21 @@ class Dashboard extends React.Component {
     })
   }
   update = (newData, oldData, table) => {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+      if(table == 'branches') {
+        this.props.updateBranch({
+          variables: {
+            name: oldData.name,
+            newName: newData.name
+          }
+        }).then(data => {
+          this.props.branches.refetch().then(() => {
+            resolve()
+          }).catch(err => {
+            reject()
+          })
+        })
+      }
       resolve()
       let newstate = this.state
       newstate[table].data[newstate[table].data.indexOf(oldData)] = newData
@@ -106,12 +131,12 @@ class Dashboard extends React.Component {
     })
   }
   delete = (oldData, table) => {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (table == 'campuses') {
         this.props
           .removeCampus({ variables: { name: oldData.name } })
           .then(data => {
-            this.props.data
+            this.props.campuses
               .refetch()
               .then(data => {
                 resolve()
@@ -128,7 +153,7 @@ class Dashboard extends React.Component {
         this.props
           .removeBranch({ variables: { name: oldData.name } })
           .then(data => {
-            this.props.data
+            this.props.branches
               .refetch()
               .then(data => {
                 resolve()
@@ -150,13 +175,16 @@ class Dashboard extends React.Component {
 
   componentDidMount () {}
   componentWillUpdate (nextProps, nextState) {
-    if (nextProps.data.loading == false) {
-      nextState.campuses.data = nextProps.data.campuses
-      nextState.branches.data = nextProps.data.branches
+    if (nextProps.campuses.loading == false) {
+      nextState.campuses.data = nextProps.campuses.campuses
+      
+    }
+    if(nextProps.branches.loading == false) {
+      nextState.branches.data = nextProps.branches.branches
     }
   }
   render () {
-    console.log(this.props.data)
+    
     return (
       <div>
         <RegisterControl />
@@ -220,5 +248,7 @@ export default compose(
   graphql(ADD_CAMPUS, { name: 'addCampus' }),
   graphql(REMOVE_BRANCH, { name: 'removeBranch' }),
   graphql(ADD_BRANCH, { name: 'addBranch' }),
-  graphql(CAMPUSES_AND_BRANCHES)
+  graphql(UPDATE_BRANCH, { name: 'updateBranch' }),
+  graphql(CAMPUSES, {name: 'campuses'}),
+  graphql(BRANCHES, {name: 'branches'})
 )(Dashboard)

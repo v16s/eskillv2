@@ -4,6 +4,7 @@ import { history } from './util'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Login, Register, Admin } from './views'
+import {Loading} from './components'
 
 const GET_USER = gql`
   {
@@ -28,7 +29,7 @@ class Router extends React.Component {
   render () {
     let { data } = this.props
     if (data.loggedIn == null) {
-      return 'loading...'
+      return <Loading color="#03a9f4"></Loading>
     }
     return (
       <BrowserRouter history={history}>
