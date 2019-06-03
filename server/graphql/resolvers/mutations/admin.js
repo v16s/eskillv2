@@ -125,5 +125,30 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
+  },
+
+  addCourse: async (parent, { name , branchName }, { user }) => {
+    if (user.level < 1) {
+      try {
+        let identity = name.concat( branchName )
+        let salt = await promisify(bcrypt.genSalt)(10)
+        let hash = await promisify(bcrypt.hash)('password', salt, null)
+        let { username } = await prisma.createUser({
+          username: `${identity.replace(/ /g, '-')}-Coordinator-`,
+          password: hash,
+          name: `${identity} Coordinator`,
+          course: name,
+          email: '',
+          level: 2
+        })
+        return await prisma.createCourse({ name, coordinator_id: username })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
   }
+
 }

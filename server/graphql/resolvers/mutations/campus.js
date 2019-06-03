@@ -3,6 +3,22 @@ import bcrypt from 'bcrypt-nodejs'
 import { promisify } from 'util'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
 export default {
+  updateOwnCampus: async (parent, { name, newName }, { user }) => {
+    if (user.level < 2 && user.username == `${name.replace(/ /g, '-')}-Admin`) {
+      try {
+        return await prisma.updateCampus({
+          where: { name },
+          data: { name: newName }
+        })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
   addCourse: async (parent, { course }, { user }) => {
     if (user.level < 2) {
       try {

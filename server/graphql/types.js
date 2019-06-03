@@ -53,13 +53,14 @@ export default gql`
     addCampus(name: String!): Campus
     removeCampus(name: String!): Campus
     updateCampus(name: String!, newName: String!): Campus
+    updateOwnCampus(name: String!, newName: String!): Campus
     login(user: LoginInput): User
     register(user: RegisterInput): User
     addBranch(name: String!): Branch
     removeBranch(name: String!): Branch
     updateBranch(name: String!, newName: String!): Branch
-    addCourse(course: CourseInput): Course
-    removeCourse(course: CourseInput): Branch
+    addCourse(name: String!, branchName: String!): Branch
+    removeCourse(name: String!, branchName: String!): Branch
     updateCourse(course: CourseInput): Branch
   }
   input CourseInput {
