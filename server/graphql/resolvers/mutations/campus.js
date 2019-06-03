@@ -22,14 +22,13 @@ export default {
   addCourse: async (parent, { name, branch }, { user }) => {
     if (user.level < 2) {
       try {
-        let identity = name.concat(branch)
+        let identity = `${name}-${branch}`
         let salt = await promisify(bcrypt.genSalt)(10)
         let hash = await promisify(bcrypt.hash)('password', salt, null)
         let { username } = await prisma.createUser({
           username: `${identity.replace(/ /g, '-')}-Coordinator`,
           password: hash,
-          name: `${idenity} Coordinator`,
-          course: name,
+          name: `${identity} Coordinator`,
           email: '',
           level: 2
         })
@@ -47,12 +46,12 @@ export default {
     }
   },
 
-  removeCourse: async (parent, { name, branch }, { user }) => {
+  removeCourse: async (parent, { name }, { user }) => {
     if (user.level < 2) {
       try {
         let { coordinator_id } = await prisma.course({ name })
         await prisma.deleteUser({ username: coordinator_id })
-        return await prisma.deleteCourse({ branch, name })
+        return await prisma.deleteCourse({ name })
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
@@ -65,8 +64,17 @@ export default {
   updateCourse: async (parent, { name, newName, branch }, { user }) => {
     if (user.level < 2) {
       try {
+        let identity = `${name}-${branch}`
+        let iden = `${newName}-${branch}`
+        let { username } = await prisma.updateUser({
+          where: { username: `${identity.replace(/ /g, '-')}-Coordinator` },
+          data: {
+            username: `${iden.replace(/ /g, '-')}-Coordinator`,
+            name: `${iden} Coordinator`,
+          }
+        })
         return await prisma.updateCourse({
-          where: { name, branch },
+          where: { name },
           data: { name: newName }
         })
       }

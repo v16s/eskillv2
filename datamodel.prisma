@@ -28,10 +28,10 @@ type Campus {
 type Branch {
   id: ID! @id
   name: String! @unique
-  courses: [Course] @relation(name: "BranchCourseRelation")
 }
 type Course  {
+  id: ID! @id
   branch : String!
   coordinator_id: String!
-  name: String!
+  name: String! @unique
 }

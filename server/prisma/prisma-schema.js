@@ -11,6 +11,10 @@ type AggregateCampus {
   count: Int!
 }
 
+type AggregateCourse {
+  count: Int!
+}
+
 type AggregateGlobal {
   count: Int!
 }
@@ -26,7 +30,6 @@ type BatchPayload {
 type Branch {
   id: ID!
   name: String!
-  courses: [Course!]
 }
 
 type BranchConnection {
@@ -38,7 +41,6 @@ type BranchConnection {
 input BranchCreateInput {
   id: ID
   name: String!
-  courses: CourseCreateManyInput
 }
 
 type BranchEdge {
@@ -76,7 +78,6 @@ input BranchSubscriptionWhereInput {
 
 input BranchUpdateInput {
   name: String
-  courses: CourseUpdateManyInput
 }
 
 input BranchUpdateManyMutationInput {
@@ -112,9 +113,6 @@ input BranchWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  courses_some: CourseWhereInput
-  courses_every: CourseRestrictedWhereInput
-  courses_none: CourseRestrictedWhereInput
   AND: [BranchWhereInput!]
 }
 
@@ -245,102 +243,105 @@ input CampusWhereUniqueInput {
 }
 
 type Course {
+  id: ID!
+  branch: String!
   coordinator_id: String!
   name: String!
+}
+
+type CourseConnection {
+  pageInfo: PageInfo!
+  edges: [CourseEdge]!
+  aggregate: AggregateCourse!
 }
 
 input CourseCreateInput {
+  id: ID
+  branch: String!
   coordinator_id: String!
   name: String!
 }
 
-input CourseCreateManyInput {
-  create: [CourseCreateInput!]
+type CourseEdge {
+  node: Course!
+  cursor: String!
 }
 
-input CourseRestrictedWhereInput {
-  coordinator_id: String
-  coordinator_id_not: String
-  coordinator_id_in: [String!]
-  coordinator_id_not_in: [String!]
-  coordinator_id_lt: String
-  coordinator_id_lte: String
-  coordinator_id_gt: String
-  coordinator_id_gte: String
-  coordinator_id_contains: String
-  coordinator_id_not_contains: String
-  coordinator_id_starts_with: String
-  coordinator_id_not_starts_with: String
-  coordinator_id_ends_with: String
-  coordinator_id_not_ends_with: String
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  AND: [CourseRestrictedWhereInput!]
+enum CourseOrderByInput {
+  id_ASC
+  id_DESC
+  branch_ASC
+  branch_DESC
+  coordinator_id_ASC
+  coordinator_id_DESC
+  name_ASC
+  name_DESC
 }
 
-input CourseScalarWhereInput {
-  coordinator_id: String
-  coordinator_id_not: String
-  coordinator_id_in: [String!]
-  coordinator_id_not_in: [String!]
-  coordinator_id_lt: String
-  coordinator_id_lte: String
-  coordinator_id_gt: String
-  coordinator_id_gte: String
-  coordinator_id_contains: String
-  coordinator_id_not_contains: String
-  coordinator_id_starts_with: String
-  coordinator_id_not_starts_with: String
-  coordinator_id_ends_with: String
-  coordinator_id_not_ends_with: String
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  AND: [CourseScalarWhereInput!]
-  OR: [CourseScalarWhereInput!]
-  NOT: [CourseScalarWhereInput!]
+type CoursePreviousValues {
+  id: ID!
+  branch: String!
+  coordinator_id: String!
+  name: String!
 }
 
-input CourseUpdateManyDataInput {
+type CourseSubscriptionPayload {
+  mutation: MutationType!
+  node: Course
+  updatedFields: [String!]
+  previousValues: CoursePreviousValues
+}
+
+input CourseSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CourseWhereInput
+  AND: [CourseSubscriptionWhereInput!]
+}
+
+input CourseUpdateInput {
+  branch: String
   coordinator_id: String
   name: String
 }
 
-input CourseUpdateManyInput {
-  create: [CourseCreateInput!]
-  deleteMany: [CourseScalarWhereInput!]
-  updateMany: [CourseUpdateManyWithWhereNestedInput!]
-}
-
-input CourseUpdateManyWithWhereNestedInput {
-  where: CourseScalarWhereInput!
-  data: CourseUpdateManyDataInput!
+input CourseUpdateManyMutationInput {
+  branch: String
+  coordinator_id: String
+  name: String
 }
 
 input CourseWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  branch: String
+  branch_not: String
+  branch_in: [String!]
+  branch_not_in: [String!]
+  branch_lt: String
+  branch_lte: String
+  branch_gt: String
+  branch_gte: String
+  branch_contains: String
+  branch_not_contains: String
+  branch_starts_with: String
+  branch_not_starts_with: String
+  branch_ends_with: String
+  branch_not_ends_with: String
   coordinator_id: String
   coordinator_id_not: String
   coordinator_id_in: [String!]
@@ -370,6 +371,11 @@ input CourseWhereInput {
   name_ends_with: String
   name_not_ends_with: String
   AND: [CourseWhereInput!]
+}
+
+input CourseWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 scalar DateTime
@@ -501,6 +507,12 @@ type Mutation {
   upsertCampus(where: CampusWhereUniqueInput!, create: CampusCreateInput!, update: CampusUpdateInput!): Campus!
   deleteCampus(where: CampusWhereUniqueInput!): Campus
   deleteManyCampuses(where: CampusWhereInput): BatchPayload!
+  createCourse(data: CourseCreateInput!): Course!
+  updateCourse(data: CourseUpdateInput!, where: CourseWhereUniqueInput!): Course
+  updateManyCourses(data: CourseUpdateManyMutationInput!, where: CourseWhereInput): BatchPayload!
+  upsertCourse(where: CourseWhereUniqueInput!, create: CourseCreateInput!, update: CourseUpdateInput!): Course!
+  deleteCourse(where: CourseWhereUniqueInput!): Course
+  deleteManyCourses(where: CourseWhereInput): BatchPayload!
   createGlobal(data: GlobalCreateInput!): Global!
   updateGlobal(data: GlobalUpdateInput!, where: GlobalWhereUniqueInput!): Global
   updateManyGlobals(data: GlobalUpdateManyMutationInput!, where: GlobalWhereInput): BatchPayload!
@@ -539,6 +551,9 @@ type Query {
   campus(where: CampusWhereUniqueInput!): Campus
   campuses(where: CampusWhereInput, orderBy: CampusOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Campus]!
   campusesConnection(where: CampusWhereInput, orderBy: CampusOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CampusConnection!
+  course(where: CourseWhereUniqueInput!): Course
+  courses(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Course]!
+  coursesConnection(where: CourseWhereInput, orderBy: CourseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourseConnection!
   global(where: GlobalWhereUniqueInput!): Global
   globals(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Global]!
   globalsConnection(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GlobalConnection!
@@ -551,6 +566,7 @@ type Query {
 type Subscription {
   branch(where: BranchSubscriptionWhereInput): BranchSubscriptionPayload
   campus(where: CampusSubscriptionWhereInput): CampusSubscriptionPayload
+  course(where: CourseSubscriptionWhereInput): CourseSubscriptionPayload
   global(where: GlobalSubscriptionWhereInput): GlobalSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
