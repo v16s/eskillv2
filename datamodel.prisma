@@ -30,7 +30,8 @@ type Branch {
   name: String! @unique
   courses: [Course] @relation(name: "BranchCourseRelation")
 }
-type Course @embedded {
+type Course  {
+  branch : String!
   coordinator_id: String!
   name: String!
 }

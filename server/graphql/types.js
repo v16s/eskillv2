@@ -35,6 +35,7 @@ export default gql`
     courses: [Course]
   }
   type Course {
+    branch : String!
     name: String!
     coordinator_id: String!
   }
@@ -59,9 +60,9 @@ export default gql`
     addBranch(name: String!): Branch
     removeBranch(name: String!): Branch
     updateBranch(name: String!, newName: String!): Branch
-    addCourse(name: String!, branchName: String!): Branch
-    removeCourse(name: String!, branchName: String!): Branch
-    updateCourse(course: CourseInput): Branch
+    addCourse(name: String!, branch: String!): Course
+    removeCourse(name: String!, branch: String!): Course
+    updateCourse(name: String!, newName: String!, branch: String! ): Course
   }
   input CourseInput {
     branch: String!

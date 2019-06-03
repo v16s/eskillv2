@@ -127,22 +127,58 @@ export default {
     }
   },
 
-  addCourse: async (parent, { name , branchName }, { user }) => {
+  addCourse: async (parent, { name, branch }, { user }) => {
     if (user.level < 1) {
       try {
-        let identity = name.concat( branchName )
+        let identity = name.concat(branch)
         let salt = await promisify(bcrypt.genSalt)(10)
         let hash = await promisify(bcrypt.hash)('password', salt, null)
         let { username } = await prisma.createUser({
-          username: `${identity.replace(/ /g, '-')}-Coordinator-`,
+          username: `${identity.replace(/ /g, '-')}-Coordinator`,
           password: hash,
-          name: `${identity} Coordinator`,
+          name: `${idenity} Coordinator`,
           course: name,
           email: '',
           level: 2
         })
-        return await prisma.createCourse({ name, coordinator_id: username })
+        return await prisma.createCourse({
+          name,
+          coordinator_id: username,
+          branch
+        })
       } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  removeCourse: async (parent, { name, branch }, { user }) => {
+    if (user.level < 1) {
+      try {
+        let { coordinator_id } = await prisma.course({ name })
+        await prisma.deleteUser({ username: coordinator_id })
+        return await prisma.deleteCourse({ branch, name })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  updateCourse : async (parent, { name, newName, branch}, { user }) => {
+    if(user.level < 1 ) {
+      try {
+        return await prisma.updateCourse({
+          where: { name, branch },
+          data: { name: newName }
+        })
+      }
+      catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
       }
