@@ -3,8 +3,7 @@ import { Table, List, RegisterControl } from '../../components'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
 
-const CAMPUSES =
-gql`
+const CAMPUSES = gql`
   {
     campuses {
       departments {
@@ -14,7 +13,8 @@ gql`
       admin_id
       name
     }
-  }`
+  }
+`
 const BRANCHES = gql`
   {
     branches {
@@ -34,11 +34,11 @@ const ADD_CAMPUS = gql`
   }
 `
 const UPDATE_BRANCH = gql`
-mutation UpdateBranch($name: String!, $newName: String!) {
-  updateBranch(name: $name, newName: $newName){
-    name
+  mutation UpdateBranch($name: String!, $newName: String!) {
+    updateBranch(name: $name, newName: $newName) {
+      name
+    }
   }
-}
 `
 const REMOVE_CAMPUS = gql`
   mutation RemoveCampus($name: String!) {
@@ -110,19 +110,24 @@ class Dashboard extends React.Component {
   }
   update = (newData, oldData, table) => {
     return new Promise((resolve, reject) => {
-      if(table == 'branches') {
-        this.props.updateBranch({
-          variables: {
-            name: oldData.name,
-            newName: newData.name
-          }
-        }).then(data => {
-          this.props.branches.refetch().then(() => {
-            resolve()
-          }).catch(err => {
-            reject()
+      if (table == 'branches') {
+        this.props
+          .updateBranch({
+            variables: {
+              name: oldData.name,
+              newName: newData.name
+            }
           })
-        })
+          .then(data => {
+            this.props.branches
+              .refetch()
+              .then(() => {
+                resolve()
+              })
+              .catch(err => {
+                reject()
+              })
+          })
       }
       resolve()
       let newstate = this.state
@@ -177,14 +182,12 @@ class Dashboard extends React.Component {
   componentWillUpdate (nextProps, nextState) {
     if (nextProps.campuses.loading == false) {
       nextState.campuses.data = nextProps.campuses.campuses
-      
     }
-    if(nextProps.branches.loading == false) {
+    if (nextProps.branches.loading == false) {
       nextState.branches.data = nextProps.branches.branches
     }
   }
   render () {
-    
     return (
       <div>
         <RegisterControl />
@@ -202,19 +205,16 @@ class Dashboard extends React.Component {
               columns={this.state.campuses.columns}
               table='campuses'
               title='Campuses'
-              body={{editRow: {deleteText: 'Remove the campus?'}}}
+              body={{ editRow: { deleteText: 'Remove the campus?' } }}
               detailPanel={({ departments }) => {
-                if (departments.length > 0) {
-                  return (
-                    <div style={{ display: 'flex', boxSizing: 'border-box' }}>
-                      <List
-                        title='Departments'
-                        data={departments.map(d => d.name)}
-                      />
-                    </div>
-                  )
-                }
-                return undefined
+                return (
+                  <div style={{ display: 'flex', boxSizing: 'border-box' }}>
+                    <List
+                      title='Departments'
+                      data={departments.map(d => d.name)}
+                    />
+                  </div>
+                )
               }}
             />
           </div>
@@ -228,14 +228,14 @@ class Dashboard extends React.Component {
               table='branches'
               title='Branches'
               detailPanel={({ courses }) => {
-                if (courses && courses.length > 0) {
-                  return (
-                    <div style={{ display: 'flex', boxSizing: 'border-box' }}>
-                      <List title='Courses' data={courses.map(d => d.name)} />
-                    </div>
-                  )
+                if (!(courses && courses.length > 0)) {
+                  courses = []
                 }
-                return undefined
+                return (
+                  <div style={{ display: 'flex', boxSizing: 'border-box' }}>
+                    <List title='Courses' data={courses.map(d => d.name)} />
+                  </div>
+                )
               }}
             />
           </div>
@@ -250,6 +250,6 @@ export default compose(
   graphql(REMOVE_BRANCH, { name: 'removeBranch' }),
   graphql(ADD_BRANCH, { name: 'addBranch' }),
   graphql(UPDATE_BRANCH, { name: 'updateBranch' }),
-  graphql(CAMPUSES, {name: 'campuses'}),
-  graphql(BRANCHES, {name: 'branches'})
+  graphql(CAMPUSES, { name: 'campuses' }),
+  graphql(BRANCHES, { name: 'branches' })
 )(Dashboard)
