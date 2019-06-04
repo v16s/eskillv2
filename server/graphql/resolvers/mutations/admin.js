@@ -199,6 +199,71 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
+  },
+
+  addDepartment: (parent, { tag }, {user}) => {
+      if (user.level < 2)  
+    {try {
+        
+        return await prisma.updateGlobal({
+            where: { id: 'global' },
+            data: {
+              departments: {
+                create: [tag]
+              }
+            }
+          })
+
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  removeDepartment: (parent, { id }, {user}) => {
+    if(user.level < 1){
+      try {
+          return await prisma.updateGlobal({
+            where: { id: 'global' },
+            data: {
+              departments: {
+                deleteMany: { id }
+              }
+            }
+          })
+        
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  updateCampus: (parent, { update: updateMany }, {user}) => {
+    if(user.level < 1) {
+      try {
+        resolve(
+          await prisma.updateGlobal({
+            where: { id: 'global' },
+            data: {
+              campuses: {
+                updateMany
+              }
+            }
+          })
+        )
+      } catch(e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
   }
 
 }
