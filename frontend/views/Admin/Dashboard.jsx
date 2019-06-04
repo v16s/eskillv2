@@ -202,10 +202,11 @@ class Dashboard extends React.Component {
               columns={this.state.campuses.columns}
               table='campuses'
               title='Campuses'
+              body={{editRow: {deleteText: 'Remove the campus?'}}}
               detailPanel={({ departments }) => {
                 if (departments.length > 0) {
                   return (
-                    <div style={{ padding: '20px' }}>
+                    <div style={{ display: 'flex', boxSizing: 'border-box' }}>
                       <List
                         title='Departments'
                         data={departments.map(d => d.name)}
@@ -227,9 +228,9 @@ class Dashboard extends React.Component {
               table='branches'
               title='Branches'
               detailPanel={({ courses }) => {
-                if (courses.length > 0) {
+                if (courses && courses.length > 0) {
                   return (
-                    <div style={{ padding: '20px' }}>
+                    <div style={{ display: 'flex', boxSizing: 'border-box' }}>
                       <List title='Courses' data={courses.map(d => d.name)} />
                     </div>
                   )

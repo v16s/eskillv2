@@ -9,7 +9,11 @@ import {
   Grid,
   Typography
 } from '@material-ui/core/'
-import DeleteIcon from '@material-ui/icons/Delete'
+import {
+  
+  DeleteOutline as DeleteIcon,
+  Edit as EditIcon,
+} from '@material-ui/icons'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,14 +24,14 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   title: {
-    margin: theme.spacing(4, 0, 2)
+    paddingLeft: '5px'
   }
 }))
 
 export default ({ title, data }) => {
   const classes = useStyles()
   return (
-    <Grid item xs={12} md={6}>
+    <div style={{width: '100%', padding: '10px'}}>
       <Typography variant='h6' className={classes.title}>
         {title}
       </Typography>
@@ -35,6 +39,9 @@ export default ({ title, data }) => {
         <List>
           {data.map(d => (
             <ListItem>
+            <IconButton edge='start' aria-label='Edit'>
+                  <EditIcon />
+                </IconButton>
               <ListItemText primary={d} />
               <ListItemSecondaryAction>
                 <IconButton edge='end' aria-label='Delete'>
@@ -45,6 +52,6 @@ export default ({ title, data }) => {
           ))}
         </List>
       </div>
-    </Grid>
+      </div>
   )
 }
