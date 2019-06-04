@@ -75,14 +75,17 @@ export default {
     if (user.level < 1) {
       try {
         let { username } = await prisma.updateUser({
-          where: { username: `${name.replace(/ /g, '-')}-Admin`}, 
-          data : {
-          username: `${newName.replace(/ /g, '-')}-Admin`,
-          name: `${newName} Admin`,
-          campus: newName}
+          where: { username: `${name.replace(/ /g, '-')}-Admin` },
+          data: {
+            username: `${newName.replace(/ /g, '-')}-Admin`,
+            name: `${newName} Admin`,
+            campus: newName
+          }
         })
         return await prisma.updateCampus({
-          where: { name },data: {name: newName}})
+          where: { name },
+          data: { name: newName }
+        })
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
@@ -123,7 +126,7 @@ export default {
       try {
         return await prisma.updateBranch({
           where: { name },
-          data:  { name: newName }
+          data: { name: newName }
         })
       } catch (e) {
         console.log(e)
@@ -176,44 +179,22 @@ export default {
     }
   },
 
-  updateCourse : async (parent, { name, newName, branch}, { user }) => {
-    if(user.level < 1 ) {
+  updateCourse: async (parent, { name, newName, branch }, { user }) => {
+    if (user.level < 1) {
       try {
         let identity = `${name}-${branch}`
         let iden = `${newName}-${branch}`
         let { username } = await prisma.updateUser({
           where: { username: `${identity.replace(/ /g, '-')}-Coordinator` },
-          data : {username: `${iden.replace(/ /g, '-')}-Coordinator`,
-          name: `${iden} Coordinator`,
-        }
+          data: {
+            username: `${iden.replace(/ /g, '-')}-Coordinator`,
+            name: `${iden} Coordinator`
+          }
         })
         return await prisma.updateCourse({
           where: { name },
           data: { name: newName }
         })
-      }
-      catch (e) {
-        console.log(e)
-        throw new ValidationError(e.toString())
-      }
-    } else {
-      throw new AuthenticationError('Unauthorized')
-    }
-  },
-
-  addDepartment: (parent, { tag }, {user}) => {
-      if (user.level < 2)  
-    {try {
-        
-        return await prisma.updateGlobal({
-            where: { id: 'global' },
-            data: {
-              departments: {
-                create: [tag]
-              }
-            }
-          })
-
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
@@ -223,18 +204,17 @@ export default {
     }
   },
 
-  removeDepartment: (parent, { id }, {user}) => {
-    if(user.level < 1){
+  addDepartment: async (parent, { tag }, { user }) => {
+    if (user.level < 2) {
       try {
-          return await prisma.updateGlobal({
-            where: { id: 'global' },
-            data: {
-              departments: {
-                deleteMany: { id }
-              }
+        return await prisma.updateGlobal({
+          where: { id: 'global' },
+          data: {
+            departments: {
+              create: [tag]
             }
-          })
-        
+          }
+        })
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
@@ -244,8 +224,28 @@ export default {
     }
   },
 
-  updateCampus: (parent, { update: updateMany }, {user}) => {
-    if(user.level < 1) {
+  removeDepartment: async (parent, { id }, { user }) => {
+    if (user.level < 1) {
+      try {
+        return await prisma.updateGlobal({
+          where: { id: 'global' },
+          data: {
+            departments: {
+              deleteMany: { id }
+            }
+          }
+        })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  updateCampus: async (parent, { update: updateMany }, { user }) => {
+    if (user.level < 1) {
       try {
         resolve(
           await prisma.updateGlobal({
@@ -257,7 +257,7 @@ export default {
             }
           })
         )
-      } catch(e) {
+      } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
       }
@@ -265,5 +265,4 @@ export default {
       throw new AuthenticationError('Unauthorized')
     }
   }
-
 }
