@@ -45,7 +45,8 @@ export default function Table ({
   detailPanel,
   onRowAdd,
   onRowDelete,
-  onRowUpdate
+  onRowUpdate,
+  body
 }) {
   return (
     <MaterialTable
@@ -72,6 +73,9 @@ export default function Table ({
               resolve()
             })
           })
+      }}
+      localization={body && {
+        body
       }}
       detailPanel={detailPanel}
     />
