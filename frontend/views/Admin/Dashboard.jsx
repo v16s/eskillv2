@@ -178,7 +178,16 @@ class Dashboard extends React.Component {
     })
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    let nextState = this.state
+    if (this.props.campuses.loading == false) {
+      nextState.campuses.data = this.props.campuses.campuses
+    }
+    if (this.props.branches.loading == false) {
+      nextState.branches.data = this.props.branches.branches
+    }
+    this.setState(nextState)
+  }
   componentWillUpdate (nextProps, nextState) {
     if (nextProps.campuses.loading == false) {
       nextState.campuses.data = nextProps.campuses.campuses
@@ -186,6 +195,7 @@ class Dashboard extends React.Component {
     if (nextProps.branches.loading == false) {
       nextState.branches.data = nextProps.branches.branches
     }
+    return true
   }
   render () {
     return (

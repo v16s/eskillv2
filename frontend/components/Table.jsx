@@ -46,7 +46,8 @@ export default function Table ({
   onRowAdd,
   onRowDelete,
   onRowUpdate,
-  body
+  body,
+  style
 }) {
   return (
     <MaterialTable
@@ -54,6 +55,7 @@ export default function Table ({
       columns={columns}
       icons={tableIcons}
       data={data}
+      style={style}
       editable={{
         onRowAdd: newData =>
           new Promise(resolve => {
@@ -74,9 +76,11 @@ export default function Table ({
             })
           })
       }}
-      localization={body && {
-        body
-      }}
+      localization={
+        body && {
+          body
+        }
+      }
       detailPanel={detailPanel}
     />
   )
