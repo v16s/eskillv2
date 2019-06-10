@@ -1,9 +1,10 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
-import { Paper, TextField } from '@material-ui/core'
+import { Paper, TextField, Fab, Modal, Backdrop } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { Dropdown, Table } from '../../components'
+import { Dropdown, Table, NewQuestion } from '../../components'
+import { Add } from '@material-ui/icons'
 
 const styles = theme => ({
   paper: {
@@ -28,6 +29,18 @@ const styles = theme => ({
   },
   padded: {
     padding: '20px'
+  },
+  icon: {
+    color: '#fff',
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    maxWidth: '200px'
+  },
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 
@@ -37,7 +50,11 @@ class Questions extends React.Component {
       { title: 'Number', field: 'name' },
       { title: 'Question Title', field: 'admin_id' }
     ],
-    data: []
+    data: [],
+    show: false
+  }
+  show = () => {
+    this.setState({ show: !this.state.show })
   }
   add = (newData, table) => {
     return new Promise((resolve, reject) => {
@@ -106,10 +123,33 @@ class Questions extends React.Component {
                 style={{ boxShadow: 'none' }}
               />
             </div>
+            {!this.state.show && (
+              <Fab
+                className={classes.icon}
+                onClick={this.show}
+                variant='extended'
+                color='primary'
+                aria-label='Add'
+              >
+                <Add />
+                New Question
+              </Fab>
+            )}
+            <Modal
+              className={classes.root}
+              open={this.state.show}
+              onClose={this.show}
+            >
+              <NewQuestion close={this.show} />
+            </Modal>
           </Paper>
         </div>
       </div>
     )
   }
+}
+const ModalContainer = props => {
+  console.log(props)
+  return(<div>hello</div>)
 }
 export default withStyles(styles)(Questions)
