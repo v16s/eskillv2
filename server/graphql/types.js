@@ -48,9 +48,9 @@ export default gql`
   type Mutation {
     toggleStudentRegistration: ToggleResult
     toggleFacultyRegistration: ToggleResult
-    addDepartment(tag: TagInput): Global
-    removeDepartment(id: String): Global
-    updateDepartment(update: UpdateTag): Global
+    addDepartment(tag: TagInput, name: String!): Campus
+    removeDepartment(id: String!, name: String!): Campus
+    updateDepartment(id: String!, name: String!, tag: TagInput): Campus
     addCampus(name: String!): Campus
     removeCampus(name: String!): Campus
     updateCampus(name: String!, newName: String!): Campus

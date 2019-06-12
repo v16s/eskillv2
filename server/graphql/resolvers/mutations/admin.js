@@ -2,6 +2,7 @@ import { prisma } from 'prisma'
 import bcrypt from 'bcrypt-nodejs'
 import { promisify } from 'util'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
+import { async } from 'q'
 export default {
   toggleStudentRegistration: async (p, a, { user }) => {
     if (user.level < 1) {
@@ -204,11 +205,11 @@ export default {
     }
   },
 
-  addDepartment: async (parent, { tag }, { user }) => {
-    if (user.level < 2) {
+  addDepartment: async (parent, { tag, name }, { user }) => {
+    if (user.level < 1) {
       try {
-        return await prisma.updateGlobal({
-          where: { id: 'global' },
+        return await prisma.updateCampus({
+          where: { name },
           data: {
             departments: {
               create: [tag]
@@ -217,18 +218,18 @@ export default {
         })
       } catch (e) {
         console.log(e)
-        throw new ValidationError(e.toString())
+        throw new ValidationError(e)
       }
     } else {
       throw new AuthenticationError('Unauthorized')
     }
   },
 
-  removeDepartment: async (parent, { id }, { user }) => {
+  removeDepartment: async (parent, { id, name }, { user }) => {
     if (user.level < 1) {
       try {
-        return await prisma.updateGlobal({
-          where: { id: 'global' },
+        return await prisma.updateCampus({
+          where: { name },
           data: {
             departments: {
               deleteMany: { id }
@@ -244,19 +245,25 @@ export default {
     }
   },
 
-  updateCampus: async (parent, { update: updateMany }, { user }) => {
+  updateDepartment: async (parent, { id, name, tag }, { user }) => {
     if (user.level < 1) {
       try {
-        resolve(
-          await prisma.updateGlobal({
-            where: { id: 'global' },
-            data: {
-              campuses: {
-                updateMany
-              }
+        await prisma.updateCampus({
+          where: { name },
+          data: {
+            departments: {
+              deleteMany: { id }
             }
-          })
-        )
+          }
+        })
+        return await prisma.updateCampus({
+          where: { name },
+          data: {
+            departments: {
+              create: [tag]
+            }
+          }
+        })
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())

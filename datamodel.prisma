@@ -22,16 +22,16 @@ type Tag @embedded {
 type Campus {
   id: ID! @id @unique
   admin_id: String!
-  departments: [Tag] @relation(name: "CampusDepartmentRelation")
+  departments: [Tag]
   name: String! @unique
 }
 type Branch {
   id: ID! @id
   name: String! @unique
 }
-type Course  {
+type Course {
   id: ID! @id
-  branch : String!
+  branch: String!
   coordinator_id: String!
   name: String! @unique
 }
