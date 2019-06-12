@@ -6,6 +6,14 @@ export default {
   updateOwnCampus: async (parent, { name, newName }, { user }) => {
     if (user.level < 2 && user.username == `${name.replace(/ /g, '-')}-Admin`) {
       try {
+        let { username } = await prisma.updateUser({
+          where: { username: `${name.replace(/ /g, '-')}-Admin` },
+          data: {
+            username: `${newName.replace(/ /g, '-')}-Admin`,
+            name: `${newName} Admin`,
+            campus: newName
+          }
+        })
         return await prisma.updateCampus({
           where: { name },
           data: { name: newName }
@@ -70,15 +78,82 @@ export default {
           where: { username: `${identity.replace(/ /g, '-')}-Coordinator` },
           data: {
             username: `${iden.replace(/ /g, '-')}-Coordinator`,
-            name: `${iden} Coordinator`,
+            name: `${iden} Coordinator`
           }
         })
         return await prisma.updateCourse({
           where: { name },
           data: { name: newName }
         })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
       }
-      catch (e) {
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  addDepartment: async (parent, { tag, name }, { user }) => {
+    if (user.level < 2 && user.username == `${name.replace(/ /g, '-')}-Admin`) {
+      try {
+        return await prisma.updateCampus({
+          where: { name },
+          data: {
+            departments: {
+              create: [tag]
+            }
+          }
+        })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e)
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  removeDepartment: async (parent, { id, name }, { user }) => {
+    if (user.level < 2 && user.username == `${name.replace(/ /g, '-')}-Admin`) {
+      try {
+        return await prisma.updateCampus({
+          where: { name },
+          data: {
+            departments: {
+              deleteMany: { id }
+            }
+          }
+        })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+
+  updateDepartment: async (parent, { id, name, tag }, { user }) => {
+    if (user.level < 2 && user.username == `${name.replace(/ /g, '-')}-Admin`) {
+      try {
+        await prisma.updateCampus({
+          where: { name },
+          data: {
+            departments: {
+              deleteMany: { id }
+            }
+          }
+        })
+        return await prisma.updateCampus({
+          where: { name },
+          data: {
+            departments: {
+              create: [tag]
+            }
+          }
+        })
+      } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
       }
@@ -86,5 +161,4 @@ export default {
       throw new AuthenticationError('Unauthorized')
     }
   }
-
 }
