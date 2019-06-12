@@ -51,6 +51,9 @@ export default gql`
     addDepartment(tag: TagInput, name: String!): Campus
     removeDepartment(id: String!, name: String!): Campus
     updateDepartment(id: String!, name: String!, tag: TagInput): Campus
+    adminAddDepartment(tag: TagInput, name: String!): Campus
+    adminRemoveDepartment(id: String!, name: String!): Campus
+    adminUpdateDepartment(id: String!, name: String!, tag: TagInput): Campus
     addCampus(name: String!): Campus
     removeCampus(name: String!): Campus
     updateCampus(name: String!, newName: String!): Campus

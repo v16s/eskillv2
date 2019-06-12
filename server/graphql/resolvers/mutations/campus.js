@@ -94,7 +94,7 @@ export default {
     }
   },
 
-  addDepartment: async (parent, { tag, name }, { user }) => {
+  adminAddDepartment: async (parent, { tag, name }, { user }) => {
     if (user.level < 2 && user.username == `${name.replace(/ /g, '-')}-Admin`) {
       try {
         return await prisma.updateCampus({
@@ -114,7 +114,7 @@ export default {
     }
   },
 
-  removeDepartment: async (parent, { id, name }, { user }) => {
+  adminRemoveDepartment: async (parent, { id, name }, { user }) => {
     if (user.level < 2 && user.username == `${name.replace(/ /g, '-')}-Admin`) {
       try {
         return await prisma.updateCampus({
@@ -134,7 +134,7 @@ export default {
     }
   },
 
-  updateDepartment: async (parent, { id, name, tag }, { user }) => {
+  adminUpdateDepartment: async (parent, { id, name, tag }, { user }) => {
     if (user.level < 2 && user.username == `${name.replace(/ /g, '-')}-Admin`) {
       try {
         await prisma.updateCampus({
