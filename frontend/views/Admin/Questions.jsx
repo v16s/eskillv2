@@ -51,7 +51,7 @@ class Questions extends React.Component {
       { title: 'Question Title', field: 'admin_id' }
     ],
     data: [],
-    show: false
+    show: true
   }
   show = () => {
     this.setState({ show: !this.state.show })
@@ -147,9 +147,5 @@ class Questions extends React.Component {
       </div>
     )
   }
-}
-const ModalContainer = props => {
-  console.log(props)
-  return(<div>hello</div>)
 }
 export default withStyles(styles)(Questions)
