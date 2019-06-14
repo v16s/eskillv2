@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, List, RegisterControl } from '../../components'
+import { Table, RegisterControl } from '../../components'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
 
@@ -15,16 +15,14 @@ const CAMPUSES = gql`
     }
   }
 `
-const BRANCHES = gql`
-  {
-    branches {
-      name
-      courses {
-        name
-        coordinator_id
-      }
-    }
+const COURSES = gql`
+{
+  courses {
+    branch
+    name
+    coordinator_id
   }
+}
 `
 const ADD_CAMPUS = gql`
   mutation AddCampus($name: String!) {
@@ -33,9 +31,23 @@ const ADD_CAMPUS = gql`
     }
   }
 `
-const UPDATE_BRANCH = gql`
-  mutation UpdateBranch($name: String!, $newName: String!) {
-    updateBranch(name: $name, newName: $newName) {
+const ADD_DEPARTMENT = gql`
+  mutation AddDepartment($name: String!, $id: String!, $tname: String!) {
+    addDepartment(name: $name, tag: { id: $id, name: $tname }) {
+      name
+    }
+  }
+`
+const REMOVE_DEPARTMENT = gql`
+  mutation RemoveDepartment($name: String!, $id: String!) {
+    removeDepartment(name: $name, id: $id) {
+      name
+    }
+  }
+`
+const UPDATE_CAMPUS = gql`
+  mutation UpdateCampus($name: String!, $newName: String!) {
+    updateCampus(name: $name, newName: $newName) {
       name
     }
   }
@@ -47,156 +59,39 @@ const REMOVE_CAMPUS = gql`
     }
   }
 `
-const ADD_BRANCH = gql`
-  mutation AddBranch($name: String!) {
-    addBranch(name: $name) {
+const ADD_COURSE = gql`
+  mutation AddCourse($name: String!, $branch: String!) {
+    addCourse(name: $name, branch: $branch) {
       name
     }
   }
 `
-const REMOVE_BRANCH = gql`
-  mutation RemoveBranch($name: String!) {
-    removeBranch(name: $name) {
+const UPDATE_COURSE = gql`
+  mutation UpdateCourse($name: String!, $newName: String!, $branch: String!) {
+    updateCourse(name: $name, newName: $newName, branch: $branch) {
       name
     }
   }
 `
+const REMOVE_COURSE = gql`
+  mutation RemoveCourse($name: String!) {
+    removeCourse(name: $name) {
+      name
+    }
+  }
+`
+
+const CampusTable = compose(
+  graphql(CAMPUSES),
+  graphql(ADD_CAMPUS, { name: 'addOutside' }),
+  graphql(REMOVE_CAMPUS, { name: 'removeOutside' }),
+  graphql(UPDATE_CAMPUS, { name: 'updateOutside' }),
+  graphql(ADD_DEPARTMENT, { name: 'addInside' })
+)(Table)
+const CourseTable = compose(graphql(COURSES),graphql(ADD_COURSE, { name: 'addOutside' }),
+graphql(REMOVE_COURSE, { name: 'removeOutside' }),
+graphql(UPDATE_COURSE, { name: 'updateOutside' }),)(Table)
 class Dashboard extends React.Component {
-  state = {
-    campuses: {
-      columns: [
-        { title: 'Name', field: 'name' },
-        { title: 'Admin ID', field: 'admin_id' }
-      ],
-      data: []
-    },
-    branches: {
-      columns: [{ title: 'Name', field: 'name' }],
-      data: []
-    }
-  }
-  add = (newData, table) => {
-    return new Promise((resolve, reject) => {
-      if (table == 'campuses') {
-        this.props
-          .addCampus({ variables: { name: newData.name } })
-          .then(data => {
-            this.props.campuses.refetch()
-            resolve()
-          })
-          .catch(err => {
-            reject()
-          })
-      }
-      if (table == 'branches') {
-        this.props
-          .addBranch({ variables: { name: newData.name } })
-          .then(data => {
-            this.props.branches.refetch()
-            resolve()
-          })
-          .catch(err => {
-            reject()
-          })
-      }
-      resolve()
-      let newstate = this.state
-      newstate[table].data.push(newData)
-      this.setState(newstate)
-
-      // newstate[table].data.push(newData)
-      // this.setState(newstate)
-    })
-  }
-  update = (newData, oldData, table) => {
-    return new Promise((resolve, reject) => {
-      if (table == 'branches') {
-        this.props
-          .updateBranch({
-            variables: {
-              name: oldData.name,
-              newName: newData.name
-            }
-          })
-          .then(data => {
-            this.props.branches
-              .refetch()
-              .then(() => {
-                resolve()
-              })
-              .catch(err => {
-                reject()
-              })
-          })
-      }
-      resolve()
-      let newstate = this.state
-      newstate[table].data[newstate[table].data.indexOf(oldData)] = newData
-      this.setState(newstate)
-    })
-  }
-  delete = (oldData, table) => {
-    return new Promise((resolve, reject) => {
-      if (table == 'campuses') {
-        this.props
-          .removeCampus({ variables: { name: oldData.name } })
-          .then(data => {
-            this.props.campuses
-              .refetch()
-              .then(data => {
-                resolve()
-              })
-              .catch(err => {
-                reject()
-              })
-          })
-          .catch(err => {
-            reject()
-          })
-      }
-      if (table == 'branches') {
-        this.props
-          .removeBranch({ variables: { name: oldData.name } })
-          .then(data => {
-            this.props.branches
-              .refetch()
-              .then(data => {
-                resolve()
-              })
-              .catch(err => {
-                reject()
-              })
-          })
-          .catch(err => {
-            reject()
-          })
-      }
-      resolve()
-      let newstate = this.state
-      newstate[table].data.splice(newstate[table].data.indexOf(oldData), 1)
-      this.setState(newstate)
-    })
-  }
-
-  componentDidMount () {
-    let nextState = this.state
-    if (this.props.campuses.loading == false) {
-      nextState.campuses.data = this.props.campuses.campuses
-    }
-    if (this.props.branches.loading == false) {
-      nextState.branches.data = this.props.branches.branches
-    }
-    this.setState(nextState)
-  }
-  componentWillUpdate (nextProps, nextState) {
-    if (nextProps.campuses.loading == false) {
-      nextState.campuses.data = nextProps.campuses.campuses
-    }
-    if (nextProps.branches.loading == false) {
-      nextState.branches.data = nextProps.branches.branches
-    }
-    return true
-  }
   render () {
     return (
       <div>
@@ -207,59 +102,29 @@ class Dashboard extends React.Component {
           }}
         >
           <div style={{ width: '50%', padding: '20px' }}>
-            <Table
-              onRowAdd={this.add}
-              onRowDelete={this.delete}
-              onRowUpdate={this.update}
-              data={this.state.campuses.data}
-              columns={this.state.campuses.columns}
-              table='campuses'
-              title='Campuses'
-              body={{ editRow: { deleteText: 'Remove the campus?' } }}
-              detailPanel={({ departments }) => {
-                return (
-                  <div style={{ display: 'flex', boxSizing: 'border-box' }}>
-                    <List
-                      title='Departments'
-                      data={departments.map(d => d.name)}
-                    />
-                  </div>
-                )
-              }}
+            <CampusTable
+              columns={[
+                { title: 'Name', field: 'name' },
+                { title: 'Admin ID', field: 'admin_id' }
+              ]}
+              inside='departments'
+              title='Campus'
+              name='campuses'
+              insideTitle='Departments'
             />
           </div>
           <div style={{ width: '50%', padding: '20px' }}>
-            <Table
-              onRowAdd={this.add}
-              onRowDelete={this.delete}
-              onRowUpdate={this.update}
-              data={this.state.branches.data}
-              columns={this.state.branches.columns}
-              table='branches'
-              title='Branches'
-              detailPanel={({ courses }) => {
-                if (!(courses && courses.length > 0)) {
-                  courses = []
-                }
-                return (
-                  <div style={{ display: 'flex', boxSizing: 'border-box' }}>
-                    <List title='Courses' data={courses.map(d => d.name)} />
-                  </div>
-                )
-              }}
-            />
+            <CourseTable columns={[
+                { title: 'Name', field: 'name' },
+                { title: 'Coordinator ID', field: 'coordinator_id' },
+                {title: 'Branch', field: "branch"}
+              ]} title='Course'
+              name='courses' isCourse></CourseTable>
           </div>
         </div>
       </div>
     )
   }
 }
-export default compose(
-  graphql(REMOVE_CAMPUS, { name: 'removeCampus' }),
-  graphql(ADD_CAMPUS, { name: 'addCampus' }),
-  graphql(REMOVE_BRANCH, { name: 'removeBranch' }),
-  graphql(ADD_BRANCH, { name: 'addBranch' }),
-  graphql(UPDATE_BRANCH, { name: 'updateBranch' }),
-  graphql(CAMPUSES, { name: 'campuses' }),
-  graphql(BRANCHES, { name: 'branches' })
-)(Dashboard)
+
+export default Dashboard

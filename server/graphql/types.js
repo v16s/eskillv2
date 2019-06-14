@@ -8,6 +8,7 @@ export default gql`
     branches: [Branch]
     validate: User
     campuses: [Campus]
+    courses: [Course]
   }
   type Global {
     regs: Boolean!

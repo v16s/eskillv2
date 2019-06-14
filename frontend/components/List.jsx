@@ -79,7 +79,7 @@ class TableList extends React.Component {
     this.setState({ add: true, addValue: '' })
   }
   add = () => {
-    this.props.handleAdd(this.state.addValue).then(() => {
+    this.props.handleAdd(this.props.current, this.state.addValue).then(() => {
       this.setState({ add: false })
     })
   }
@@ -98,7 +98,7 @@ class TableList extends React.Component {
             {data.map((d, i) => {
               if (edit && editing == i) {
                 return (
-                  <ListItem>
+                  <ListItem key={d}>
                     <IconButton
                       edge='start'
                       aria-label='Edit'
@@ -128,7 +128,7 @@ class TableList extends React.Component {
                 )
               }
               return (
-                <ListItem>
+                <ListItem  key={d}>
                   <IconButton
                     edge='start'
                     aria-label='Edit'
@@ -169,7 +169,7 @@ class TableList extends React.Component {
                 variant='contained'
                 color='primary'
                 className={classes.button}
-                onClick={this.addInitiate}
+                onClick={this.add}
               >
                 <Add />
               </Button>

@@ -18,5 +18,8 @@ export default {
   },
   branches: async () => {
     return await prisma.branches()
+  },
+  courses: async () => {
+    return await prisma.courses()
   }
 }
