@@ -170,7 +170,6 @@ export default class DashboardTable extends React.Component {
   }
   addInside = (name, newName) => {
     return new Promise(resolve => {
-      console.log(name, newName)
     this.props.addInside({variables: {
       name,
       id: newName,
@@ -181,6 +180,33 @@ export default class DashboardTable extends React.Component {
         resolve()
       })
     })
+    })
+  }
+  removeInside = (name, newName) => {
+    return new Promise(resolve => {
+    this.props.removeInside({variables: {
+      name,
+      id: newName
+    }}).then(data => {
+
+      this.props.data.refetch().then(() => {
+        resolve()
+      })
+    })
+    })
+  }
+  updateInside = (name, oldValue, newValue) => {
+    this.props.updateInside({
+      variables: {
+        name,
+        prev: oldValue,
+        next: newValue
+      }
+    }).then(data => {
+
+      this.props.data.refetch().then(() => {
+        resolve()
+      })
     })
   }
 render() {
@@ -201,7 +227,9 @@ render() {
           title={this.props.insideTitle}
           data={k[this.props.inside].map(d => d.name)}
           handleAdd={this.addInside}
+          handleRemove={this.removeInside}
           key={k.name}
+          handleUpdate={this.updateInside}
         />
       </div>
     )

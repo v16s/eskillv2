@@ -65,7 +65,7 @@ class TableList extends React.Component {
     this.setState({ addValue: e.target.value })
   }
   finish = oldValue => {
-    this.props.handleUpdate(oldValue, this.state.value).then(() => {
+    this.props.handleUpdate(this.props.current, oldValue, this.state.value).then(() => {
       this.setState({ edit: false })
     })
   }
@@ -73,7 +73,7 @@ class TableList extends React.Component {
     this.setState({ edit: false })
   }
   delete = value => {
-    this.props.handleDelete(value)
+    this.props.handleRemove(this.props.current, value)
   }
   addInitiate = () => {
     this.setState({ add: true, addValue: '' })

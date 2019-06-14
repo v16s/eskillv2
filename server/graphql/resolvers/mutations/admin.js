@@ -245,22 +245,15 @@ export default {
     }
   },
 
-  updateDepartment: async (parent, { id, name, tag }, { user }) => {
+  updateDepartment: async (parent, { name, update: updateMany }, { user }) => {
     if (user.level < 1) {
       try {
-        await prisma.updateCampus({
-          where: { name },
-          data: {
-            departments: {
-              deleteMany: { id }
-            }
-          }
-        })
+        
         return await prisma.updateCampus({
           where: { name },
           data: {
             departments: {
-              create: [tag]
+              updateMany
             }
           }
         })

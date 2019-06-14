@@ -38,6 +38,13 @@ const ADD_DEPARTMENT = gql`
     }
   }
 `
+const UPDATE_DEPARTMENT = gql`
+  mutation UpdateDepartment($name: String!, $prev: String!, $next: String!) {
+    updateDepartment(name: $name, update: {where: { id: $prev, name: $prev }, data: { id: $next, name: $next }}) {
+      name
+    }
+  }
+`
 const REMOVE_DEPARTMENT = gql`
   mutation RemoveDepartment($name: String!, $id: String!) {
     removeDepartment(name: $name, id: $id) {
@@ -86,7 +93,9 @@ const CampusTable = compose(
   graphql(ADD_CAMPUS, { name: 'addOutside' }),
   graphql(REMOVE_CAMPUS, { name: 'removeOutside' }),
   graphql(UPDATE_CAMPUS, { name: 'updateOutside' }),
-  graphql(ADD_DEPARTMENT, { name: 'addInside' })
+  graphql(ADD_DEPARTMENT, { name: 'addInside' }),
+  graphql(REMOVE_DEPARTMENT, { name: 'removeInside' }),
+  graphql(UPDATE_DEPARTMENT, { name: 'updateInside' })
 )(Table)
 const CourseTable = compose(graphql(COURSES),graphql(ADD_COURSE, { name: 'addOutside' }),
 graphql(REMOVE_COURSE, { name: 'removeOutside' }),

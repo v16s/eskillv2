@@ -51,7 +51,7 @@ export default gql`
     toggleFacultyRegistration: ToggleResult
     addDepartment(tag: TagInput, name: String!): Campus
     removeDepartment(id: String!, name: String!): Campus
-    updateDepartment(id: String!, name: String!, tag: TagInput): Campus
+    updateDepartment(name: String!, update: UpdateTag!): Campus
     adminAddDepartment(tag: TagInput, name: String!): Campus
     adminRemoveDepartment(id: String!, name: String!): Campus
     adminUpdateDepartment(id: String!, name: String!, tag: TagInput): Campus
