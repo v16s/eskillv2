@@ -27,6 +27,10 @@ var models = [
   {
     name: "Course",
     embedded: false
+  },
+  {
+    name: "Question",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({

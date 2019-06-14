@@ -20,6 +20,7 @@ export interface Exists {
   campus: (where?: CampusWhereInput) => Promise<boolean>;
   course: (where?: CourseWhereInput) => Promise<boolean>;
   global: (where?: GlobalWhereInput) => Promise<boolean>;
+  question: (where?: QuestionWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -118,6 +119,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => GlobalConnectionPromise;
+  question: (where: QuestionWhereUniqueInput) => QuestionNullablePromise;
+  questions: (args?: {
+    where?: QuestionWhereInput;
+    orderBy?: QuestionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Question>;
+  questionsConnection: (args?: {
+    where?: QuestionWhereInput;
+    orderBy?: QuestionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => QuestionConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -207,6 +227,22 @@ export interface Prisma {
   }) => GlobalPromise;
   deleteGlobal: (where: GlobalWhereUniqueInput) => GlobalPromise;
   deleteManyGlobals: (where?: GlobalWhereInput) => BatchPayloadPromise;
+  createQuestion: (data: QuestionCreateInput) => QuestionPromise;
+  updateQuestion: (args: {
+    data: QuestionUpdateInput;
+    where: QuestionWhereUniqueInput;
+  }) => QuestionPromise;
+  updateManyQuestions: (args: {
+    data: QuestionUpdateManyMutationInput;
+    where?: QuestionWhereInput;
+  }) => BatchPayloadPromise;
+  upsertQuestion: (args: {
+    where: QuestionWhereUniqueInput;
+    create: QuestionCreateInput;
+    update: QuestionUpdateInput;
+  }) => QuestionPromise;
+  deleteQuestion: (where: QuestionWhereUniqueInput) => QuestionPromise;
+  deleteManyQuestions: (where?: QuestionWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -244,6 +280,9 @@ export interface Subscription {
   global: (
     where?: GlobalSubscriptionWhereInput
   ) => GlobalSubscriptionPayloadSubscription;
+  question: (
+    where?: QuestionSubscriptionWhereInput
+  ) => QuestionSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -290,6 +329,26 @@ export type GlobalOrderByInput =
   | "id_DESC"
   | "_id_ASC"
   | "_id_DESC";
+
+export type QuestionOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "num_ASC"
+  | "num_DESC"
+  | "course_ASC"
+  | "course_DESC"
+  | "title_ASC"
+  | "title_DESC"
+  | "opt1_ASC"
+  | "opt1_DESC"
+  | "opt2_ASC"
+  | "opt2_DESC"
+  | "opt3_ASC"
+  | "opt3_DESC"
+  | "opt4_ASC"
+  | "opt4_DESC"
+  | "ans_ASC"
+  | "ans_DESC";
 
 export type UserOrderByInput =
   | "username_ASC"
@@ -574,6 +633,135 @@ export interface GlobalWhereInput {
   AND?: Maybe<GlobalWhereInput[] | GlobalWhereInput>;
 }
 
+export type QuestionWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  title?: Maybe<String>;
+}>;
+
+export interface QuestionWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  num?: Maybe<Int>;
+  num_not?: Maybe<Int>;
+  num_in?: Maybe<Int[] | Int>;
+  num_not_in?: Maybe<Int[] | Int>;
+  num_lt?: Maybe<Int>;
+  num_lte?: Maybe<Int>;
+  num_gt?: Maybe<Int>;
+  num_gte?: Maybe<Int>;
+  course?: Maybe<String>;
+  course_not?: Maybe<String>;
+  course_in?: Maybe<String[] | String>;
+  course_not_in?: Maybe<String[] | String>;
+  course_lt?: Maybe<String>;
+  course_lte?: Maybe<String>;
+  course_gt?: Maybe<String>;
+  course_gte?: Maybe<String>;
+  course_contains?: Maybe<String>;
+  course_not_contains?: Maybe<String>;
+  course_starts_with?: Maybe<String>;
+  course_not_starts_with?: Maybe<String>;
+  course_ends_with?: Maybe<String>;
+  course_not_ends_with?: Maybe<String>;
+  title?: Maybe<String>;
+  title_not?: Maybe<String>;
+  title_in?: Maybe<String[] | String>;
+  title_not_in?: Maybe<String[] | String>;
+  title_lt?: Maybe<String>;
+  title_lte?: Maybe<String>;
+  title_gt?: Maybe<String>;
+  title_gte?: Maybe<String>;
+  title_contains?: Maybe<String>;
+  title_not_contains?: Maybe<String>;
+  title_starts_with?: Maybe<String>;
+  title_not_starts_with?: Maybe<String>;
+  title_ends_with?: Maybe<String>;
+  title_not_ends_with?: Maybe<String>;
+  opt1?: Maybe<String>;
+  opt1_not?: Maybe<String>;
+  opt1_in?: Maybe<String[] | String>;
+  opt1_not_in?: Maybe<String[] | String>;
+  opt1_lt?: Maybe<String>;
+  opt1_lte?: Maybe<String>;
+  opt1_gt?: Maybe<String>;
+  opt1_gte?: Maybe<String>;
+  opt1_contains?: Maybe<String>;
+  opt1_not_contains?: Maybe<String>;
+  opt1_starts_with?: Maybe<String>;
+  opt1_not_starts_with?: Maybe<String>;
+  opt1_ends_with?: Maybe<String>;
+  opt1_not_ends_with?: Maybe<String>;
+  opt2?: Maybe<String>;
+  opt2_not?: Maybe<String>;
+  opt2_in?: Maybe<String[] | String>;
+  opt2_not_in?: Maybe<String[] | String>;
+  opt2_lt?: Maybe<String>;
+  opt2_lte?: Maybe<String>;
+  opt2_gt?: Maybe<String>;
+  opt2_gte?: Maybe<String>;
+  opt2_contains?: Maybe<String>;
+  opt2_not_contains?: Maybe<String>;
+  opt2_starts_with?: Maybe<String>;
+  opt2_not_starts_with?: Maybe<String>;
+  opt2_ends_with?: Maybe<String>;
+  opt2_not_ends_with?: Maybe<String>;
+  opt3?: Maybe<String>;
+  opt3_not?: Maybe<String>;
+  opt3_in?: Maybe<String[] | String>;
+  opt3_not_in?: Maybe<String[] | String>;
+  opt3_lt?: Maybe<String>;
+  opt3_lte?: Maybe<String>;
+  opt3_gt?: Maybe<String>;
+  opt3_gte?: Maybe<String>;
+  opt3_contains?: Maybe<String>;
+  opt3_not_contains?: Maybe<String>;
+  opt3_starts_with?: Maybe<String>;
+  opt3_not_starts_with?: Maybe<String>;
+  opt3_ends_with?: Maybe<String>;
+  opt3_not_ends_with?: Maybe<String>;
+  opt4?: Maybe<String>;
+  opt4_not?: Maybe<String>;
+  opt4_in?: Maybe<String[] | String>;
+  opt4_not_in?: Maybe<String[] | String>;
+  opt4_lt?: Maybe<String>;
+  opt4_lte?: Maybe<String>;
+  opt4_gt?: Maybe<String>;
+  opt4_gte?: Maybe<String>;
+  opt4_contains?: Maybe<String>;
+  opt4_not_contains?: Maybe<String>;
+  opt4_starts_with?: Maybe<String>;
+  opt4_not_starts_with?: Maybe<String>;
+  opt4_ends_with?: Maybe<String>;
+  opt4_not_ends_with?: Maybe<String>;
+  ans?: Maybe<String>;
+  ans_not?: Maybe<String>;
+  ans_in?: Maybe<String[] | String>;
+  ans_not_in?: Maybe<String[] | String>;
+  ans_lt?: Maybe<String>;
+  ans_lte?: Maybe<String>;
+  ans_gt?: Maybe<String>;
+  ans_gte?: Maybe<String>;
+  ans_contains?: Maybe<String>;
+  ans_not_contains?: Maybe<String>;
+  ans_starts_with?: Maybe<String>;
+  ans_not_starts_with?: Maybe<String>;
+  ans_ends_with?: Maybe<String>;
+  ans_not_ends_with?: Maybe<String>;
+  AND?: Maybe<QuestionWhereInput[] | QuestionWhereInput>;
+}
+
 export type UserWhereUniqueInput = AtLeastOne<{
   username: Maybe<String>;
   id?: Maybe<ID_Input>;
@@ -827,6 +1015,40 @@ export interface GlobalUpdateManyMutationInput {
   id?: Maybe<String>;
 }
 
+export interface QuestionCreateInput {
+  id?: Maybe<ID_Input>;
+  num?: Maybe<Int>;
+  course: String;
+  title: String;
+  opt1: String;
+  opt2: String;
+  opt3: String;
+  opt4: String;
+  ans: String;
+}
+
+export interface QuestionUpdateInput {
+  num?: Maybe<Int>;
+  course?: Maybe<String>;
+  title?: Maybe<String>;
+  opt1?: Maybe<String>;
+  opt2?: Maybe<String>;
+  opt3?: Maybe<String>;
+  opt4?: Maybe<String>;
+  ans?: Maybe<String>;
+}
+
+export interface QuestionUpdateManyMutationInput {
+  num?: Maybe<Int>;
+  course?: Maybe<String>;
+  title?: Maybe<String>;
+  opt1?: Maybe<String>;
+  opt2?: Maybe<String>;
+  opt3?: Maybe<String>;
+  opt4?: Maybe<String>;
+  ans?: Maybe<String>;
+}
+
 export interface UserCreateInput {
   username: String;
   password: String;
@@ -895,6 +1117,17 @@ export interface GlobalSubscriptionWhereInput {
   updatedFields_contains_some?: Maybe<String[] | String>;
   node?: Maybe<GlobalWhereInput>;
   AND?: Maybe<GlobalSubscriptionWhereInput[] | GlobalSubscriptionWhereInput>;
+}
+
+export interface QuestionSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<QuestionWhereInput>;
+  AND?: Maybe<
+    QuestionSubscriptionWhereInput[] | QuestionSubscriptionWhereInput
+  >;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -1291,6 +1524,114 @@ export interface AggregateGlobalSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface Question {
+  id: ID_Output;
+  num?: Int;
+  course: String;
+  title: String;
+  opt1: String;
+  opt2: String;
+  opt3: String;
+  opt4: String;
+  ans: String;
+}
+
+export interface QuestionPromise extends Promise<Question>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  num: () => Promise<Int>;
+  course: () => Promise<String>;
+  title: () => Promise<String>;
+  opt1: () => Promise<String>;
+  opt2: () => Promise<String>;
+  opt3: () => Promise<String>;
+  opt4: () => Promise<String>;
+  ans: () => Promise<String>;
+}
+
+export interface QuestionSubscription
+  extends Promise<AsyncIterator<Question>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  num: () => Promise<AsyncIterator<Int>>;
+  course: () => Promise<AsyncIterator<String>>;
+  title: () => Promise<AsyncIterator<String>>;
+  opt1: () => Promise<AsyncIterator<String>>;
+  opt2: () => Promise<AsyncIterator<String>>;
+  opt3: () => Promise<AsyncIterator<String>>;
+  opt4: () => Promise<AsyncIterator<String>>;
+  ans: () => Promise<AsyncIterator<String>>;
+}
+
+export interface QuestionNullablePromise
+  extends Promise<Question | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  num: () => Promise<Int>;
+  course: () => Promise<String>;
+  title: () => Promise<String>;
+  opt1: () => Promise<String>;
+  opt2: () => Promise<String>;
+  opt3: () => Promise<String>;
+  opt4: () => Promise<String>;
+  ans: () => Promise<String>;
+}
+
+export interface QuestionConnection {
+  pageInfo: PageInfo;
+  edges: QuestionEdge[];
+}
+
+export interface QuestionConnectionPromise
+  extends Promise<QuestionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<QuestionEdge>>() => T;
+  aggregate: <T = AggregateQuestionPromise>() => T;
+}
+
+export interface QuestionConnectionSubscription
+  extends Promise<AsyncIterator<QuestionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<QuestionEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateQuestionSubscription>() => T;
+}
+
+export interface QuestionEdge {
+  node: Question;
+  cursor: String;
+}
+
+export interface QuestionEdgePromise
+  extends Promise<QuestionEdge>,
+    Fragmentable {
+  node: <T = QuestionPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface QuestionEdgeSubscription
+  extends Promise<AsyncIterator<QuestionEdge>>,
+    Fragmentable {
+  node: <T = QuestionSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateQuestion {
+  count: Int;
+}
+
+export interface AggregateQuestionPromise
+  extends Promise<AggregateQuestion>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateQuestionSubscription
+  extends Promise<AsyncIterator<AggregateQuestion>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface User {
   username: String;
   password: String;
@@ -1604,6 +1945,71 @@ export interface GlobalPreviousValuesSubscription
   _id: () => Promise<AsyncIterator<ID_Output>>;
 }
 
+export interface QuestionSubscriptionPayload {
+  mutation: MutationType;
+  node: Question;
+  updatedFields: String[];
+  previousValues: QuestionPreviousValues;
+}
+
+export interface QuestionSubscriptionPayloadPromise
+  extends Promise<QuestionSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = QuestionPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = QuestionPreviousValuesPromise>() => T;
+}
+
+export interface QuestionSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<QuestionSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = QuestionSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = QuestionPreviousValuesSubscription>() => T;
+}
+
+export interface QuestionPreviousValues {
+  id: ID_Output;
+  num?: Int;
+  course: String;
+  title: String;
+  opt1: String;
+  opt2: String;
+  opt3: String;
+  opt4: String;
+  ans: String;
+}
+
+export interface QuestionPreviousValuesPromise
+  extends Promise<QuestionPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  num: () => Promise<Int>;
+  course: () => Promise<String>;
+  title: () => Promise<String>;
+  opt1: () => Promise<String>;
+  opt2: () => Promise<String>;
+  opt3: () => Promise<String>;
+  opt4: () => Promise<String>;
+  ans: () => Promise<String>;
+}
+
+export interface QuestionPreviousValuesSubscription
+  extends Promise<AsyncIterator<QuestionPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  num: () => Promise<AsyncIterator<Int>>;
+  course: () => Promise<AsyncIterator<String>>;
+  title: () => Promise<AsyncIterator<String>>;
+  opt1: () => Promise<AsyncIterator<String>>;
+  opt2: () => Promise<AsyncIterator<String>>;
+  opt3: () => Promise<AsyncIterator<String>>;
+  opt4: () => Promise<AsyncIterator<String>>;
+  ans: () => Promise<AsyncIterator<String>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -1729,6 +2135,10 @@ export const models: Model[] = [
   },
   {
     name: "Course",
+    embedded: false
+  },
+  {
+    name: "Question",
     embedded: false
   }
 ];

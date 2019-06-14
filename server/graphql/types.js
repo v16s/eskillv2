@@ -40,6 +40,17 @@ export default gql`
     name: String!
     coordinator_id: String!
   }
+  type Question {
+    num: Int
+    course: String!
+    title: String!
+    opt1: String!
+    opt2: String!
+    opt3: String!
+    opt4: String!
+    ans: String!
+  }
+
   type Campus {
     admin_id: String!
     departments: [Tag]
@@ -67,6 +78,27 @@ export default gql`
     addCourse(name: String!, branch: String!): Course
     removeCourse(name: String!): Course
     updateCourse(name: String!, newName: String!, branch: String!): Course
+    addQuestion(
+      num: Int
+      course: String!
+      title: String!
+      opt1: String!
+      opt2: String!
+      opt3: String!
+      opt4: String!
+      ans: String!
+    ): Question
+    removeQuestion(title: String!): Question
+    updateQuestion(
+      course: String!
+      title: String!
+      newTitle: String!
+      newOpt1: String!
+      newOpt2: String!
+      newOpt3: String!
+      newOpt4: String!
+      newAns: String!
+    ): Question
   }
   input CourseInput {
     branch: String!

@@ -19,6 +19,10 @@ type AggregateGlobal {
   count: Int!
 }
 
+type AggregateQuestion {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -519,6 +523,12 @@ type Mutation {
   upsertGlobal(where: GlobalWhereUniqueInput!, create: GlobalCreateInput!, update: GlobalUpdateInput!): Global!
   deleteGlobal(where: GlobalWhereUniqueInput!): Global
   deleteManyGlobals(where: GlobalWhereInput): BatchPayload!
+  createQuestion(data: QuestionCreateInput!): Question!
+  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
+  updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
+  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question
+  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -557,10 +567,248 @@ type Query {
   global(where: GlobalWhereUniqueInput!): Global
   globals(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Global]!
   globalsConnection(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GlobalConnection!
+  question(where: QuestionWhereUniqueInput!): Question
+  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
+  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
+}
+
+type Question {
+  id: ID!
+  num: Int
+  course: String!
+  title: String!
+  opt1: String!
+  opt2: String!
+  opt3: String!
+  opt4: String!
+  ans: String!
+}
+
+type QuestionConnection {
+  pageInfo: PageInfo!
+  edges: [QuestionEdge]!
+  aggregate: AggregateQuestion!
+}
+
+input QuestionCreateInput {
+  id: ID
+  num: Int
+  course: String!
+  title: String!
+  opt1: String!
+  opt2: String!
+  opt3: String!
+  opt4: String!
+  ans: String!
+}
+
+type QuestionEdge {
+  node: Question!
+  cursor: String!
+}
+
+enum QuestionOrderByInput {
+  id_ASC
+  id_DESC
+  num_ASC
+  num_DESC
+  course_ASC
+  course_DESC
+  title_ASC
+  title_DESC
+  opt1_ASC
+  opt1_DESC
+  opt2_ASC
+  opt2_DESC
+  opt3_ASC
+  opt3_DESC
+  opt4_ASC
+  opt4_DESC
+  ans_ASC
+  ans_DESC
+}
+
+type QuestionPreviousValues {
+  id: ID!
+  num: Int
+  course: String!
+  title: String!
+  opt1: String!
+  opt2: String!
+  opt3: String!
+  opt4: String!
+  ans: String!
+}
+
+type QuestionSubscriptionPayload {
+  mutation: MutationType!
+  node: Question
+  updatedFields: [String!]
+  previousValues: QuestionPreviousValues
+}
+
+input QuestionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: QuestionWhereInput
+  AND: [QuestionSubscriptionWhereInput!]
+}
+
+input QuestionUpdateInput {
+  num: Int
+  course: String
+  title: String
+  opt1: String
+  opt2: String
+  opt3: String
+  opt4: String
+  ans: String
+}
+
+input QuestionUpdateManyMutationInput {
+  num: Int
+  course: String
+  title: String
+  opt1: String
+  opt2: String
+  opt3: String
+  opt4: String
+  ans: String
+}
+
+input QuestionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  num: Int
+  num_not: Int
+  num_in: [Int!]
+  num_not_in: [Int!]
+  num_lt: Int
+  num_lte: Int
+  num_gt: Int
+  num_gte: Int
+  course: String
+  course_not: String
+  course_in: [String!]
+  course_not_in: [String!]
+  course_lt: String
+  course_lte: String
+  course_gt: String
+  course_gte: String
+  course_contains: String
+  course_not_contains: String
+  course_starts_with: String
+  course_not_starts_with: String
+  course_ends_with: String
+  course_not_ends_with: String
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  opt1: String
+  opt1_not: String
+  opt1_in: [String!]
+  opt1_not_in: [String!]
+  opt1_lt: String
+  opt1_lte: String
+  opt1_gt: String
+  opt1_gte: String
+  opt1_contains: String
+  opt1_not_contains: String
+  opt1_starts_with: String
+  opt1_not_starts_with: String
+  opt1_ends_with: String
+  opt1_not_ends_with: String
+  opt2: String
+  opt2_not: String
+  opt2_in: [String!]
+  opt2_not_in: [String!]
+  opt2_lt: String
+  opt2_lte: String
+  opt2_gt: String
+  opt2_gte: String
+  opt2_contains: String
+  opt2_not_contains: String
+  opt2_starts_with: String
+  opt2_not_starts_with: String
+  opt2_ends_with: String
+  opt2_not_ends_with: String
+  opt3: String
+  opt3_not: String
+  opt3_in: [String!]
+  opt3_not_in: [String!]
+  opt3_lt: String
+  opt3_lte: String
+  opt3_gt: String
+  opt3_gte: String
+  opt3_contains: String
+  opt3_not_contains: String
+  opt3_starts_with: String
+  opt3_not_starts_with: String
+  opt3_ends_with: String
+  opt3_not_ends_with: String
+  opt4: String
+  opt4_not: String
+  opt4_in: [String!]
+  opt4_not_in: [String!]
+  opt4_lt: String
+  opt4_lte: String
+  opt4_gt: String
+  opt4_gte: String
+  opt4_contains: String
+  opt4_not_contains: String
+  opt4_starts_with: String
+  opt4_not_starts_with: String
+  opt4_ends_with: String
+  opt4_not_ends_with: String
+  ans: String
+  ans_not: String
+  ans_in: [String!]
+  ans_not_in: [String!]
+  ans_lt: String
+  ans_lte: String
+  ans_gt: String
+  ans_gte: String
+  ans_contains: String
+  ans_not_contains: String
+  ans_starts_with: String
+  ans_not_starts_with: String
+  ans_ends_with: String
+  ans_not_ends_with: String
+  AND: [QuestionWhereInput!]
+}
+
+input QuestionWhereUniqueInput {
+  id: ID
+  title: String
 }
 
 type Subscription {
@@ -568,6 +816,7 @@ type Subscription {
   campus(where: CampusSubscriptionWhereInput): CampusSubscriptionPayload
   course(where: CourseSubscriptionWhereInput): CourseSubscriptionPayload
   global(where: GlobalSubscriptionWhereInput): GlobalSubscriptionPayload
+  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 

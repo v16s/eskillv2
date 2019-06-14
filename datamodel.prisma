@@ -35,3 +35,14 @@ type Course {
   coordinator_id: String!
   name: String! @unique
 }
+type Question {
+  id: ID! @id
+  num: Int
+  course: String!
+  title: String! @unique
+  opt1: String!
+  opt2: String!
+  opt3: String!
+  opt4: String!
+  ans: String!
+}
