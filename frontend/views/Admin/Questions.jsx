@@ -40,7 +40,8 @@ const styles = theme => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    overflow: 'auto',
+    padding: '20px 0'
   }
 })
 
@@ -51,7 +52,7 @@ class Questions extends React.Component {
       { title: 'Question Title', field: 'admin_id' }
     ],
     data: [],
-    show: true
+    show: false
   }
   show = () => {
     this.setState({ show: !this.state.show })
