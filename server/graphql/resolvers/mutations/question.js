@@ -73,5 +73,16 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
+  },
+  questionTest: async (_, { picture }, { user, bucket }) => {
+    const { createReadStream, filename } = await picture
+    return new Promise((resolve, reject) => {
+      createReadStream()
+        .pipe(bucket.openUploadStream(filename))
+        .on('finish', () => {
+          console.log(user)
+          resolve(user)
+        })
+    })
   }
 }

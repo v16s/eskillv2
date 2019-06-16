@@ -186,7 +186,7 @@ class Questions extends React.Component {
               open={this.state.show}
               onClose={this.show}
             >
-              <NewQuestion close={this.show} />
+              <NewQuestion close={this.show} branches={branches} />
             </Modal>
           </Paper>
         </div>

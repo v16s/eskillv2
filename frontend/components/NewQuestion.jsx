@@ -3,6 +3,24 @@ import { TextField, Paper, Button, Grid, Radio } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import { Dropdown, PreviewCard } from './index'
 import { withStyles } from '@material-ui/core/styles'
+import { compose, graphql, withApollo } from 'react-apollo'
+import gql from 'graphql-tag'
+
+const COURSES = gql`
+  query Courses($name: String, $branch: String) {
+    courses(where: { name: $name, branch: $branch }) {
+      name
+    }
+  }
+`
+
+const TEST = gql`
+  mutation Test($file: Upload) {
+    questionTest(picture: $file) {
+      username
+    }
+  }
+`
 
 const styles = {
   paper: {
@@ -54,8 +72,10 @@ const defaults = {
   answer: ''
 }
 class NewQuestion extends Component {
-  state = defaults
-  onChange = pictures => this.setState({ pictures })
+  state = { ...defaults, courses: [] }
+  onChange = ({ target }) => {
+    this.setState({ picture: target.files[0] })
+  }
   handleRadioChange = (e, v) => {
     this.setState({ answer: e.target.value })
   }
@@ -70,12 +90,14 @@ class NewQuestion extends Component {
     this.setState(newstate)
   }
   checkQuestion = () => {
-    let flag = true
-    Object.keys(this.state).map(k => {
-      if (this.state[k] == defaults[k]) {
-        flag = false
-      }
-    })
+    let flag = !!this.state.course
+    if (flag) {
+      Object.keys(this.state).map(k => {
+        if (k in defaults && this.state[k] == defaults[k]) {
+          flag = false
+        }
+      })
+    }
     if (flag) {
       Object.keys(this.state.options).map(k => {
         if (this.state.options[k] == defaults.options[k]) {
@@ -85,25 +107,52 @@ class NewQuestion extends Component {
     }
     return flag
   }
+  onSubmit = e => {
+    this.props.mutate({
+      variables: {
+        file: this.state.picture
+      }
+    })
+  }
+  onDropdownChange = (value, e) => {
+    let newstate = this.state
+    newstate[e.name] = value
+    let { client } = this.props
+    client
+      .query({
+        query: COURSES,
+        variables: { branch: value.value }
+      })
+      .then(({ data }) => {
+        this.setState({ courses: data.courses })
+      })
+    this.setState(newstate)
+  }
+
   render () {
+    let { branches } = this.props
+    const courses = this.state.courses.map(d => ({
+      label: d.name,
+      value: d.name
+    }))
     const { answer } = this.state
     return (
       <Paper style={styles.paper}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
           <Grid item md={6}>
             <Dropdown
-              options={[]}
+              options={branches}
               onChange={this.onDropdownChange}
               label='Branch'
-              name='campus'
+              name='branch'
             />
           </Grid>
           <Grid item md={6}>
             <Dropdown
-              options={[]}
+              options={courses}
               onChange={this.onDropdownChange}
               label='Course'
-              name='campus'
+              name='course'
             />
           </Grid>
           <Grid item md={12}>
@@ -228,6 +277,7 @@ class NewQuestion extends Component {
               style={{ display: 'none' }}
               id='raised-button-file'
               type='file'
+              onChange={this.onChange}
             />
             <label htmlFor='raised-button-file'>
               <Button
@@ -271,6 +321,7 @@ class NewQuestion extends Component {
               style={{ ...styles.action, color: '#fff' }}
               variant='contained'
               color='primary'
+              onClick={this.onSubmit}
             >
               Submit
             </Button>
@@ -281,4 +332,7 @@ class NewQuestion extends Component {
   }
 }
 
-export default NewQuestion
+export default compose(
+  withApollo,
+  graphql(TEST)
+)(NewQuestion)

@@ -9,6 +9,7 @@ export default gql`
     validate: User
     campuses: [Campus]
     courses(where: CourseWhereInput): [Course]
+    file: String
   }
   input CourseWhereInput {
     branch: String
@@ -108,6 +109,7 @@ export default gql`
       newOpt4: String!
       newAns: String!
     ): Question
+    questionTest(picture: Upload): User
   }
   input CourseInput {
     branch: String!

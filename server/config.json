@@ -1,3 +1,4 @@
 {
-  "dburl": "mongodb://admin:password1@ds031947.mlab.com:31947/eskill-test"
+  "dburl": "mongodb+srv://root:root@testdb-6kjha.mongodb.net",
+  "dbname": "default_default"
 }

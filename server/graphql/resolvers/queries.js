@@ -25,5 +25,19 @@ export default {
   },
   user: async () => {
     return await prisma.users()
+  },
+  file: async (_, _args, { bucket }) => {
+    let string = ''
+    return new Promise((resolve, reject) => {
+      bucket
+        .openDownloadStreamByName('forsenCD.jpg')
+        .on('data', str => {
+          string += str.toString('base64')
+        })
+        .on('end', () => {
+          console.log('finish')
+          resolve(string)
+        })
+    })
   }
 }
