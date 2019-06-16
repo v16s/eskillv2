@@ -188,15 +188,11 @@ export default {
     }
   },
 
-  updateCourse: async (
-    parent,
-    { name, newName, branch, newBranch },
-    { user }
-  ) => {
+  updateCourse: async (parent, { name, newName, branch }, { user }) => {
     if (user.level < 1) {
       try {
         let identity = `${name} ${branch}`
-        let iden = `${newName}-${newBranch}`
+        let iden = `${newName}-${branch}`
         console.log('asd', newName, newBranch)
         let courses = await prisma.courses({ where: { branch } })
         if (courses.length == 1) {

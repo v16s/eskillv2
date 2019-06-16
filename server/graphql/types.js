@@ -45,15 +45,21 @@ export default gql`
     name: String!
     coordinator_id: String!
   }
-  type Question {
-    num: Int
+  type QuestionAdd {
     course: String!
-    title: String!
+    name: String!
+    desc: String!
+    exp: String!
+    opt: [Obj]!
+    ans: String!
+    picture: Upload
+  }
+  type Obj {
     opt1: String!
     opt2: String!
     opt3: String!
     opt4: String!
-    ans: String!
+    id: String
   }
 
   type Campus {
@@ -82,33 +88,30 @@ export default gql`
     updateBranch(name: String!, newName: String!): Branch
     addCourse(name: String!, branch: String!): Course
     removeCourse(name: String!): Course
-    updateCourse(
-      name: String!
-      newName: String!
-      branch: String!
-      newBranch: String!
-    ): Course
+    updateCourse(name: String!, newName: String!, branch: String!): Course
+    adminAddCourse(name: String!, branch: String!): Course
+    adminRemoveCourse(name: String!): Course
+    adminUpdateCourse(name: String!, newName: String!, branch: String!): Course
     addQuestion(
-      num: Int
       course: String!
-      title: String!
-      opt1: String!
-      opt2: String!
-      opt3: String!
-      opt4: String!
+      name: String!
+      desc: String!
+      exp: String!
+      Obj: ObjInput!
       ans: String!
-    ): Question
-    removeQuestion(title: String!): Question
+      picture: Upload
+    ): QuestionAdd
+    removeQuestion(id: String!): QuestionAdd
     updateQuestion(
-      course: String!
-      title: String!
-      newTitle: String!
-      newOpt1: String!
-      newOpt2: String!
-      newOpt3: String!
-      newOpt4: String!
+      id: String!
+      newCourse: String!
+      newName: String!
+      newDesc: String!
+      newExp: String!
+      update: updateObj!
       newAns: String!
-    ): Question
+      newPicture: Upload
+    ): QuestionAdd
     questionTest(picture: Upload): User
   }
   input CourseInput {
@@ -141,6 +144,17 @@ export default gql`
   input TagInput {
     name: String!
     id: String
+  }
+  input ObjInput {
+    opt1: String!
+    opt2: String!
+    opt3: String!
+    opt4: String!
+    id: String
+  }
+  input updateObj {
+    where: ObjInput!
+    data: ObjInput!
   }
   input UserInput {
     username: String

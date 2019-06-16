@@ -6,19 +6,31 @@ import { async } from 'q'
 export default {
   addQuestion: async (
     parent,
-    {  course, title, opt1, opt2, opt3, opt4, ans },
-    { user }
+    { course, name, desc, exp, Obj, ans, picture },
+    { user, bucket }
   ) => {
     if (user.level < 1) {
       try {
-        return await prisma.createQuestion({
-          course,
-          title,
-          opt1,
-          opt2,
-          opt3,
-          opt4,
-          ans
+        const { createReadStream, filename } = await picture
+        return new Promise((resolve, reject) => {
+          let question = await prisma.createQuestionAdd({
+            course,
+            name,
+            desc,
+            exp,
+            opts: { create: [Obj] },
+            ans
+          })
+          let { id } = await question
+          let ar = filename.split('.')
+          let ext = ar(ar.length - 1)
+          let img = `${id}-${ext}`
+          createReadStream()
+            .pipe(bucket.openUploadStream(img))
+            .on('finish', () => {
+              console.log(user)
+              resolve(user)
+            })
         })
       } catch (e) {
         throw new ValidationError(e.toString())
@@ -28,10 +40,10 @@ export default {
     }
   },
 
-  removeQuestion: async (parent, { title }, { user }) => {
+  removeQuestion: async (parent, { id }, { user }) => {
     if (user.level < 1) {
       try {
-        return await prisma.deleteQuestion({ title })
+        return await prisma.deleteQuestionAdd({ id })
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
@@ -43,21 +55,30 @@ export default {
 
   updateQuestion: async (
     parent,
-    { course, title, newTitle, newOpt1, newOpt2, newOpt3, newOpt4, newAns },
+    {
+      id,
+      newCourse,
+      newName,
+      newDesc,
+      newExp,
+      update: updateMany,
+      newAns,
+      newPicture
+    },
     { user }
   ) => {
     if (user.level < 1) {
       try {
-        return await prisma.updateQuestion({
-          where: { title },
+        return await prisma.updateQuestionAdd({
+          where: { id },
           data: {
-            course,
-            title: newTitle,
-            opt1: newOpt1,
-            opt2: newOpt2,
-            opt3: newOpt3,
-            opt4: newOpt4,
-            ans: newAns
+            course: newCourse,
+            name: newName,
+            desc: newDesc,
+            exp: newExp,
+            opts: { updateMany },
+            ans: newAns,
+            picture: newPicture
           }
         })
       } catch (e) {

@@ -35,14 +35,19 @@ type Course {
   coordinator_id: String!
   name: String! @unique
 }
-type Question {
+type QuestionAdd {
   id: ID! @id
-  num: Int
   course: String!
-  title: String! @unique
-  opt1: String!
-  opt2: String!
-  opt3: String!
-  opt4: String!
+  name: String!
+  desc: String!
+  exp: String!
+  opt: [Obj]!
   ans: String!
+}
+type Obj @embedded{
+    opt1: String!
+    opt2: String!
+    opt3: String!
+    opt4: String!
+    id: String!
 }
