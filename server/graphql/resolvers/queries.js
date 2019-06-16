@@ -19,7 +19,11 @@ export default {
   branches: async () => {
     return await prisma.branches()
   },
-  courses: async () => {
-    return await prisma.courses()
+  courses: async (_, { where }) => {
+    console.log(where)
+    return await prisma.courses({ where })
+  },
+  user: async () => {
+    return await prisma.users()
   }
 }

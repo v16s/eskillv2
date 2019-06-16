@@ -96,52 +96,56 @@ export default {
     }
   },
 
-  addBranch: async (parent, { name }, { user }) => {
-    if (user.level < 1) {
-      try {
-        return await prisma.createBranch({ name })
-      } catch (e) {
-        console.log(e)
-        throw new ValidationError(e.toString())
-      }
-    } else {
-      throw new AuthenticationError('Unauthorized')
-    }
-  },
+  // addBranch: async (parent, { name }, { user }) => {
+  //   if (user.level < 1) {
+  //     try {
+  //       return await prisma.createBranch({ name })
+  //     } catch (e) {
+  //       console.log(e)
+  //       throw new ValidationError(e.toString())
+  //     }
+  //   } else {
+  //     throw new AuthenticationError('Unauthorized')
+  //   }
+  // },
 
-  removeBranch: async (parent, { name }, { user }) => {
-    if (user.level < 1) {
-      try {
-        return await prisma.deleteBranch({ name })
-      } catch (e) {
-        console.log(e)
-        throw new ValidationError(e.toString())
-      }
-    } else {
-      throw new AuthenticationError('Unauthorized')
-    }
-  },
+  // removeBranch: async (parent, { name }, { user }) => {
+  //   if (user.level < 1) {
+  //     try {
+  //       return await prisma.deleteBranch({ name })
+  //     } catch (e) {
+  //       console.log(e)
+  //       throw new ValidationError(e.toString())
+  //     }
+  //   } else {
+  //     throw new AuthenticationError('Unauthorized')
+  //   }
+  // },
 
-  updateBranch: async (parent, { name, newName }, { user }) => {
-    if (user.level < 1) {
-      try {
-        return await prisma.updateBranch({
-          where: { name },
-          data: { name: newName }
-        })
-      } catch (e) {
-        console.log(e)
-        throw new ValidationError(e.toString())
-      }
-    } else {
-      throw new AuthenticationError('Unauthorized')
-    }
-  },
+  // updateBranch: async (parent, { name, newName }, { user }) => {
+  //   if (user.level < 1) {
+  //     try {
+  //       return await prisma.updateBranch({
+  //         where: { name },
+  //         data: { name: newName }
+  //       })
+  //     } catch (e) {
+  //       console.log(e)
+  //       throw new ValidationError(e.toString())
+  //     }
+  //   } else {
+  //     throw new AuthenticationError('Unauthorized')
+  //   }
+  // },
 
   addCourse: async (parent, { name, branch }, { user }) => {
     if (user.level < 1) {
       try {
-        let identity = `${name}-${branch}`
+        let branches = await prisma.branches({ where: { name: branch } })
+        if (branches.length == 0) {
+          await prisma.createBranch({ name: branch })
+        }
+        let identity = `${name} ${branch}`
         let salt = await promisify(bcrypt.genSalt)(10)
         let hash = await promisify(bcrypt.hash)('password', salt, null)
         let { username } = await prisma.createUser({
@@ -168,7 +172,11 @@ export default {
   removeCourse: async (parent, { name }, { user }) => {
     if (user.level < 1) {
       try {
-        let { coordinator_id } = await prisma.course({ name })
+        let { coordinator_id, branch } = await prisma.course({ name })
+        let courses = await prisma.courses({ where: { branch } })
+        if (courses.length == 1) {
+          await prisma.deleteBranch({ name: branch })
+        }
         await prisma.deleteUser({ username: coordinator_id })
         return await prisma.deleteCourse({ name })
       } catch (e) {
@@ -180,12 +188,25 @@ export default {
     }
   },
 
-  updateCourse: async (parent, { name, newName, branch }, { user }) => {
+  updateCourse: async (
+    parent,
+    { name, newName, branch, newBranch },
+    { user }
+  ) => {
     if (user.level < 1) {
       try {
-        let identity = `${name}-${branch}`
-        let iden = `${newName}-${branch}`
-        let { username } = await prisma.updateUser({
+        let identity = `${name} ${branch}`
+        let iden = `${newName}-${newBranch}`
+        console.log('asd', newName, newBranch)
+        let courses = await prisma.courses({ where: { branch } })
+        if (courses.length == 1) {
+          await prisma.deleteBranch({ name: branch })
+        }
+        let branches = await prisma.branches({ where: { name: newBranch } })
+        if (branches.length == 0) {
+          await prisma.createBranch({ name: newBranch })
+        }
+        await prisma.updateUser({
           where: { username: `${identity.replace(/ /g, '-')}-Coordinator` },
           data: {
             username: `${iden.replace(/ /g, '-')}-Coordinator`,
@@ -194,10 +215,9 @@ export default {
         })
         return await prisma.updateCourse({
           where: { name },
-          data: { name: newName }
+          data: { name: newName, branch: newBranch }
         })
       } catch (e) {
-        console.log(e)
         throw new ValidationError(e.toString())
       }
     } else {
@@ -248,7 +268,6 @@ export default {
   updateDepartment: async (parent, { name, update: updateMany }, { user }) => {
     if (user.level < 1) {
       try {
-        
         return await prisma.updateCampus({
           where: { name },
           data: {

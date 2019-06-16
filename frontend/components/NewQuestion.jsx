@@ -11,7 +11,6 @@ const styles = {
     maxWidth: 1000,
     padding: '30px',
     overflow: 'auto'
-    
   },
   container: {
     display: 'flex',
@@ -31,7 +30,7 @@ const styles = {
     height: '100%'
   },
   radio: { marginRight: '5px', width: '20px', height: '20px' },
-  action: {width: '100%'}
+  action: { width: '100%' }
 }
 const GreenRadio = withStyles({
   root: {
@@ -60,12 +59,12 @@ class NewQuestion extends Component {
   handleRadioChange = (e, v) => {
     this.setState({ answer: e.target.value })
   }
-  onInputChange = ({target}) => {
+  onInputChange = ({ target }) => {
     let newstate = this.state
     newstate[target.name] = target.value
     this.setState(newstate)
   }
-  onOptionInputChange = ({target}) => {
+  onOptionInputChange = ({ target }) => {
     let newstate = this.state
     newstate.options[target.name] = target.value
     this.setState(newstate)
@@ -73,13 +72,13 @@ class NewQuestion extends Component {
   checkQuestion = () => {
     let flag = true
     Object.keys(this.state).map(k => {
-      if(this.state[k] == defaults[k]) {
+      if (this.state[k] == defaults[k]) {
         flag = false
       }
     })
-    if(flag) {
+    if (flag) {
       Object.keys(this.state.options).map(k => {
-        if(this.state.options[k] == defaults.options[k]){
+        if (this.state.options[k] == defaults.options[k]) {
           flag = false
         }
       })
@@ -90,7 +89,7 @@ class NewQuestion extends Component {
     const { answer } = this.state
     return (
       <Paper style={styles.paper}>
-        <Grid container spacing={3} style={{height: 'auto'}}>
+        <Grid container spacing={3} style={{ height: 'auto' }}>
           <Grid item md={6}>
             <Dropdown
               options={[]}
@@ -222,7 +221,7 @@ class NewQuestion extends Component {
               value={this.state.options.d}
             />
           </Grid>
-          
+
           <Grid item md={12}>
             <input
               accept='image/*'
@@ -231,7 +230,12 @@ class NewQuestion extends Component {
               type='file'
             />
             <label htmlFor='raised-button-file'>
-              <Button variant='contained' color='primary' component='span'>
+              <Button
+                style={{ color: '#fff' }}
+                variant='contained'
+                color='primary'
+                component='span'
+              >
                 Upload
               </Button>
             </label>
@@ -251,15 +255,22 @@ class NewQuestion extends Component {
             />
           </Grid>
           <Grid item md={12}>
-            <PreviewCard {...this.state}></PreviewCard>
+            <PreviewCard {...this.state} />
           </Grid>
           <Grid item md={6}>
-            <Button variant='contained' onClick={this.props.close} style={styles.action}>Cancel</Button>
+            <Button
+              variant='contained'
+              onClick={this.props.close}
+              style={{ ...styles.action, color: '#fff' }}
+            >
+              Cancel
+            </Button>
           </Grid>
           <Grid item md={6}>
-          <Button style={styles.action} variant='contained' color='primary'>Submit</Button>
+            <Button style={styles.action} variant='contained' color='primary'>
+              Submit
+            </Button>
           </Grid>
-          
         </Grid>
       </Paper>
     )

@@ -46,6 +46,12 @@ class RegisterControl extends React.Component {
       })
     }
   }
+  componentDidMount () {
+    let { global: glob } = this.props.data
+    if (glob) {
+      this.setState({ student: glob.regs, faculty: glob.regf })
+    }
+  }
   componentWillUpdate (nextProps, nextState) {
     if (nextProps.data.global) {
       nextState.student = nextProps.data.global.regs

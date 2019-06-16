@@ -4,11 +4,15 @@ export default gql`
 
   type Query {
     global: Global
-    user(user: UserInput!): User
+    user: [User]
     branches: [Branch]
     validate: User
     campuses: [Campus]
-    courses: [Course]
+    courses(where: CourseWhereInput): [Course]
+  }
+  input CourseWhereInput {
+    branch: String
+    name: String
   }
   type Global {
     regs: Boolean!
@@ -77,7 +81,12 @@ export default gql`
     updateBranch(name: String!, newName: String!): Branch
     addCourse(name: String!, branch: String!): Course
     removeCourse(name: String!): Course
-    updateCourse(name: String!, newName: String!, branch: String!): Course
+    updateCourse(
+      name: String!
+      newName: String!
+      branch: String!
+      newBranch: String!
+    ): Course
     addQuestion(
       num: Int
       course: String!
