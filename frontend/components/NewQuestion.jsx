@@ -261,13 +261,17 @@ class NewQuestion extends Component {
             <Button
               variant='contained'
               onClick={this.props.close}
-              style={{ ...styles.action, color: '#fff' }}
+              style={styles.action}
             >
               Cancel
             </Button>
           </Grid>
           <Grid item md={6}>
-            <Button style={styles.action} variant='contained' color='primary'>
+            <Button
+              style={{ ...styles.action, color: '#fff' }}
+              variant='contained'
+              color='primary'
+            >
               Submit
             </Button>
           </Grid>
