@@ -19,7 +19,25 @@ export default {
   branches: async () => {
     return await prisma.branches()
   },
-  courses: async () => {
-    return await prisma.courses()
+  courses: async (_, { where }) => {
+    console.log(where)
+    return await prisma.courses({ where })
+  },
+  user: async () => {
+    return await prisma.users()
+  },
+  file: async (_, _args, { bucket }) => {
+    let string = ''
+    return new Promise((resolve, reject) => {
+      bucket
+        .openDownloadStreamByName('forsenCD.jpg')
+        .on('data', str => {
+          string += str.toString('base64')
+        })
+        .on('end', () => {
+          console.log('finish')
+          resolve(string)
+        })
+    })
   }
 }

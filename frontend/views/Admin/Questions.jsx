@@ -1,11 +1,26 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { compose, graphql } from 'react-apollo'
+import { compose, graphql, withApollo } from 'react-apollo'
 import { Paper, TextField, Fab, Modal, Backdrop } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { Dropdown, Table, NewQuestion } from '../../components'
 import { Add } from '@material-ui/icons'
 
+const BRANCHES = gql`
+  query Branches {
+    branches {
+      name
+    }
+  }
+`
+
+const COURSES = gql`
+  query Courses($name: String, $branch: String) {
+    courses(where: { name: $name, branch: $branch }) {
+      name
+    }
+  }
+`
 const styles = theme => ({
   paper: {
     width: '100%',
@@ -52,7 +67,9 @@ class Questions extends React.Component {
       { title: 'Question Title', field: 'admin_id' }
     ],
     data: [],
-    show: false
+    show: false,
+    courses: [],
+    questions: []
   }
   show = () => {
     this.setState({ show: !this.state.show })
@@ -85,9 +102,35 @@ class Questions extends React.Component {
     })
   }
 
-  componentWillUpdate (nextProps, nextState) {}
+  onDropdownChange = (value, e) => {
+    let newstate = this.state
+    newstate[e.name] = value
+    let { client } = this.props
+    client
+      .query({
+        query: COURSES,
+        variables: { branch: value.value }
+      })
+      .then(({ data }) => {
+        this.setState({ courses: data.courses })
+      })
+    this.setState(newstate)
+  }
+
   render () {
     const { classes } = this.props
+    let branches = []
+    if (this.props.branches.branches) {
+      branches = this.props.branches.branches.map(d => ({
+        label: d.name,
+        value: d.name
+      }))
+    }
+    const courses = this.state.courses.map(d => ({
+      label: d.name,
+      value: d.name
+    }))
+    const { questions } = this.state
     return (
       <div>
         <div
@@ -99,30 +142,32 @@ class Questions extends React.Component {
           <Paper className={classes.paper}>
             <Dropdown
               className={classes.input}
-              options={[]}
+              options={branches}
               onChange={this.onDropdownChange}
               label='Branch'
-              name='campus'
+              name='branch'
             />
             <Dropdown
               className={classes.input}
-              options={[]}
+              options={courses}
               onChange={this.onDropdownChange}
               label='Course'
-              name='campus'
+              name='course'
             />
             <div className={classes.padded}>
-              <Table
-                onRowAdd={this.add}
-                onRowDelete={this.delete}
-                onRowUpdate={this.update}
-                data={this.state.data}
-                columns={this.state.columns}
-                table=''
-                title=''
-                body={{ editRow: { deleteText: 'Remove the campus?' } }}
-                style={{ boxShadow: 'none' }}
-              />
+              {questions.length > 0 && (
+                <Table
+                  onRowAdd={this.add}
+                  onRowDelete={this.delete}
+                  onRowUpdate={this.update}
+                  data={this.state.data}
+                  columns={this.state.columns}
+                  table=''
+                  title=''
+                  body={{ editRow: { deleteText: 'Remove the campus?' } }}
+                  style={{ boxShadow: 'none' }}
+                />
+              )}
             </div>
             {!this.state.show && (
               <Fab
@@ -141,7 +186,7 @@ class Questions extends React.Component {
               open={this.state.show}
               onClose={this.show}
             >
-              <NewQuestion close={this.show} />
+              <NewQuestion close={this.show} branches={branches} />
             </Modal>
           </Paper>
         </div>
@@ -149,4 +194,10 @@ class Questions extends React.Component {
     )
   }
 }
-export default withStyles(styles)(Questions)
+export default compose(
+  withApollo,
+  graphql(BRANCHES, {
+    name: 'branches',
+    options: { fetchPolicy: 'network-only' }
+  })
+)(withStyles(styles)(Questions))

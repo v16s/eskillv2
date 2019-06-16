@@ -3,6 +3,24 @@ import { TextField, Paper, Button, Grid, Radio } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import { Dropdown, PreviewCard } from './index'
 import { withStyles } from '@material-ui/core/styles'
+import { compose, graphql, withApollo } from 'react-apollo'
+import gql from 'graphql-tag'
+
+const COURSES = gql`
+  query Courses($name: String, $branch: String) {
+    courses(where: { name: $name, branch: $branch }) {
+      name
+    }
+  }
+`
+
+const TEST = gql`
+  mutation Test($file: Upload) {
+    questionTest(picture: $file) {
+      username
+    }
+  }
+`
 
 const styles = {
   paper: {
@@ -11,7 +29,6 @@ const styles = {
     maxWidth: 1000,
     padding: '30px',
     overflow: 'auto'
-    
   },
   container: {
     display: 'flex',
@@ -31,7 +48,7 @@ const styles = {
     height: '100%'
   },
   radio: { marginRight: '5px', width: '20px', height: '20px' },
-  action: {width: '100%'}
+  action: { width: '100%' }
 }
 const GreenRadio = withStyles({
   root: {
@@ -55,56 +72,87 @@ const defaults = {
   answer: ''
 }
 class NewQuestion extends Component {
-  state = defaults
-  onChange = pictures => this.setState({ pictures })
+  state = { ...defaults, courses: [] }
+  onChange = ({ target }) => {
+    this.setState({ picture: target.files[0] })
+  }
   handleRadioChange = (e, v) => {
     this.setState({ answer: e.target.value })
   }
-  onInputChange = ({target}) => {
+  onInputChange = ({ target }) => {
     let newstate = this.state
     newstate[target.name] = target.value
     this.setState(newstate)
   }
-  onOptionInputChange = ({target}) => {
+  onOptionInputChange = ({ target }) => {
     let newstate = this.state
     newstate.options[target.name] = target.value
     this.setState(newstate)
   }
   checkQuestion = () => {
-    let flag = true
-    Object.keys(this.state).map(k => {
-      if(this.state[k] == defaults[k]) {
-        flag = false
-      }
-    })
-    if(flag) {
+    let flag = !!this.state.course
+    if (flag) {
+      Object.keys(this.state).map(k => {
+        if (k in defaults && this.state[k] == defaults[k]) {
+          flag = false
+        }
+      })
+    }
+    if (flag) {
       Object.keys(this.state.options).map(k => {
-        if(this.state.options[k] == defaults.options[k]){
+        if (this.state.options[k] == defaults.options[k]) {
           flag = false
         }
       })
     }
     return flag
   }
+  onSubmit = e => {
+    this.props.mutate({
+      variables: {
+        file: this.state.picture
+      }
+    })
+  }
+  onDropdownChange = (value, e) => {
+    let newstate = this.state
+    newstate[e.name] = value
+    let { client } = this.props
+    client
+      .query({
+        query: COURSES,
+        variables: { branch: value.value }
+      })
+      .then(({ data }) => {
+        this.setState({ courses: data.courses })
+      })
+    this.setState(newstate)
+  }
+
   render () {
+    let { branches } = this.props
+    const courses = this.state.courses.map(d => ({
+      label: d.name,
+      value: d.name
+    }))
     const { answer } = this.state
     return (
       <Paper style={styles.paper}>
-        <Grid container spacing={3} style={{height: 'auto'}}>
+        <Grid container spacing={3} style={{ height: 'auto' }}>
           <Grid item md={6}>
             <Dropdown
-              options={[]}
+              options={branches}
               onChange={this.onDropdownChange}
               label='Branch'
-              name='campus'
+              name='branch'
             />
           </Grid>
           <Grid item md={6}>
             <Dropdown
-              options={[]}
+              options={courses}
               onChange={this.onDropdownChange}
               label='Course'
-              name='campus'
+              name='course'
             />
           </Grid>
           <Grid item md={12}>
@@ -222,16 +270,22 @@ class NewQuestion extends Component {
               value={this.state.options.d}
             />
           </Grid>
-          
+
           <Grid item md={12}>
             <input
               accept='image/*'
               style={{ display: 'none' }}
               id='raised-button-file'
               type='file'
+              onChange={this.onChange}
             />
             <label htmlFor='raised-button-file'>
-              <Button variant='contained' color='primary' component='span'>
+              <Button
+                style={{ color: '#fff' }}
+                variant='contained'
+                color='primary'
+                component='span'
+              >
                 Upload
               </Button>
             </label>
@@ -251,19 +305,34 @@ class NewQuestion extends Component {
             />
           </Grid>
           <Grid item md={12}>
-            <PreviewCard {...this.state}></PreviewCard>
+            <PreviewCard {...this.state} />
           </Grid>
           <Grid item md={6}>
-            <Button variant='contained' onClick={this.props.close} style={styles.action}>Cancel</Button>
+            <Button
+              variant='contained'
+              onClick={this.props.close}
+              style={styles.action}
+            >
+              Cancel
+            </Button>
           </Grid>
           <Grid item md={6}>
-          <Button style={styles.action} variant='contained' color='primary'>Submit</Button>
+            <Button
+              style={{ ...styles.action, color: '#fff' }}
+              variant='contained'
+              color='primary'
+              onClick={this.onSubmit}
+            >
+              Submit
+            </Button>
           </Grid>
-          
         </Grid>
       </Paper>
     )
   }
 }
 
-export default NewQuestion
+export default compose(
+  withApollo,
+  graphql(TEST)
+)(NewQuestion)

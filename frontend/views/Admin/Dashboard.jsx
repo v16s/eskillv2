@@ -16,13 +16,13 @@ const CAMPUSES = gql`
   }
 `
 const COURSES = gql`
-{
-  courses {
-    branch
-    name
-    coordinator_id
+  {
+    courses {
+      branch
+      name
+      coordinator_id
+    }
   }
-}
 `
 const ADD_CAMPUS = gql`
   mutation AddCampus($name: String!) {
@@ -40,7 +40,13 @@ const ADD_DEPARTMENT = gql`
 `
 const UPDATE_DEPARTMENT = gql`
   mutation UpdateDepartment($name: String!, $prev: String!, $next: String!) {
-    updateDepartment(name: $name, update: {where: { id: $prev, name: $prev }, data: { id: $next, name: $next }}) {
+    updateDepartment(
+      name: $name
+      update: {
+        where: { id: $prev, name: $prev }
+        data: { id: $next, name: $next }
+      }
+    ) {
       name
     }
   }
@@ -74,8 +80,18 @@ const ADD_COURSE = gql`
   }
 `
 const UPDATE_COURSE = gql`
-  mutation UpdateCourse($name: String!, $newName: String!, $branch: String!) {
-    updateCourse(name: $name, newName: $newName, branch: $branch) {
+  mutation UpdateCourse(
+    $name: String!
+    $newName: String!
+    $branch: String!
+    $newBranch: String!
+  ) {
+    updateCourse(
+      name: $name
+      newName: $newName
+      branch: $branch
+      newBranch: $newBranch
+    ) {
       name
     }
   }
@@ -97,9 +113,12 @@ const CampusTable = compose(
   graphql(REMOVE_DEPARTMENT, { name: 'removeInside' }),
   graphql(UPDATE_DEPARTMENT, { name: 'updateInside' })
 )(Table)
-const CourseTable = compose(graphql(COURSES),graphql(ADD_COURSE, { name: 'addOutside' }),
-graphql(REMOVE_COURSE, { name: 'removeOutside' }),
-graphql(UPDATE_COURSE, { name: 'updateOutside' }),)(Table)
+const CourseTable = compose(
+  graphql(COURSES),
+  graphql(ADD_COURSE, { name: 'addOutside' }),
+  graphql(REMOVE_COURSE, { name: 'removeOutside' }),
+  graphql(UPDATE_COURSE, { name: 'updateOutside' })
+)(Table)
 class Dashboard extends React.Component {
   render () {
     return (
@@ -123,12 +142,16 @@ class Dashboard extends React.Component {
             />
           </div>
           <div style={{ width: '50%', padding: '20px' }}>
-            <CourseTable columns={[
+            <CourseTable
+              columns={[
                 { title: 'Name', field: 'name' },
                 { title: 'Coordinator ID', field: 'coordinator_id' },
-                {title: 'Branch', field: "branch"}
-              ]} title='Course'
-              name='courses' isCourse></CourseTable>
+                { title: 'Branch', field: 'branch' }
+              ]}
+              title='Course'
+              name='courses'
+              isCourse
+            />
           </div>
         </div>
       </div>

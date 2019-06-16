@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import Questions from './Questions'
+import Users from './Users'
 import { Tabs, Tab } from '@material-ui/core'
 import { AppBar } from '../../components'
 import { history } from '../../util'
@@ -22,7 +23,6 @@ export default class Admin extends React.Component {
     }
   }
   handleChange = (e, value) => {
-    e.preventDefault()
     switch (value) {
       case 0:
         history.push('/')
@@ -57,6 +57,7 @@ export default class Admin extends React.Component {
           <Tab label='User' />
         </Tabs>
         <Switch>
+        <Route path='/user' component={Users} />
           <Route path='/questions' component={Questions} />
           <Route path='/' component={Dashboard} />
         </Switch>

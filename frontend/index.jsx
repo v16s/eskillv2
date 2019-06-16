@@ -55,7 +55,7 @@ const GET_USER = gql`
   }
 `
 client.writeData({
-  data: { loggedIn: null, dark: localStorage.getItem('dark') }
+  data: { loggedIn: null, dark: localStorage.getItem('dark') == 'true' }
 })
 client.query({ query: GET_USER }).then(({ data: { validate } }) => {
   client.writeData({

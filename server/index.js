@@ -6,45 +6,56 @@ import http from 'http'
 import passport from './config/passport'
 import logger from 'morgan'
 import { ApolloServer } from 'apollo-server-express'
-import { prisma } from './prisma'
 import { typeDefs, resolvers } from './graphql'
-import bcrypt from 'bcrypt-nodejs'
-import { promisify } from 'util'
+import mongodb from 'mongodb'
+import { dburl, dbname } from './config'
 
 const app = express()
 const port = process.env.PORT || 5000
 
 async function init (callback) {
-  const apollo = new ApolloServer({
-    typeDefs,
-    resolvers,
-    context: ({ req }) => ({ user: req.user })
-  })
+  mongodb.MongoClient.connect(
+    dburl,
+    { useNewUrlParser: true },
+    async (error, client) => {
+      const db = client.db(dbname)
 
-  app.use(cors())
-  app.use(logger('tiny'))
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: 'false' }))
+      const apollo = new ApolloServer({
+        typeDefs,
+        resolvers,
+        context: ({ req }) => ({
+          user: req.user,
+          bucket: new mongodb.GridFSBucket(db)
+        })
+      })
 
-  app.use('/api/auth', auth)
-  app.use('/api/validate', validate)
-  app.use('/graphql', (req, res, next) => {
-    passport.authenticate('auth', { session: false }, (err, user) => {
-      req.user = user
-      next()
-    })(req, res, next)
-  })
-  await apollo.applyMiddleware({
-    app
-  })
-  let server = http.createServer(app)
+      app.use(cors())
+      app.use(logger('tiny'))
+      app.use(bodyParser.json())
+      app.use(bodyParser.urlencoded({ extended: 'false' }))
 
-  server.listen(port)
-  server.on('listening', () => {
-    let addr = server.address()
-    let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
-    console.log('Listening on ' + bind)
-  })
+      app.use('/api/auth', auth)
+      app.use('/api/validate', validate)
+      app.use('/graphql', (req, res, next) => {
+        passport.authenticate('auth', { session: false }, (err, user) => {
+          req.user = user
+          next()
+        })(req, res, next)
+      })
+      await apollo.applyMiddleware({
+        app
+      })
+      let server = http.createServer(app)
+
+      server.listen(port)
+      server.on('listening', () => {
+        let addr = server.address()
+        let bind =
+          typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
+        console.log('Listening on ' + bind)
+      })
+    }
+  )
 }
 try {
   init()
