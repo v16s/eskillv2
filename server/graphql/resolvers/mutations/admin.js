@@ -248,7 +248,6 @@ export default {
   updateDepartment: async (parent, { name, update: updateMany }, { user }) => {
     if (user.level < 1) {
       try {
-        
         return await prisma.updateCampus({
           where: { name },
           data: {

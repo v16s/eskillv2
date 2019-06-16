@@ -6,18 +6,12 @@ import { async } from 'q'
 export default {
   addQuestion: async (
     parent,
-    { num, course, title, opt1, opt2, opt3, opt4, ans },
+    {  course, title, opt1, opt2, opt3, opt4, ans },
     { user }
   ) => {
     if (user.level < 1) {
       try {
-        let n = await prisma
-          .questionsConnection({ where: { course } })
-          .aggregate()
-          .count()
-        num = n
         return await prisma.createQuestion({
-          num,
           course,
           title,
           opt1,
