@@ -53,13 +53,13 @@ export default gql`
     opt: [Obj]!
     ans: String!
     picture: Upload
+    picOut: String
   }
   type Obj {
     opt1: String!
     opt2: String!
     opt3: String!
     opt4: String!
-    id: String
   }
 
   type Campus {

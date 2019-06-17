@@ -12,7 +12,7 @@ export default {
     if (user.level < 1) {
       try {
         return new Promise(async (resolve, reject) => {
-           if (picture) {
+           if (!!picture) {
             const { createReadStream, filename } = await picture
             let { id } = await question
             let ar = filename.split('.')
