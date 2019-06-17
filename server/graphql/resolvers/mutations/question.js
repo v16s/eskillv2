@@ -11,7 +11,6 @@ export default {
   ) => {
     if (user.level < 1) {
       try {
-        const { createReadStream, filename } = await picture
         return new Promise(async (resolve, reject) => {
           let question = await prisma.createQuestionAdd({
             course,
@@ -21,16 +20,19 @@ export default {
             opts: { create: [Obj] },
             ans
           })
-          let { id } = await question
-          let ar = filename.split('.')
-          let ext = ar(ar.length - 1)
-          let img = `${id}-${ext}`
-          createReadStream()
-            .pipe(bucket.openUploadStream(img))
-            .on('finish', () => {
-              console.log(user)
-              resolve(user)
-            })
+          if (picture) {
+            const { createReadStream, filename } = await picture
+            let { id } = await question
+            let ar = filename.split('.')
+            let ext = ar(ar.length - 1)
+            let img = `${id}-${ext}`
+            createReadStream()
+              .pipe(bucket.openUploadStream(img))
+              .on('finish', () => {
+                console.log(user)
+                resolve(user)
+              })
+          }
         })
       } catch (e) {
         throw new ValidationError(e.toString())
