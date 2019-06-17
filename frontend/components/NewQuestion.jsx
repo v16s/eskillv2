@@ -14,10 +14,29 @@ const COURSES = gql`
   }
 `
 
-const TEST = gql`
-  mutation Test($file: Upload) {
-    questionTest(picture: $file) {
-      username
+const ADD_QUESTION = gql`
+  mutation AddQuestion(
+    $picture: Upload
+    $a: String!
+    $b: String!
+    $c: String!
+    $d: String!
+    $ans: String!
+    $desc: String!
+    $name: String!
+    $course: String!
+    $exp: String!
+  ) {
+    addQuestion(
+      name: $name
+      desc: $desc
+      exp: $exp
+      ans: $ans
+      picture: $picture
+      Obj: { a: $a, b: $b, c: $c, d: $d }
+      course: $course
+    ) {
+      id
     }
   }
 `
@@ -58,23 +77,24 @@ const GreenRadio = withStyles({
   },
   checked: {}
 })(props => <Radio color='default' {...props} />)
-const defaults = {
+const makeDefaults = () => ({
   name: '',
   desc: '',
-  exp: '',
   options: {
     a: '',
     b: '',
     c: '',
     d: ''
   },
-  picture: null,
   answer: ''
-}
+})
 class NewQuestion extends Component {
-  state = { ...defaults, courses: [] }
+  state = { ...makeDefaults(), courses: [], picture: null, exp: '' }
   onChange = ({ target }) => {
-    this.setState({ picture: target.files[0] })
+    this.setState({
+      picture: target.files[0],
+      preview: URL.createObjectURL(target.files[0])
+    })
   }
   handleRadioChange = (e, v) => {
     this.setState({ answer: e.target.value })
@@ -91,16 +111,17 @@ class NewQuestion extends Component {
   }
   checkQuestion = () => {
     let flag = !!this.state.course
+    let defaults = makeDefaults()
     if (flag) {
       Object.keys(this.state).map(k => {
-        if (k in defaults && this.state[k] == defaults[k]) {
+        if (k != 'options' && k in defaults && this.state[k] == defaults[k]) {
           flag = false
         }
       })
     }
     if (flag) {
       Object.keys(this.state.options).map(k => {
-        if (this.state.options[k] == defaults.options[k]) {
+        if (this.state.options[k] === defaults.options[k]) {
           flag = false
         }
       })
@@ -108,11 +129,24 @@ class NewQuestion extends Component {
     return flag
   }
   onSubmit = e => {
-    this.props.mutate({
-      variables: {
-        file: this.state.picture
-      }
-    })
+    const { picture, desc, name, options, exp, course, answer } = this.state
+    if (this.checkQuestion()) {
+      this.props
+        .mutate({
+          variables: {
+            picture,
+            ...options,
+            ans: answer,
+            desc,
+            name,
+            course: course.label,
+            exp
+          }
+        })
+        .then(data => {
+          console.log(data)
+        })
+    }
   }
   onDropdownChange = (value, e) => {
     let newstate = this.state
@@ -128,7 +162,9 @@ class NewQuestion extends Component {
       })
     this.setState(newstate)
   }
-
+  removeImage = () => {
+    this.setState({ picture: null, preview: undefined })
+  }
   render () {
     let { branches } = this.props
     const courses = this.state.courses.map(d => ({
@@ -139,7 +175,7 @@ class NewQuestion extends Component {
     return (
       <Paper style={styles.paper}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
-          <Grid item md={6}>
+          <Grid item sm={6}>
             <Dropdown
               options={branches}
               onChange={this.onDropdownChange}
@@ -147,7 +183,7 @@ class NewQuestion extends Component {
               name='branch'
             />
           </Grid>
-          <Grid item md={6}>
+          <Grid item sm={6}>
             <Dropdown
               options={courses}
               onChange={this.onDropdownChange}
@@ -155,7 +191,7 @@ class NewQuestion extends Component {
               name='course'
             />
           </Grid>
-          <Grid item md={12}>
+          <Grid item sm={12}>
             <TextField
               label='Question Name'
               placeholder='Question Name'
@@ -168,7 +204,7 @@ class NewQuestion extends Component {
               value={this.state.name}
             />
           </Grid>
-          <Grid item md={12}>
+          <Grid item sm={12}>
             <TextField
               label='Question Description'
               type='text'
@@ -182,7 +218,7 @@ class NewQuestion extends Component {
               value={this.state.desc}
             />
           </Grid>
-          <Grid style={styles.answer} item md={6}>
+          <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
                 inputProps={{ 'aria-label': 'Radio A' }}
@@ -204,7 +240,7 @@ class NewQuestion extends Component {
               value={this.state.options.a}
             />
           </Grid>
-          <Grid style={styles.answer} item md={6}>
+          <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
                 inputProps={{ 'aria-label': 'Radio A' }}
@@ -226,7 +262,7 @@ class NewQuestion extends Component {
               value={this.state.options.b}
             />
           </Grid>
-          <Grid style={styles.answer} item md={6}>
+          <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
                 inputProps={{ 'aria-label': 'Radio A' }}
@@ -248,7 +284,7 @@ class NewQuestion extends Component {
               value={this.state.options.c}
             />
           </Grid>
-          <Grid style={styles.answer} item md={6}>
+          <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
                 inputProps={{ 'aria-label': 'Radio A' }}
@@ -271,26 +307,56 @@ class NewQuestion extends Component {
             />
           </Grid>
 
-          <Grid item md={12}>
-            <input
-              accept='image/*'
-              style={{ display: 'none' }}
-              id='raised-button-file'
-              type='file'
-              onChange={this.onChange}
-            />
-            <label htmlFor='raised-button-file'>
-              <Button
-                style={{ color: '#fff' }}
-                variant='contained'
-                color='primary'
-                component='span'
+          <Grid item sm={12}>
+            {this.state.picture ? (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
               >
-                Upload
-              </Button>
-            </label>
+                <img
+                  src={this.state.preview}
+                  style={{
+                    marginRight: '15px',
+                    maxHeight: '500px',
+                    maxWidth: '500px'
+                  }}
+                  alt=''
+                />
+                <Button
+                  style={{ color: '#fff' }}
+                  variant='contained'
+                  color='secondary'
+                  component='span'
+                  onClick={this.removeImage}
+                >
+                  Remove
+                </Button>
+              </div>
+            ) : (
+              <div>
+                <input
+                  accept='image/*'
+                  style={{ display: 'none' }}
+                  id='raised-button-file'
+                  type='file'
+                  onChange={this.onChange}
+                />
+                <label htmlFor='raised-button-file'>
+                  <Button
+                    style={{ color: '#fff' }}
+                    variant='contained'
+                    color='primary'
+                    component='span'
+                  >
+                    Upload
+                  </Button>
+                </label>
+              </div>
+            )}
           </Grid>
-          <Grid item md={12}>
+          <Grid item sm={12}>
             <TextField
               label='Explanation'
               placeholder='Explanation for the question'
@@ -304,10 +370,10 @@ class NewQuestion extends Component {
               value={this.state.exp}
             />
           </Grid>
-          <Grid item md={12}>
+          <Grid item sm={12}>
             <PreviewCard {...this.state} />
           </Grid>
-          <Grid item md={6}>
+          <Grid item sm={6}>
             <Button
               variant='contained'
               onClick={this.props.close}
@@ -316,7 +382,7 @@ class NewQuestion extends Component {
               Cancel
             </Button>
           </Grid>
-          <Grid item md={6}>
+          <Grid item sm={6}>
             <Button
               style={{ ...styles.action, color: '#fff' }}
               variant='contained'
@@ -334,5 +400,5 @@ class NewQuestion extends Component {
 
 export default compose(
   withApollo,
-  graphql(TEST)
+  graphql(ADD_QUESTION)
 )(NewQuestion)

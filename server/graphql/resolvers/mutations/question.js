@@ -5,37 +5,41 @@ import { AuthenticationError, ValidationError } from 'apollo-server-express'
 import { async } from 'q'
 export default {
   addQuestion: async (
-    parent,
+    _parent,
     { course, name, desc, exp, Obj, ans, picture },
     { user, bucket }
   ) => {
     if (user.level < 1) {
       try {
+        let question = await prisma.createQuestion({
+          course,
+          name,
+          desc,
+          exp,
+          opt: { create: Obj },
+          ans
+        })
         return new Promise(async (resolve, reject) => {
-           if (!!picture) {
-            const { createReadStream, filename } = await picture
-            let { id } = await question
-            let ar = filename.split('.')
-            let ext = ar(ar.length - 1)
-            let img = `${id}-${ext}`
-            createReadStream()
-              .pipe(bucket.openUploadStream(img))
-              .on('finish', () => {
-                console.log(user)
-                resolve(user)
-              })
+          try {
+            if (picture) {
+              const { createReadStream, filename } = await picture
+              let ar = filename.split('.')
+              let ext = ar[ar.length - 1]
+              let img = `${question.id}.jpg`
+              createReadStream()
+                .pipe(bucket.openUploadStream(img))
+                .on('finish', () => {
+                  resolve(question)
+                })
+            } else {
+              resolve(question)
+            }
+          } catch (e) {
+            reject(new ValidationError(e.toString()))
           }
-          return await prisma.createQuestionAdd({
-            course,
-            name,
-            desc,
-            exp,
-            opt: { create: [Obj] },
-            ans
-          })
-         
         })
       } catch (e) {
+        console.log(e)
         throw new ValidationError(e.toString())
       }
     } else {

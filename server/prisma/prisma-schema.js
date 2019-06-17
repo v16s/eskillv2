@@ -19,7 +19,7 @@ type AggregateGlobal {
   count: Int!
 }
 
-type AggregateQuestionAdd {
+type AggregateQuestion {
   count: Int!
 }
 
@@ -523,12 +523,12 @@ type Mutation {
   upsertGlobal(where: GlobalWhereUniqueInput!, create: GlobalCreateInput!, update: GlobalUpdateInput!): Global!
   deleteGlobal(where: GlobalWhereUniqueInput!): Global
   deleteManyGlobals(where: GlobalWhereInput): BatchPayload!
-  createQuestionAdd(data: QuestionAddCreateInput!): QuestionAdd!
-  updateQuestionAdd(data: QuestionAddUpdateInput!, where: QuestionAddWhereUniqueInput!): QuestionAdd
-  updateManyQuestionAdds(data: QuestionAddUpdateManyMutationInput!, where: QuestionAddWhereInput): BatchPayload!
-  upsertQuestionAdd(where: QuestionAddWhereUniqueInput!, create: QuestionAddCreateInput!, update: QuestionAddUpdateInput!): QuestionAdd!
-  deleteQuestionAdd(where: QuestionAddWhereUniqueInput!): QuestionAdd
-  deleteManyQuestionAdds(where: QuestionAddWhereInput): BatchPayload!
+  createQuestion(data: QuestionCreateInput!): Question!
+  updateQuestion(data: QuestionUpdateInput!, where: QuestionWhereUniqueInput!): Question
+  updateManyQuestions(data: QuestionUpdateManyMutationInput!, where: QuestionWhereInput): BatchPayload!
+  upsertQuestion(where: QuestionWhereUniqueInput!, create: QuestionCreateInput!, update: QuestionUpdateInput!): Question!
+  deleteQuestion(where: QuestionWhereUniqueInput!): Question
+  deleteManyQuestions(where: QuestionWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -547,222 +547,100 @@ interface Node {
   id: ID!
 }
 
-type Obj {
-  opt1: String!
-  opt2: String!
-  opt3: String!
-  opt4: String!
+type Options {
+  a: String!
+  b: String!
+  c: String!
+  d: String!
 }
 
-input ObjCreateInput {
-  opt1: String!
-  opt2: String!
-  opt3: String!
-  opt4: String!
+input OptionsCreateInput {
+  a: String!
+  b: String!
+  c: String!
+  d: String!
 }
 
-input ObjCreateManyInput {
-  create: [ObjCreateInput!]
+input OptionsCreateOneInput {
+  create: OptionsCreateInput
 }
 
-input ObjRestrictedWhereInput {
-  opt1: String
-  opt1_not: String
-  opt1_in: [String!]
-  opt1_not_in: [String!]
-  opt1_lt: String
-  opt1_lte: String
-  opt1_gt: String
-  opt1_gte: String
-  opt1_contains: String
-  opt1_not_contains: String
-  opt1_starts_with: String
-  opt1_not_starts_with: String
-  opt1_ends_with: String
-  opt1_not_ends_with: String
-  opt2: String
-  opt2_not: String
-  opt2_in: [String!]
-  opt2_not_in: [String!]
-  opt2_lt: String
-  opt2_lte: String
-  opt2_gt: String
-  opt2_gte: String
-  opt2_contains: String
-  opt2_not_contains: String
-  opt2_starts_with: String
-  opt2_not_starts_with: String
-  opt2_ends_with: String
-  opt2_not_ends_with: String
-  opt3: String
-  opt3_not: String
-  opt3_in: [String!]
-  opt3_not_in: [String!]
-  opt3_lt: String
-  opt3_lte: String
-  opt3_gt: String
-  opt3_gte: String
-  opt3_contains: String
-  opt3_not_contains: String
-  opt3_starts_with: String
-  opt3_not_starts_with: String
-  opt3_ends_with: String
-  opt3_not_ends_with: String
-  opt4: String
-  opt4_not: String
-  opt4_in: [String!]
-  opt4_not_in: [String!]
-  opt4_lt: String
-  opt4_lte: String
-  opt4_gt: String
-  opt4_gte: String
-  opt4_contains: String
-  opt4_not_contains: String
-  opt4_starts_with: String
-  opt4_not_starts_with: String
-  opt4_ends_with: String
-  opt4_not_ends_with: String
-  AND: [ObjRestrictedWhereInput!]
+input OptionsUpdateDataInput {
+  a: String
+  b: String
+  c: String
+  d: String
 }
 
-input ObjScalarWhereInput {
-  opt1: String
-  opt1_not: String
-  opt1_in: [String!]
-  opt1_not_in: [String!]
-  opt1_lt: String
-  opt1_lte: String
-  opt1_gt: String
-  opt1_gte: String
-  opt1_contains: String
-  opt1_not_contains: String
-  opt1_starts_with: String
-  opt1_not_starts_with: String
-  opt1_ends_with: String
-  opt1_not_ends_with: String
-  opt2: String
-  opt2_not: String
-  opt2_in: [String!]
-  opt2_not_in: [String!]
-  opt2_lt: String
-  opt2_lte: String
-  opt2_gt: String
-  opt2_gte: String
-  opt2_contains: String
-  opt2_not_contains: String
-  opt2_starts_with: String
-  opt2_not_starts_with: String
-  opt2_ends_with: String
-  opt2_not_ends_with: String
-  opt3: String
-  opt3_not: String
-  opt3_in: [String!]
-  opt3_not_in: [String!]
-  opt3_lt: String
-  opt3_lte: String
-  opt3_gt: String
-  opt3_gte: String
-  opt3_contains: String
-  opt3_not_contains: String
-  opt3_starts_with: String
-  opt3_not_starts_with: String
-  opt3_ends_with: String
-  opt3_not_ends_with: String
-  opt4: String
-  opt4_not: String
-  opt4_in: [String!]
-  opt4_not_in: [String!]
-  opt4_lt: String
-  opt4_lte: String
-  opt4_gt: String
-  opt4_gte: String
-  opt4_contains: String
-  opt4_not_contains: String
-  opt4_starts_with: String
-  opt4_not_starts_with: String
-  opt4_ends_with: String
-  opt4_not_ends_with: String
-  AND: [ObjScalarWhereInput!]
-  OR: [ObjScalarWhereInput!]
-  NOT: [ObjScalarWhereInput!]
+input OptionsUpdateOneRequiredInput {
+  create: OptionsCreateInput
+  update: OptionsUpdateDataInput
+  upsert: OptionsUpsertNestedInput
 }
 
-input ObjUpdateManyDataInput {
-  opt1: String
-  opt2: String
-  opt3: String
-  opt4: String
+input OptionsUpsertNestedInput {
+  update: OptionsUpdateDataInput!
+  create: OptionsCreateInput!
 }
 
-input ObjUpdateManyInput {
-  create: [ObjCreateInput!]
-  deleteMany: [ObjScalarWhereInput!]
-  updateMany: [ObjUpdateManyWithWhereNestedInput!]
-}
-
-input ObjUpdateManyWithWhereNestedInput {
-  where: ObjScalarWhereInput!
-  data: ObjUpdateManyDataInput!
-}
-
-input ObjWhereInput {
-  opt1: String
-  opt1_not: String
-  opt1_in: [String!]
-  opt1_not_in: [String!]
-  opt1_lt: String
-  opt1_lte: String
-  opt1_gt: String
-  opt1_gte: String
-  opt1_contains: String
-  opt1_not_contains: String
-  opt1_starts_with: String
-  opt1_not_starts_with: String
-  opt1_ends_with: String
-  opt1_not_ends_with: String
-  opt2: String
-  opt2_not: String
-  opt2_in: [String!]
-  opt2_not_in: [String!]
-  opt2_lt: String
-  opt2_lte: String
-  opt2_gt: String
-  opt2_gte: String
-  opt2_contains: String
-  opt2_not_contains: String
-  opt2_starts_with: String
-  opt2_not_starts_with: String
-  opt2_ends_with: String
-  opt2_not_ends_with: String
-  opt3: String
-  opt3_not: String
-  opt3_in: [String!]
-  opt3_not_in: [String!]
-  opt3_lt: String
-  opt3_lte: String
-  opt3_gt: String
-  opt3_gte: String
-  opt3_contains: String
-  opt3_not_contains: String
-  opt3_starts_with: String
-  opt3_not_starts_with: String
-  opt3_ends_with: String
-  opt3_not_ends_with: String
-  opt4: String
-  opt4_not: String
-  opt4_in: [String!]
-  opt4_not_in: [String!]
-  opt4_lt: String
-  opt4_lte: String
-  opt4_gt: String
-  opt4_gte: String
-  opt4_contains: String
-  opt4_not_contains: String
-  opt4_starts_with: String
-  opt4_not_starts_with: String
-  opt4_ends_with: String
-  opt4_not_ends_with: String
-  AND: [ObjWhereInput!]
+input OptionsWhereInput {
+  a: String
+  a_not: String
+  a_in: [String!]
+  a_not_in: [String!]
+  a_lt: String
+  a_lte: String
+  a_gt: String
+  a_gte: String
+  a_contains: String
+  a_not_contains: String
+  a_starts_with: String
+  a_not_starts_with: String
+  a_ends_with: String
+  a_not_ends_with: String
+  b: String
+  b_not: String
+  b_in: [String!]
+  b_not_in: [String!]
+  b_lt: String
+  b_lte: String
+  b_gt: String
+  b_gte: String
+  b_contains: String
+  b_not_contains: String
+  b_starts_with: String
+  b_not_starts_with: String
+  b_ends_with: String
+  b_not_ends_with: String
+  c: String
+  c_not: String
+  c_in: [String!]
+  c_not_in: [String!]
+  c_lt: String
+  c_lte: String
+  c_gt: String
+  c_gte: String
+  c_contains: String
+  c_not_contains: String
+  c_starts_with: String
+  c_not_starts_with: String
+  c_ends_with: String
+  c_not_ends_with: String
+  d: String
+  d_not: String
+  d_in: [String!]
+  d_not_in: [String!]
+  d_lt: String
+  d_lte: String
+  d_gt: String
+  d_gte: String
+  d_contains: String
+  d_not_contains: String
+  d_starts_with: String
+  d_not_starts_with: String
+  d_ends_with: String
+  d_not_ends_with: String
+  AND: [OptionsWhereInput!]
 }
 
 type PageInfo {
@@ -785,47 +663,47 @@ type Query {
   global(where: GlobalWhereUniqueInput!): Global
   globals(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Global]!
   globalsConnection(where: GlobalWhereInput, orderBy: GlobalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): GlobalConnection!
-  questionAdd(where: QuestionAddWhereUniqueInput!): QuestionAdd
-  questionAdds(where: QuestionAddWhereInput, orderBy: QuestionAddOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuestionAdd]!
-  questionAddsConnection(where: QuestionAddWhereInput, orderBy: QuestionAddOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionAddConnection!
+  question(where: QuestionWhereUniqueInput!): Question
+  questions(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Question]!
+  questionsConnection(where: QuestionWhereInput, orderBy: QuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuestionConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
-type QuestionAdd {
+type Question {
   id: ID!
   course: String!
   name: String!
   desc: String!
   exp: String!
-  opt: [Obj!]
+  opt: Options!
   ans: String!
 }
 
-type QuestionAddConnection {
+type QuestionConnection {
   pageInfo: PageInfo!
-  edges: [QuestionAddEdge]!
-  aggregate: AggregateQuestionAdd!
+  edges: [QuestionEdge]!
+  aggregate: AggregateQuestion!
 }
 
-input QuestionAddCreateInput {
+input QuestionCreateInput {
   id: ID
   course: String!
   name: String!
   desc: String!
   exp: String!
-  opt: ObjCreateManyInput
+  opt: OptionsCreateOneInput!
   ans: String!
 }
 
-type QuestionAddEdge {
-  node: QuestionAdd!
+type QuestionEdge {
+  node: Question!
   cursor: String!
 }
 
-enum QuestionAddOrderByInput {
+enum QuestionOrderByInput {
   id_ASC
   id_DESC
   course_ASC
@@ -840,7 +718,7 @@ enum QuestionAddOrderByInput {
   ans_DESC
 }
 
-type QuestionAddPreviousValues {
+type QuestionPreviousValues {
   id: ID!
   course: String!
   name: String!
@@ -849,32 +727,32 @@ type QuestionAddPreviousValues {
   ans: String!
 }
 
-type QuestionAddSubscriptionPayload {
+type QuestionSubscriptionPayload {
   mutation: MutationType!
-  node: QuestionAdd
+  node: Question
   updatedFields: [String!]
-  previousValues: QuestionAddPreviousValues
+  previousValues: QuestionPreviousValues
 }
 
-input QuestionAddSubscriptionWhereInput {
+input QuestionSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: QuestionAddWhereInput
-  AND: [QuestionAddSubscriptionWhereInput!]
+  node: QuestionWhereInput
+  AND: [QuestionSubscriptionWhereInput!]
 }
 
-input QuestionAddUpdateInput {
+input QuestionUpdateInput {
   course: String
   name: String
   desc: String
   exp: String
-  opt: ObjUpdateManyInput
+  opt: OptionsUpdateOneRequiredInput
   ans: String
 }
 
-input QuestionAddUpdateManyMutationInput {
+input QuestionUpdateManyMutationInput {
   course: String
   name: String
   desc: String
@@ -882,7 +760,7 @@ input QuestionAddUpdateManyMutationInput {
   ans: String
 }
 
-input QuestionAddWhereInput {
+input QuestionWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -953,9 +831,7 @@ input QuestionAddWhereInput {
   exp_not_starts_with: String
   exp_ends_with: String
   exp_not_ends_with: String
-  opt_some: ObjWhereInput
-  opt_every: ObjRestrictedWhereInput
-  opt_none: ObjRestrictedWhereInput
+  opt: OptionsWhereInput
   ans: String
   ans_not: String
   ans_in: [String!]
@@ -970,10 +846,10 @@ input QuestionAddWhereInput {
   ans_not_starts_with: String
   ans_ends_with: String
   ans_not_ends_with: String
-  AND: [QuestionAddWhereInput!]
+  AND: [QuestionWhereInput!]
 }
 
-input QuestionAddWhereUniqueInput {
+input QuestionWhereUniqueInput {
   id: ID
 }
 
@@ -982,7 +858,7 @@ type Subscription {
   campus(where: CampusSubscriptionWhereInput): CampusSubscriptionPayload
   course(where: CourseSubscriptionWhereInput): CourseSubscriptionPayload
   global(where: GlobalSubscriptionWhereInput): GlobalSubscriptionPayload
-  questionAdd(where: QuestionAddSubscriptionWhereInput): QuestionAddSubscriptionPayload
+  question(where: QuestionSubscriptionWhereInput): QuestionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 

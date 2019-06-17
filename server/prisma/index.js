@@ -29,11 +29,11 @@ var models = [
     embedded: false
   },
   {
-    name: "QuestionAdd",
+    name: "Question",
     embedded: false
   },
   {
-    name: "Obj",
+    name: "Options",
     embedded: true
   }
 ];

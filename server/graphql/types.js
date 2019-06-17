@@ -1,7 +1,6 @@
 import { gql } from 'apollo-server-express'
 export default gql`
   scalar Date
-
   type Query {
     global: Global
     user: [User]
@@ -45,21 +44,22 @@ export default gql`
     name: String!
     coordinator_id: String!
   }
-  type QuestionAdd {
+  type Question {
+    id: String!
     course: String!
     name: String!
     desc: String!
     exp: String!
-    opt: [Obj]!
+    opt: Options!
     ans: String!
     picture: Upload
-    picOut: String
+    display: String
   }
-  type Obj {
-    opt1: String!
-    opt2: String!
-    opt3: String!
-    opt4: String!
+  type Options {
+    a: String!
+    b: String!
+    c: String!
+    d: String!
   }
 
   type Campus {
@@ -97,11 +97,11 @@ export default gql`
       name: String!
       desc: String!
       exp: String!
-      Obj: ObjInput!
+      Obj: OptionInput!
       ans: String!
       picture: Upload
-    ): QuestionAdd
-    removeQuestion(id: String!): QuestionAdd
+    ): Question
+    removeQuestion(id: String!): Question
     updateQuestion(
       id: String!
       newCourse: String!
@@ -111,7 +111,7 @@ export default gql`
       update: updateObj!
       newAns: String!
       newPicture: Upload
-    ): QuestionAdd
+    ): Question
     questionTest(picture: Upload): User
   }
   input CourseInput {
@@ -122,6 +122,12 @@ export default gql`
   input LoginInput {
     username: String!
     password: String!
+  }
+  input OptionInput {
+    a: String!
+    b: String!
+    c: String!
+    d: String!
   }
   input BranchUpdateInput {
     where: String!
@@ -146,10 +152,10 @@ export default gql`
     id: String
   }
   input ObjInput {
-    opt1: String!
-    opt2: String!
-    opt3: String!
-    opt4: String!
+    a: String!
+    b: String!
+    c: String!
+    d: String!
   }
   input updateObj {
     where: ObjInput!
