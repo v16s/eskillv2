@@ -12,7 +12,7 @@ export default {
     if (user.level < 1) {
       try {
         const { createReadStream, filename } = await picture
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
           let question = await prisma.createQuestionAdd({
             course,
             name,
