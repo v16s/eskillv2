@@ -552,7 +552,6 @@ type Obj {
   opt2: String!
   opt3: String!
   opt4: String!
-  id: String!
 }
 
 input ObjCreateInput {
@@ -560,7 +559,6 @@ input ObjCreateInput {
   opt2: String!
   opt3: String!
   opt4: String!
-  id: String!
 }
 
 input ObjCreateManyInput {
@@ -624,20 +622,6 @@ input ObjRestrictedWhereInput {
   opt4_not_starts_with: String
   opt4_ends_with: String
   opt4_not_ends_with: String
-  id: String
-  id_not: String
-  id_in: [String!]
-  id_not_in: [String!]
-  id_lt: String
-  id_lte: String
-  id_gt: String
-  id_gte: String
-  id_contains: String
-  id_not_contains: String
-  id_starts_with: String
-  id_not_starts_with: String
-  id_ends_with: String
-  id_not_ends_with: String
   AND: [ObjRestrictedWhereInput!]
 }
 
@@ -698,20 +682,6 @@ input ObjScalarWhereInput {
   opt4_not_starts_with: String
   opt4_ends_with: String
   opt4_not_ends_with: String
-  id: String
-  id_not: String
-  id_in: [String!]
-  id_not_in: [String!]
-  id_lt: String
-  id_lte: String
-  id_gt: String
-  id_gte: String
-  id_contains: String
-  id_not_contains: String
-  id_starts_with: String
-  id_not_starts_with: String
-  id_ends_with: String
-  id_not_ends_with: String
   AND: [ObjScalarWhereInput!]
   OR: [ObjScalarWhereInput!]
   NOT: [ObjScalarWhereInput!]
@@ -722,7 +692,6 @@ input ObjUpdateManyDataInput {
   opt2: String
   opt3: String
   opt4: String
-  id: String
 }
 
 input ObjUpdateManyInput {
@@ -793,20 +762,6 @@ input ObjWhereInput {
   opt4_not_starts_with: String
   opt4_ends_with: String
   opt4_not_ends_with: String
-  id: String
-  id_not: String
-  id_in: [String!]
-  id_not_in: [String!]
-  id_lt: String
-  id_lte: String
-  id_gt: String
-  id_gte: String
-  id_contains: String
-  id_not_contains: String
-  id_starts_with: String
-  id_not_starts_with: String
-  id_ends_with: String
-  id_not_ends_with: String
   AND: [ObjWhereInput!]
 }
 

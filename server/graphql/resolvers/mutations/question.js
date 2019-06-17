@@ -12,15 +12,7 @@ export default {
     if (user.level < 1) {
       try {
         return new Promise(async (resolve, reject) => {
-          let question = await prisma.createQuestionAdd({
-            course,
-            name,
-            desc,
-            exp,
-            opts: { create: [Obj] },
-            ans
-          })
-          if (picture) {
+           if (picture) {
             const { createReadStream, filename } = await picture
             let { id } = await question
             let ar = filename.split('.')
@@ -33,6 +25,15 @@ export default {
                 resolve(user)
               })
           }
+          return await prisma.createQuestionAdd({
+            course,
+            name,
+            desc,
+            exp,
+            opt: { create: [Obj] },
+            ans
+          })
+         
         })
       } catch (e) {
         throw new ValidationError(e.toString())

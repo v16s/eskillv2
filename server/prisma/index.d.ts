@@ -783,20 +783,6 @@ export interface ObjWhereInput {
   opt4_not_starts_with?: Maybe<String>;
   opt4_ends_with?: Maybe<String>;
   opt4_not_ends_with?: Maybe<String>;
-  id?: Maybe<String>;
-  id_not?: Maybe<String>;
-  id_in?: Maybe<String[] | String>;
-  id_not_in?: Maybe<String[] | String>;
-  id_lt?: Maybe<String>;
-  id_lte?: Maybe<String>;
-  id_gt?: Maybe<String>;
-  id_gte?: Maybe<String>;
-  id_contains?: Maybe<String>;
-  id_not_contains?: Maybe<String>;
-  id_starts_with?: Maybe<String>;
-  id_not_starts_with?: Maybe<String>;
-  id_ends_with?: Maybe<String>;
-  id_not_ends_with?: Maybe<String>;
   AND?: Maybe<ObjWhereInput[] | ObjWhereInput>;
 }
 
@@ -857,20 +843,6 @@ export interface ObjRestrictedWhereInput {
   opt4_not_starts_with?: Maybe<String>;
   opt4_ends_with?: Maybe<String>;
   opt4_not_ends_with?: Maybe<String>;
-  id?: Maybe<String>;
-  id_not?: Maybe<String>;
-  id_in?: Maybe<String[] | String>;
-  id_not_in?: Maybe<String[] | String>;
-  id_lt?: Maybe<String>;
-  id_lte?: Maybe<String>;
-  id_gt?: Maybe<String>;
-  id_gte?: Maybe<String>;
-  id_contains?: Maybe<String>;
-  id_not_contains?: Maybe<String>;
-  id_starts_with?: Maybe<String>;
-  id_not_starts_with?: Maybe<String>;
-  id_ends_with?: Maybe<String>;
-  id_not_ends_with?: Maybe<String>;
   AND?: Maybe<ObjRestrictedWhereInput[] | ObjRestrictedWhereInput>;
 }
 
@@ -1146,7 +1118,6 @@ export interface ObjCreateInput {
   opt2: String;
   opt3: String;
   opt4: String;
-  id: String;
 }
 
 export interface QuestionAddUpdateInput {
@@ -1223,20 +1194,6 @@ export interface ObjScalarWhereInput {
   opt4_not_starts_with?: Maybe<String>;
   opt4_ends_with?: Maybe<String>;
   opt4_not_ends_with?: Maybe<String>;
-  id?: Maybe<String>;
-  id_not?: Maybe<String>;
-  id_in?: Maybe<String[] | String>;
-  id_not_in?: Maybe<String[] | String>;
-  id_lt?: Maybe<String>;
-  id_lte?: Maybe<String>;
-  id_gt?: Maybe<String>;
-  id_gte?: Maybe<String>;
-  id_contains?: Maybe<String>;
-  id_not_contains?: Maybe<String>;
-  id_starts_with?: Maybe<String>;
-  id_not_starts_with?: Maybe<String>;
-  id_ends_with?: Maybe<String>;
-  id_not_ends_with?: Maybe<String>;
   AND?: Maybe<ObjScalarWhereInput[] | ObjScalarWhereInput>;
   OR?: Maybe<ObjScalarWhereInput[] | ObjScalarWhereInput>;
   NOT?: Maybe<ObjScalarWhereInput[] | ObjScalarWhereInput>;
@@ -1252,7 +1209,6 @@ export interface ObjUpdateManyDataInput {
   opt2?: Maybe<String>;
   opt3?: Maybe<String>;
   opt4?: Maybe<String>;
-  id?: Maybe<String>;
 }
 
 export interface QuestionAddUpdateManyMutationInput {
@@ -1787,7 +1743,6 @@ export interface Obj {
   opt2: String;
   opt3: String;
   opt4: String;
-  id: String;
 }
 
 export interface ObjPromise extends Promise<Obj>, Fragmentable {
@@ -1795,7 +1750,6 @@ export interface ObjPromise extends Promise<Obj>, Fragmentable {
   opt2: () => Promise<String>;
   opt3: () => Promise<String>;
   opt4: () => Promise<String>;
-  id: () => Promise<String>;
 }
 
 export interface ObjSubscription
@@ -1805,7 +1759,6 @@ export interface ObjSubscription
   opt2: () => Promise<AsyncIterator<String>>;
   opt3: () => Promise<AsyncIterator<String>>;
   opt4: () => Promise<AsyncIterator<String>>;
-  id: () => Promise<AsyncIterator<String>>;
 }
 
 export interface ObjNullablePromise extends Promise<Obj | null>, Fragmentable {
@@ -1813,7 +1766,6 @@ export interface ObjNullablePromise extends Promise<Obj | null>, Fragmentable {
   opt2: () => Promise<String>;
   opt3: () => Promise<String>;
   opt4: () => Promise<String>;
-  id: () => Promise<String>;
 }
 
 export interface QuestionAddConnection {

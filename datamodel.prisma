@@ -49,5 +49,4 @@ type Obj @embedded{
     opt2: String!
     opt3: String!
     opt4: String!
-    id: String!
 }

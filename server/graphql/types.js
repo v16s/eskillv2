@@ -150,7 +150,6 @@ export default gql`
     opt2: String!
     opt3: String!
     opt4: String!
-    id: String
   }
   input updateObj {
     where: ObjInput!
