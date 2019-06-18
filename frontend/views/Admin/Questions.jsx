@@ -1,10 +1,17 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { compose, graphql, withApollo } from 'react-apollo'
-import { Paper, TextField, Fab, Modal, Backdrop } from '@material-ui/core'
+import {
+  Paper,
+  TextField,
+  Fab,
+  Modal,
+  Backdrop,
+  IconButton
+} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { Dropdown, Table, NewQuestion, EditQuestion } from '../../components'
-import { Add } from '@material-ui/icons'
+import { Add, DeleteOutline as Delete } from '@material-ui/icons'
 
 const BRANCHES = gql`
   query Branches {
@@ -36,6 +43,13 @@ const QUESTIONS = gql`
         d
       }
       ans
+    }
+  }
+`
+const REMOVE_QUESTION = gql`
+  mutation RemoveQuestion($id: String!) {
+    removeQuestion(id: $id) {
+      id
     }
   }
 `
@@ -88,13 +102,19 @@ class Questions extends React.Component {
     show: false,
     courses: [],
     questions: [],
-    editQ: false
+    editQ: false,
+    refetch: () => {
+      return ''
+    }
   }
-  show = () => {
+  show = refetch => {
     this.setState({ show: !this.state.show })
+    if (refetch === true) {
+      this.onCourseChange(this.state.course, { target: { name: 'course' } })
+    }
   }
   editQ = () => {
-    this.setState({editQ: !this.state.editQ})
+    this.setState({ editQ: !this.state.editQ })
   }
   add = (newData, table) => {
     return new Promise((resolve, reject) => {
@@ -145,17 +165,45 @@ class Questions extends React.Component {
     client
       .query({
         query: QUESTIONS,
-        variables: { course: value.value }
+        variables: { course: value.value },
+        fetchPolicy: 'network-only'
       })
-      .then(({ data: { questions } }) => {
-        this.setState({ questions })
+      .then(({ data: { questions }, refetch }) => {
+        this.setState({ questions, refetch })
       })
     this.setState(newstate)
   }
   editQuestion = (e, rowData) => {
-    this.setState({question: rowData, editQ: true})
+    this.setState({ question: rowData, editQ: true })
   }
-  columns = [{ title: 'ID', field: 'id' }, { title: 'Title', field: 'name' }]
+  columns = [
+    { title: 'ID', field: 'id' },
+    { title: 'Title', field: 'name' },
+    {
+      title: 'Remove',
+      render: ({ id }) => (
+        <IconButton
+          style={{
+            color: '#fff'
+          }}
+          onClick={e => {
+            e.preventDefault()
+            this.removeQuestion(id)
+          }}
+          color='secondary'
+          aria-label='Delete'
+        >
+          <Delete />
+        </IconButton>
+      ),
+      disableClick: true
+    }
+  ]
+  removeQuestion = id => {
+    this.props.removeQuestion({ variables: { id } }).then(({ data }) => {
+      this.setState({ questions: this.state.questions.filter(d => d.id != id) })
+    })
+  }
   render () {
     const { classes } = this.props
     let branches = []
@@ -201,7 +249,7 @@ class Questions extends React.Component {
                   table='questions'
                   title={this.state.course.value}
                   style={{ boxShadow: 'none' }}
-                  uneditable={true}
+                  uneditable
                   onRowClick={this.editQuestion}
                 />
               )}
@@ -225,15 +273,19 @@ class Questions extends React.Component {
             >
               <NewQuestion close={this.show} branches={branches} />
             </Modal>
-            {
-              this.state.editQ && <Modal
-              className={classes.root}
-              open={this.state.editQ}
-              onClose={this.editQ}
-            >
-              <EditQuestion close={this.editQ} branches={branches} question={this.state.question}/>
-            </Modal>
-            }
+            {this.state.editQ && (
+              <Modal
+                className={classes.root}
+                open={this.state.editQ}
+                onClose={this.editQ}
+              >
+                <EditQuestion
+                  close={this.editQ}
+                  branches={branches}
+                  question={this.state.question}
+                />
+              </Modal>
+            )}
           </Paper>
         </div>
       </div>
@@ -245,5 +297,6 @@ export default compose(
   graphql(BRANCHES, {
     name: 'branches',
     options: { fetchPolicy: 'network-only' }
-  })
+  }),
+  graphql(REMOVE_QUESTION, { name: 'removeQuestion' })
 )(withStyles(styles)(Questions))

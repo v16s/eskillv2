@@ -145,6 +145,7 @@ class NewQuestion extends Component {
         })
         .then(data => {
           console.log(data)
+          this.props.close(true)
         })
     }
   }
