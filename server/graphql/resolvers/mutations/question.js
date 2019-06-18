@@ -66,30 +66,42 @@ export default {
 
   updateQuestion: async (
     parent,
-    {
-      id,
-      newCourse,
-      newName,
-      newDesc,
-      newExp,
-      update: updateMany,
-      newAns,
-      newPicture
-    },
+    { id, newCourse, newName, newDesc, newExp, Obj, newAns, newPicture },
     { user }
   ) => {
     if (user.level < 1) {
       try {
-        return await prisma.updateQuestionAdd({
-          where: { id },
-          data: {
-            course: newCourse,
-            name: newName,
-            desc: newDesc,
-            exp: newExp,
-            opts: { updateMany },
-            ans: newAns,
-            picture: newPicture
+        try {
+          let image = bucket.find({ filename: `${id}.jpg` })
+          let { _id } = await image.next()
+          bucket.delete(_id)
+        } catch (e) {}
+        return await prisma.deleteQuestion({ id })
+        let question = await prisma.createQuestion({
+          course: newCourse,
+          name: newName,
+          desc: newDesc,
+          exp: newExp,
+          opt: { create: Obj },
+          ans: newAns
+        })
+        return new Promise(async (resolve, reject) => {
+          try {
+            if (newPicture) {
+              const { createReadStream, filename } = await newPicture
+              let ar = filename.split('.')
+              let ext = ar[ar.length - 1]
+              let img = `${question.id}.jpg`
+              createReadStream()
+                .pipe(bucket.openUploadStream(img))
+                .on('finish', () => {
+                  resolve(question)
+                })
+            } else {
+              resolve(question)
+            }
+          } catch (e) {
+            reject(new ValidationError(e.toString()))
           }
         })
       } catch (e) {
