@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { compose, graphql, withApollo } from 'react-apollo'
 import { Paper, TextField, Fab, Modal, Backdrop } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { Dropdown, Table, NewQuestion } from '../../components'
+import { Dropdown, Table, NewQuestion, EditQuestion } from '../../components'
 import { Add } from '@material-ui/icons'
 
 const BRANCHES = gql`
@@ -87,10 +87,14 @@ class Questions extends React.Component {
     data: [],
     show: false,
     courses: [],
-    questions: []
+    questions: [],
+    editQ: false
   }
   show = () => {
     this.setState({ show: !this.state.show })
+  }
+  editQ = () => {
+    this.setState({editQ: !this.state.editQ})
   }
   add = (newData, table) => {
     return new Promise((resolve, reject) => {
@@ -149,7 +153,7 @@ class Questions extends React.Component {
     this.setState(newstate)
   }
   editQuestion = (e, rowData) => {
-    console.log(rowData)
+    this.setState({question: rowData, editQ: true})
   }
   columns = [{ title: 'ID', field: 'id' }, { title: 'Title', field: 'name' }]
   render () {
@@ -197,7 +201,7 @@ class Questions extends React.Component {
                   table='questions'
                   title={this.state.course.value}
                   style={{ boxShadow: 'none' }}
-                  uneditable
+                  uneditable={true}
                   onRowClick={this.editQuestion}
                 />
               )}
@@ -221,6 +225,15 @@ class Questions extends React.Component {
             >
               <NewQuestion close={this.show} branches={branches} />
             </Modal>
+            {
+              this.state.editQ && <Modal
+              className={classes.root}
+              open={this.state.editQ}
+              onClose={this.editQ}
+            >
+              <EditQuestion close={this.editQ} branches={branches} question={this.state.question}/>
+            </Modal>
+            }
           </Paper>
         </div>
       </div>
