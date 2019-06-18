@@ -50,12 +50,13 @@ export default {
   removeQuestion: async (parent, { id }, { user, bucket }) => {
     if (user.level < 1) {
       try {
-        // let image = bucket.find({ filename : `${id}.jpg`})
-        // let {_id} = await image.next()
-        // bucket.delete(_id)
-        return await prisma.deleteQuestion({where:{id}})
+        try {
+          let image = bucket.find({ filename: `${id}.jpg` })
+          let { _id } = await image.next()
+          bucket.delete(_id)
+        } catch (e) {}
+        return await prisma.deleteQuestion({ id })
       } catch (e) {
-        console.log(e)
         throw new ValidationError(e.toString())
       }
     } else {
@@ -98,16 +99,5 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
-  },
-  questionTest: async (_, { picture }, { user, bucket }) => {
-    const { createReadStream, filename } = await picture
-    return new Promise((resolve, reject) => {
-      createReadStream()
-        .pipe(bucket.openUploadStream(filename))
-        .on('finish', () => {
-          console.log(user)
-          resolve(user)
-        })
-    })
   }
 }

@@ -23,29 +23,15 @@ export default {
     console.log(where)
     return await prisma.courses({ where })
   },
-  file: async (_, _args, { bucket }) => {
-    let string = ''
-    return new Promise((resolve, reject) => {
-      bucket
-        .openDownloadStreamByName('forsenCD.jpg')
-        .on('data', str => {
-          string += str.toString('base64')
-        })
-        .on('end', () => {
-          console.log('finish')
-          resolve(string)
-        })
-    })
-  },
   questions: async (_, { where }, { user }) => {
     return await prisma.questions({ where })
   },
-  question: async(_, {id}, {bucket}) => {
-    let question = await prisma.question({id})
+  question: async (_, { id }, { bucket }) => {
+    let question = await prisma.question({ id })
     return new Promise((resolve, reject) => {
-        let string = ''
-        bucket
-        .openDownloadStreamByName(id+ '.jpg')
+      let string = ''
+      bucket
+        .openDownloadStreamByName(id + '.jpg')
         .on('data', str => {
           string += str.toString('base64')
         })
@@ -56,7 +42,6 @@ export default {
         .on('error', () => {
           resolve(question)
         })
-      
     })
   }
 }
