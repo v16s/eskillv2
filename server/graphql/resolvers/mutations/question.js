@@ -47,10 +47,13 @@ export default {
     }
   },
 
-  removeQuestion: async (parent, { id }, { user }) => {
+  removeQuestion: async (parent, { id }, { user, bucket }) => {
     if (user.level < 1) {
       try {
-        return await prisma.deleteQuestionAdd({ id })
+        // let image = bucket.find({ filename : `${id}.jpg`})
+        // let {_id} = await image.next()
+        // bucket.delete(_id)
+        return await prisma.deleteQuestion({where:{id}})
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
