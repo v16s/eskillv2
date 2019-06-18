@@ -50,10 +50,13 @@ export default {
   removeQuestion: async (parent, { id }, { user, bucket }) => {
     if (user.level < 1) {
       try {
-        // let image = bucket.find({ filename : `${id}.jpg`})
-        // let {_id} = await image.next()
-        // bucket.delete(_id)
-        return await prisma.deleteQuestion({where:{id}})
+        try{
+          let image = bucket.find({ filename : `${id}.jpg`})
+          let {_id} = await image.next()
+          bucket.delete(_id)
+        }
+        catch(e){}
+        return await prisma.deleteQuestion({id})
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
@@ -71,7 +74,7 @@ export default {
       newName,
       newDesc,
       newExp,
-      update: updateMany,
+      Obj,
       newAns,
       newPicture
     },
@@ -79,16 +82,38 @@ export default {
   ) => {
     if (user.level < 1) {
       try {
-        return await prisma.updateQuestionAdd({
-          where: { id },
-          data: {
+        try{
+          let image = bucket.find({ filename : `${id}.jpg`})
+          let {_id} = await image.next()
+          bucket.delete(_id)
+        }
+        catch(e){}
+        return await prisma.deleteQuestion({id})
+        let question = await prisma.createQuestion({
             course: newCourse,
             name: newName,
             desc: newDesc,
             exp: newExp,
-            opts: { updateMany },
+            opt: { create: Obj },
             ans: newAns,
-            picture: newPicture
+        })
+        return new Promise(async (resolve, reject) => {
+          try {
+            if (newPicture) {
+              const { createReadStream, filename } = await newPicture
+              let ar = filename.split('.')
+              let ext = ar[ar.length - 1]
+              let img = `${question.id}.jpg`
+              createReadStream()
+                .pipe(bucket.openUploadStream(img))
+                .on('finish', () => {
+                  resolve(question)
+                })
+            } else {
+              resolve(question)
+            }
+          } catch (e) {
+            reject(new ValidationError(e.toString()))
           }
         })
       } catch (e) {
@@ -98,16 +123,5 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
-  },
-  questionTest: async (_, { picture }, { user, bucket }) => {
-    const { createReadStream, filename } = await picture
-    return new Promise((resolve, reject) => {
-      createReadStream()
-        .pipe(bucket.openUploadStream(filename))
-        .on('finish', () => {
-          console.log(user)
-          resolve(user)
-        })
-    })
   }
 }

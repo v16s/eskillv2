@@ -114,7 +114,7 @@ export default gql`
       newName: String!
       newDesc: String!
       newExp: String!
-      update: updateObj!
+      Obj: OptionInput!
       newAns: String!
       newPicture: Upload
     ): Question
