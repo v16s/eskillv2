@@ -133,24 +133,30 @@ class Dashboard extends React.Component {
             <CampusTable
               columns={[
                 { title: 'Name', field: 'name' },
-                { title: 'Admin ID', field: 'admin_id' }
+                { title: 'Admin ID', field: 'admin_id', editable: 'never' }
               ]}
               inside='departments'
               title='Campus'
               name='campuses'
               insideTitle='Departments'
+              uneditable={false}
             />
           </div>
           <div style={{ width: '50%', padding: '20px' }}>
             <CourseTable
               columns={[
                 { title: 'Name', field: 'name' },
-                { title: 'Coordinator ID', field: 'coordinator_id' },
+                {
+                  title: 'Coordinator ID',
+                  field: 'coordinator_id',
+                  editable: 'never'
+                },
                 { title: 'Branch', field: 'branch' }
               ]}
               title='Course'
               name='courses'
               isCourse
+              uneditable={false}
             />
           </div>
         </div>

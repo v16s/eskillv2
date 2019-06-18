@@ -23,9 +23,6 @@ export default {
     console.log(where)
     return await prisma.courses({ where })
   },
-  user: async () => {
-    return await prisma.users()
-  },
   file: async (_, _args, { bucket }) => {
     let string = ''
     return new Promise((resolve, reject) => {
@@ -39,5 +36,8 @@ export default {
           resolve(string)
         })
     })
+  },
+  questions: async (_, { where }, { user }) => {
+    return await prisma.questions({ where })
   }
 }

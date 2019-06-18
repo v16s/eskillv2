@@ -3,16 +3,21 @@ export default gql`
   scalar Date
   type Query {
     global: Global
-    user: [User]
     branches: [Branch]
     validate: User
     campuses: [Campus]
     courses(where: CourseWhereInput): [Course]
     file: String
+    questions(where: QuestionWhereInput): [Question]
   }
   input CourseWhereInput {
     branch: String
     name: String
+  }
+  input QuestionWhereInput {
+    course: String
+    name: String
+    desc: String
   }
   type Global {
     regs: Boolean!

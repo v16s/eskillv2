@@ -21,6 +21,24 @@ const COURSES = gql`
     }
   }
 `
+const QUESTIONS = gql`
+  query Questions($course: String!) {
+    questions(where: { course: $course }) {
+      id
+      name
+      desc
+      course
+      exp
+      opt {
+        a
+        b
+        c
+        d
+      }
+      ans
+    }
+  }
+`
 const styles = theme => ({
   paper: {
     width: '100%',
@@ -116,7 +134,24 @@ class Questions extends React.Component {
       })
     this.setState(newstate)
   }
-
+  onCourseChange = (value, e) => {
+    let newstate = this.state
+    newstate[e.name] = value
+    let { client } = this.props
+    client
+      .query({
+        query: QUESTIONS,
+        variables: { course: value.value }
+      })
+      .then(({ data: { questions } }) => {
+        this.setState({ questions })
+      })
+    this.setState(newstate)
+  }
+  editQuestion = (e, rowData) => {
+    console.log(rowData)
+  }
+  columns = [{ title: 'ID', field: 'id' }, { title: 'Title', field: 'name' }]
   render () {
     const { classes } = this.props
     let branches = []
@@ -150,22 +185,20 @@ class Questions extends React.Component {
             <Dropdown
               className={classes.input}
               options={courses}
-              onChange={this.onDropdownChange}
+              onChange={this.onCourseChange}
               label='Course'
               name='course'
             />
             <div className={classes.padded}>
               {questions.length > 0 && (
                 <Table
-                  onRowAdd={this.add}
-                  onRowDelete={this.delete}
-                  onRowUpdate={this.update}
-                  data={this.state.data}
-                  columns={this.state.columns}
-                  table=''
-                  title=''
-                  body={{ editRow: { deleteText: 'Remove the campus?' } }}
+                  data={questions}
+                  columns={this.columns}
+                  table='questions'
+                  title={this.state.course.value}
                   style={{ boxShadow: 'none' }}
+                  uneditable
+                  onRowClick={this.editQuestion}
                 />
               )}
             </div>

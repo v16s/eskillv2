@@ -48,7 +48,9 @@ function Table ({
   onRowDelete,
   onRowUpdate,
   body,
-  style
+  style,
+  editable,
+  onRowClick
 }) {
   return (
     <MaterialTable
@@ -57,35 +59,38 @@ function Table ({
       icons={tableIcons}
       data={data}
       style={style}
-      editable={{
-        onRowAdd: newData =>
-          new Promise(resolve => {
-            onRowAdd(newData, table).then(() => {
-              resolve()
-            })
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise(resolve => {
-            onRowUpdate(newData, oldData, table).then(() => {
-              resolve()
-            })
-          }),
-        onRowDelete: oldData =>
-          new Promise(resolve => {
-            onRowDelete(oldData, table)
-              .then(() => {
+      editable={
+        editable && {
+          onRowAdd: newData =>
+            new Promise(resolve => {
+              onRowAdd(newData, table).then(() => {
                 resolve()
               })
-              .catch(err => {
-                console.log(err)
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise(resolve => {
+              onRowUpdate(newData, oldData, table).then(() => {
+                resolve()
               })
-          })
-      }}
+            }),
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              onRowDelete(oldData, table)
+                .then(() => {
+                  resolve()
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+            })
+        }
+      }
       localization={
         body && {
           body
         }
       }
+      onRowClick={onRowClick}
       detailPanel={detailPanel}
     />
   )
@@ -210,19 +215,21 @@ export default class DashboardTable extends React.Component {
     })
   }
   updateInside = (name, oldValue, newValue) => {
-    this.props
-      .updateInside({
-        variables: {
-          name,
-          prev: oldValue,
-          next: newValue
-        }
-      })
-      .then(data => {
-        this.props.data.refetch().then(() => {
-          resolve()
+    return new Promise(resolve => {
+      this.props
+        .updateInside({
+          variables: {
+            name,
+            prev: oldValue,
+            next: newValue
+          }
         })
-      })
+        .then(data => {
+          this.props.data.refetch().then(() => {
+            resolve()
+          })
+        })
+    })
   }
   render () {
     return (
@@ -230,9 +237,14 @@ export default class DashboardTable extends React.Component {
         onRowAdd={this.add}
         onRowDelete={this.delete}
         onRowUpdate={this.update}
-        data={this.state.data}
+        data={
+          this.props.uneditable === true ? this.props.data : this.state.data
+        }
         columns={this.state.columns}
         title={this.props.title}
+        onRowClick={this.props.onRowClick}
+        style={this.props.style}
+        editable={this.props.uneditable === false}
         body={{ editRow: { deleteText: `Remove the ${this.props.title}?` } }}
         detailPanel={
           this.props.inside &&
