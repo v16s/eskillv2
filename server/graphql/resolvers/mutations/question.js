@@ -76,7 +76,7 @@ export default {
           let { _id } = await image.next()
           bucket.delete(_id)
         } catch (e) {}
-        return await prisma.deleteQuestion({ id })
+        let q = await prisma.deleteQuestion({ id })
         let question = await prisma.createQuestion({
           course: newCourse,
           name: newName,
