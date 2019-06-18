@@ -14,7 +14,7 @@ export default class Admin extends React.Component {
       case '/questions':
         location = 1
         break
-      case '/user':
+      case '/reports':
         location = 2
         break
     }
@@ -31,7 +31,7 @@ export default class Admin extends React.Component {
         history.push('/questions')
         break
       case 2:
-        history.push('/user')
+        history.push('/reports')
         break
     }
     this.setState({ value })
@@ -54,10 +54,10 @@ export default class Admin extends React.Component {
         >
           <Tab label='Dashboard' />
           <Tab label='Questions' />
-          <Tab label='User' />
+          <Tab label='Problem Reports' />
         </Tabs>
         <Switch>
-        <Route path='/user' component={Users} />
+        <Route path='/reports' component={Users} />
           <Route path='/questions' component={Questions} />
           <Route path='/' component={Dashboard} />
         </Switch>

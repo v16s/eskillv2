@@ -39,5 +39,24 @@ export default {
   },
   questions: async (_, { where }, { user }) => {
     return await prisma.questions({ where })
+  },
+  question: async(_, {id}, {bucket}) => {
+    let question = await prisma.question({id})
+    return new Promise((resolve, reject) => {
+        let string = ''
+        bucket
+        .openDownloadStreamByName(id+ '.jpg')
+        .on('data', str => {
+          string += str.toString('base64')
+        })
+        .on('end', () => {
+          question.display = `data:image/jpg;base64,${string}`
+          resolve(question)
+        })
+        .on('error', () => {
+          resolve(question)
+        })
+      
+    })
   }
 }

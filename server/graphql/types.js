@@ -9,6 +9,7 @@ export default gql`
     courses(where: CourseWhereInput): [Course]
     file: String
     questions(where: QuestionWhereInput): [Question]
+    question(id: String!):Question 
   }
   input CourseWhereInput {
     branch: String

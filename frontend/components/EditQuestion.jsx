@@ -40,6 +40,13 @@ const ADD_QUESTION = gql`
     }
   }
 `
+const GET_QUESTION_PICTURE = gql`
+query Question($id: String!){
+    question(id: $id){
+        display
+    }
+}
+`
 
 const styles = {
   paper: {
@@ -153,6 +160,18 @@ class EditQuestion extends Component {
   removeImage = () => {
     this.setState({ picture: null, preview: undefined })
   }
+  componentDidMount() {
+      const {id} = this.state
+      const {client} = this.props
+      client.query({
+          query: GET_QUESTION_PICTURE,
+          variables: {id},
+      }).then(({data}) => {
+          console.log(data)
+          this.setState({preview: data.question.display})
+      })
+  }
+  
   render () {
     let { branches } = this.props
     const courses = this.state.courses.map(d => ({
@@ -211,7 +230,7 @@ class EditQuestion extends Component {
               <GreenRadio
                 inputProps={{ 'aria-label': 'Radio A' }}
                 style={styles.radio}
-                checked={answer === 'a'}
+                checked={answer == 'a'}
                 onChange={this.handleRadioChange}
                 value='a'
               />
@@ -233,7 +252,7 @@ class EditQuestion extends Component {
               <GreenRadio
                 inputProps={{ 'aria-label': 'Radio A' }}
                 style={styles.radio}
-                checked={answer === 'b'}
+                checked={answer == 'b'}
                 onChange={this.handleRadioChange}
                 value='b'
               />
@@ -255,7 +274,7 @@ class EditQuestion extends Component {
               <GreenRadio
                 inputProps={{ 'aria-label': 'Radio A' }}
                 style={styles.radio}
-                checked={answer === 'c'}
+                checked={answer == 'c'}
                 onChange={this.handleRadioChange}
                 value='c'
               />
@@ -277,7 +296,7 @@ class EditQuestion extends Component {
               <GreenRadio
                 inputProps={{ 'aria-label': 'Radio A' }}
                 style={styles.radio}
-                checked={answer === 'd'}
+                checked={answer == 'd'}
                 onChange={this.handleRadioChange}
                 value='d'
               />
@@ -296,7 +315,7 @@ class EditQuestion extends Component {
           </Grid>
 
           <Grid item sm={12}>
-            {this.state.picture ? (
+            {this.state.preview ? (
               <div
                 style={{
                   display: 'flex',
