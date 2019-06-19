@@ -95,7 +95,9 @@ let ThemeWrapper = ({ data }) => {
   let theme = createMuiTheme({
     palette: {
       type: data.dark ? 'dark' : 'light',
-      primary: lightBlue
+      primary: {
+        main: '#3281ff'
+      }
     }
   })
   return (

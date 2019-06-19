@@ -7,4 +7,18 @@ import Loading from './Loading'
 import NewQuestion from './NewQuestion'
 import EditQuestion from './EditQuestion'
 import PreviewCard from './PreviewCard'
-export { Dropdown, AppBar, Table, List, RegisterControl, Loading, NewQuestion, PreviewCard, EditQuestion }
+import CourseCard from './CourseCard'
+import RequestCourse from './RequestCourse'
+export {
+  Dropdown,
+  AppBar,
+  Table,
+  List,
+  RegisterControl,
+  Loading,
+  NewQuestion,
+  PreviewCard,
+  EditQuestion,
+  CourseCard,
+  RequestCourse
+}
