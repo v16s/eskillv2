@@ -8,8 +8,8 @@ type User {
   email: String!
   level: Int!
   id: ID! @id
-  courses: [CourseInstance] @relation(link: INLINE, name: UserCourseRelation, onDelete: CASCADE)
-  reports: [Reports] @relation(link: INLINE, name: ProblemReportRelation, onDelete: CASCADE)
+  courses: [CourseInstance] @relation(link: INLINE, name: "UserCourseRelation")
+  reports: [Report] @relation(link: INLINE, name: "ProblemReportRelation")
 }
 type Report {
   id: ID! @id
