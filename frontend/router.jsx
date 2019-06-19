@@ -3,7 +3,7 @@ import { Router as BrowserRouter, Route, Switch } from 'react-router-dom'
 import { history } from './util'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import { Login, Register, Admin } from './views'
+import { Login, Register, Admin, Student } from './views'
 import {Loading} from './components'
 
 const GET_USER = gql`
@@ -19,7 +19,8 @@ const RouterSwitch = ({ level }) => {
     case 0:
       return <Admin />
       break
-
+    case 4:
+      return <Student />
     default:
       return <div> logged in </div>
       break

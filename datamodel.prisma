@@ -8,6 +8,21 @@ type User {
   email: String!
   level: Int!
   id: ID! @id
+  courses: [CourseInstance] @relation(link: INLINE, name: UserCourseRelation, onDelete: CASCADE)
+  reports: [Reports] @relation(link: INLINE, name: ProblemReportRelation, onDelete: CASCADE)
+}
+type Report {
+  id: ID! @id
+  title: String!
+  description: String!
+  status: Int!
+}
+type CourseInstance {
+  id: ID! @id
+  questions: [String]!
+  completed: Int!
+  total: Int!
+  course: String!
 }
 type Global {
   regs: Boolean @default(value: true)
