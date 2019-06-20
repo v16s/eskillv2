@@ -4,6 +4,7 @@ import { AppBar } from '../../components'
 import { history } from '../../util'
 import Dashboard from './Dashboard'
 import CourseQuestions from './CourseQuestions'
+import QuestionView from './QuestionView'
 export default class Admin extends React.Component {
   render () {
     return (
@@ -15,6 +16,7 @@ export default class Admin extends React.Component {
       >
         <AppBar />
         <Switch>
+          <Route path='/qptest' component={QuestionView} />
           <Route path='/course/:name' component={CourseQuestions} />
           <Route path='/' component={Dashboard} />
         </Switch>

@@ -41,11 +41,11 @@ const ADD_QUESTION = gql`
   }
 `
 const GET_QUESTION_PICTURE = gql`
-query Question($id: String!){
-    question(id: $id){
-        display
+  query Question($id: String!) {
+    question(id: $id) {
+      display
     }
-}
+  }
 `
 
 const styles = {
@@ -79,28 +79,28 @@ const styles = {
 const GreenRadio = withStyles({
   root: {
     '&$checked': {
-      color: green[600]
+      color: green[400]
     }
   },
   checked: {}
 })(props => <Radio color='default' {...props} />)
 
 const makeDefaults = () => ({
-    name: '',
-    desc: '',
-    opt: {
-      a: '',
-      b: '',
-      c: '',
-      d: ''
-    },
-    ans: ''
-  })
+  name: '',
+  desc: '',
+  opt: {
+    a: '',
+    b: '',
+    c: '',
+    d: ''
+  },
+  ans: ''
+})
 
 class EditQuestion extends Component {
-  constructor(props) {
-      super(props)
-      this.state={ ...props.question, courses: [], picture: null, exp: '' }
+  constructor (props) {
+    super(props)
+    this.state = { ...props.question, courses: [], picture: null, exp: '' }
   }
   onChange = ({ target }) => {
     this.setState({
@@ -160,18 +160,20 @@ class EditQuestion extends Component {
   removeImage = () => {
     this.setState({ picture: null, preview: undefined })
   }
-  componentDidMount() {
-      const {id} = this.state
-      const {client} = this.props
-      client.query({
-          query: GET_QUESTION_PICTURE,
-          variables: {id},
-      }).then(({data}) => {
-          console.log(data)
-          this.setState({preview: data.question.display})
+  componentDidMount () {
+    const { id } = this.state
+    const { client } = this.props
+    client
+      .query({
+        query: GET_QUESTION_PICTURE,
+        variables: { id }
+      })
+      .then(({ data }) => {
+        console.log(data)
+        this.setState({ preview: data.question.display })
       })
   }
-  
+
   render () {
     let { branches } = this.props
     const courses = this.state.courses.map(d => ({
@@ -378,7 +380,13 @@ class EditQuestion extends Component {
             />
           </Grid>
           <Grid item sm={12}>
-            <PreviewCard {...{...this.state, answer: this.state.ans, options: this.state.opt}} />
+            <PreviewCard
+              {...{
+                ...this.state,
+                answer: this.state.ans,
+                options: this.state.opt
+              }}
+            />
           </Grid>
           <Grid item sm={6}>
             <Button

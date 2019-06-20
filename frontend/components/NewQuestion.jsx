@@ -72,7 +72,7 @@ const styles = {
 const GreenRadio = withStyles({
   root: {
     '&$checked': {
-      color: green[600]
+      color: green[400]
     }
   },
   checked: {}
