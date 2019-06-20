@@ -109,13 +109,13 @@ export default gql`
     removeQuestion(id: String!, course: String!): Question
     updateQuestion(
       id: String!
-      newCourse: String!
-      newName: String!
-      newDesc: String!
-      newExp: String!
+      course: String!
+      name: String!
+      desc: String!
+      exp: String!
       Obj: OptionInput!
-      newAns: String!
-      newPicture: Upload
+      ans: String!
+      picture: Upload
     ): Question
   }
   input CourseInput {

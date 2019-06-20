@@ -70,7 +70,7 @@ export default {
 
   updateQuestion: async (
     parent,
-    { id, newCourse, newName, newDesc, newExp, Obj, newAns, newPicture },
+    { id, course, name, desc, exp, Obj, ans, picture },
     { user, bucket }
   ) => {
     let sp = user.username.split('-')
@@ -84,12 +84,12 @@ export default {
         } catch (e) {}
         let q = await prisma.deleteQuestion({ id })
         let question = await prisma.createQuestion({
-          course: newCourse,
-          name: newName,
-          desc: newDesc,
-          exp: newExp,
+          course,
+          name,
+          desc,
+          exp,
           opt: { create: Obj },
-          ans: newAns
+          ans
         })
         return new Promise(async (resolve, reject) => {
           try {
