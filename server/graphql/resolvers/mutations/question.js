@@ -93,8 +93,8 @@ export default {
         })
         return new Promise(async (resolve, reject) => {
           try {
-            if (newPicture) {
-              const { createReadStream, filename } = await newPicture
+            if (picture) {
+              const { createReadStream, filename } = await picture
               let ar = filename.split('.')
               let ext = ar[ar.length - 1]
               let img = `${question.id}.jpg`
