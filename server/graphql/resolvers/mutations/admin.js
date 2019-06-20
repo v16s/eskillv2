@@ -42,7 +42,7 @@ export default {
         let salt = await promisify(bcrypt.genSalt)(10)
         let hash = await promisify(bcrypt.hash)('password', salt, null)
         let { username } = await prisma.createUser({
-          username: `${name.replace(/ /g, '-')}-Admin`,
+          username: `${name.replace(/ /g, '_')}-Admin`,
           password: hash,
           name: `${name} Admin`,
           campus: name,
@@ -76,9 +76,9 @@ export default {
     if (user.level < 1) {
       try {
         let { username } = await prisma.updateUser({
-          where: { username: `${name.replace(/ /g, '-')}-Admin` },
+          where: { username: `${name.replace(/ /g, '_')}-Admin` },
           data: {
-            username: `${newName.replace(/ /g, '-')}-Admin`,
+            username: `${newName.replace(/ /g, '_')}-Admin`,
             name: `${newName} Admin`,
             campus: newName
           }
@@ -149,7 +149,7 @@ export default {
         let salt = await promisify(bcrypt.genSalt)(10)
         let hash = await promisify(bcrypt.hash)('password', salt, null)
         let { username } = await prisma.createUser({
-          username: `${identity.replace(/ /g, '-')}-Coordinator`,
+          username: `${identity.replace(/ /g, '_')}-Coordinator`,
           password: hash,
           name: `${identity} Coordinator`,
           email: '',
@@ -177,7 +177,9 @@ export default {
         if (courses.length == 1) {
           await prisma.deleteBranch({ name: branch })
         }
-        await prisma.deleteUser({ username: coordinator_id })
+        try {
+          await prisma.deleteUser({ username: coordinator_id })
+        } catch (e) {}
         return await prisma.deleteCourse({ name })
       } catch (e) {
         console.log(e)
@@ -203,9 +205,9 @@ export default {
           await prisma.createBranch({ name: newBranch })
         }
         await prisma.updateUser({
-          where: { username: `${identity.replace(/ /g, '-')}-Coordinator` },
+          where: { username: `${identity.replace(/ /g, '_')}-Coordinator` },
           data: {
-            username: `${iden.replace(/ /g, '-')}-Coordinator`,
+            username: `${iden.replace(/ /g, '_')}-Coordinator`,
             name: `${iden} Coordinator`
           }
         })

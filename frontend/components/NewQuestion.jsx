@@ -130,6 +130,9 @@ class NewQuestion extends Component {
   }
   onSubmit = e => {
     const { picture, desc, name, options, exp, course, answer } = this.state
+    if (this.props.coordinator) {
+      course = this.props.course
+    }
     if (this.checkQuestion()) {
       this.props
         .mutate({
@@ -167,7 +170,6 @@ class NewQuestion extends Component {
     this.setState({ picture: null, preview: undefined })
   }
   render () {
-    let { branches } = this.props
     const courses = this.state.courses.map(d => ({
       label: d.name,
       value: d.name
@@ -176,22 +178,26 @@ class NewQuestion extends Component {
     return (
       <Paper style={styles.paper}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
-          <Grid item sm={6}>
-            <Dropdown
-              options={branches}
-              onChange={this.onDropdownChange}
-              label='Branch'
-              name='branch'
-            />
-          </Grid>
-          <Grid item sm={6}>
-            <Dropdown
-              options={courses}
-              onChange={this.onDropdownChange}
-              label='Course'
-              name='course'
-            />
-          </Grid>
+          {!this.props.coordinator && (
+            <div>
+              <Grid item sm={6}>
+                <Dropdown
+                  options={this.props.branches}
+                  onChange={this.onDropdownChange}
+                  label='Branch'
+                  name='branch'
+                />
+              </Grid>
+              <Grid item sm={6}>
+                <Dropdown
+                  options={courses}
+                  onChange={this.onDropdownChange}
+                  label='Course'
+                  name='course'
+                />
+              </Grid>
+            </div>
+          )}
           <Grid item sm={12}>
             <TextField
               label='Question Name'

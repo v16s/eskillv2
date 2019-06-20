@@ -5,7 +5,7 @@ import { history } from '../../util'
 import Dashboard from './Dashboard'
 import CourseQuestions from './CourseQuestions'
 import QuestionView from './QuestionView'
-export default class Admin extends React.Component {
+export default class Student extends React.Component {
   render () {
     return (
       <div
