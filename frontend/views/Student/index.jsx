@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import { AppBar } from '../../components'
 import { history } from '../../util'
 import Dashboard from './Dashboard'
+import CourseQuestions from './CourseQuestions'
 export default class Admin extends React.Component {
   render () {
     return (
@@ -14,6 +15,7 @@ export default class Admin extends React.Component {
       >
         <AppBar />
         <Switch>
+          <Route path='/course/:name' component={CourseQuestions} />
           <Route path='/' component={Dashboard} />
         </Switch>
       </div>

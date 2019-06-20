@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import { withStyles } from '@material-ui/styles'
+import { withRouter } from 'react-router-dom'
 import 'react-circular-progressbar/dist/styles.css'
 import {
   Card,
@@ -31,12 +32,25 @@ const styles = theme => ({
 })
 class CourseCard extends Component {
   render () {
-    const { classes, course, complete, correct, theme } = this.props
+    const {
+      classes,
+      course,
+      complete,
+      correct,
+      theme,
+      history: { push }
+    } = this.props
 
     return (
       <Grid item md={3} lg={2} sm={4} xs={12}>
         <Card>
-          <CardActionArea style={{ height: '100%' }}>
+          <CardActionArea
+            onClick={e => {
+              e.preventDefault()
+              push(`/course/${course.replace(/ /g, '_')}`)
+            }}
+            style={{ height: '100%' }}
+          >
             <CardHeader title={course} style={{ textAlign: 'center' }} />
 
             <CardContent className={classes.cardcontent}>
@@ -71,4 +85,4 @@ class CourseCard extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(CourseCard)
+export default withRouter(withStyles(styles, { withTheme: true })(CourseCard))

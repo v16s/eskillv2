@@ -9,6 +9,7 @@ import EditQuestion from './EditQuestion'
 import PreviewCard from './PreviewCard'
 import CourseCard from './CourseCard'
 import RequestCourse from './RequestCourse'
+import QuestionCircle from './QuestionCircle'
 export {
   Dropdown,
   AppBar,
@@ -20,5 +21,6 @@ export {
   PreviewCard,
   EditQuestion,
   CourseCard,
-  RequestCourse
+  RequestCourse,
+  QuestionCircle
 }

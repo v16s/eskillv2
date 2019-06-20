@@ -8,7 +8,8 @@ import {
   Typography,
   Badge,
   MenuItem,
-  Menu
+  Menu,
+  Button
 } from '@material-ui/core'
 import {
   Mail as MailIcon,
@@ -18,7 +19,7 @@ import {
   Tonality
 } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-
+import { history } from '../util'
 const GET_DARK = gql`
   {
     dark @client
@@ -38,7 +39,8 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   title: {
-    display: 'block'
+    display: 'block',
+    textTransform: 'none'
   },
   inputRoot: {
     color: 'inherit'
@@ -138,10 +140,17 @@ function PrimarySearchAppBar ({ dark, changeDark }) {
     <div className={classes.grow}>
       <AppBar position='static' className={classes.appBar}>
         <Toolbar>
-          <Typography className={classes.title} variant='h6' noWrap>
-            eSkill
-          </Typography>
-
+          <Button
+            color='primary'
+            onClick={e => {
+              e.preventDefault()
+              history.push('/')
+            }}
+          >
+            <Typography className={classes.title} variant='h6' noWrap>
+              eSkill
+            </Typography>
+          </Button>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
