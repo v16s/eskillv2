@@ -9,7 +9,9 @@ export default {
     { course, name, desc, exp, Obj, ans, picture },
     { user, bucket }
   ) => {
-    if (user.level < 1) {
+    let sp = user.username.split('-')
+    let cor = sp[0]
+    if (user.level < 1 || (user.level == 2 && course == cor)) {
       try {
         let question = await prisma.createQuestion({
           course,
@@ -47,8 +49,10 @@ export default {
     }
   },
 
-  removeQuestion: async (parent, { id }, { user, bucket }) => {
-    if (user.level < 1) {
+  removeQuestion: async (parent, { id, course }, { user, bucket }) => {
+    let sp = user.username.split('-')
+    let cor = sp[0]
+    if (user.level < 1 || (user.level == 2 && course == cor)) {
       try {
         try {
           let image = bucket.find({ filename: `${id}.jpg` })
@@ -67,9 +71,11 @@ export default {
   updateQuestion: async (
     parent,
     { id, newCourse, newName, newDesc, newExp, Obj, newAns, newPicture },
-    { user }
+    { user, bucket }
   ) => {
-    if (user.level < 1) {
+    let sp = user.username.split('-')
+    let cor = sp[0]
+    if (user.level < 1 || (user.level == 2 && newCourse == cor)) {
       try {
         try {
           let image = bucket.find({ filename: `${id}.jpg` })

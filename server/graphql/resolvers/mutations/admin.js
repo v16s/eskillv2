@@ -145,7 +145,7 @@ export default {
         if (branches.length == 0) {
           await prisma.createBranch({ name: branch })
         }
-        let identity = `${name} ${branch}`
+        let identity = `${name}-${branch}`
         let salt = await promisify(bcrypt.genSalt)(10)
         let hash = await promisify(bcrypt.hash)('password', salt, null)
         let { username } = await prisma.createUser({
@@ -191,7 +191,7 @@ export default {
   updateCourse: async (parent, { name, newName, branch }, { user }) => {
     if (user.level < 1) {
       try {
-        let identity = `${name} ${branch}`
+        let identity = `${name}-${branch}`
         let iden = `${newName}-${branch}`
         console.log('asd', newName, newBranch)
         let courses = await prisma.courses({ where: { branch } })
