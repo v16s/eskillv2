@@ -113,8 +113,11 @@ class Questions extends React.Component {
       this.onCourseChange(this.state.course, { target: { name: 'course' } })
     }
   }
-  editQ = () => {
+  editQ = refetch => {
     this.setState({ editQ: !this.state.editQ })
+    if (refetch === true) {
+      this.onCourseChange(this.state.course, { target: { name: 'course' } })
+    }
   }
   add = (newData, table) => {
     return new Promise((resolve, reject) => {

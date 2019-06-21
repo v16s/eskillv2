@@ -110,7 +110,7 @@ class NewQuestion extends Component {
     this.setState(newstate)
   }
   checkQuestion = () => {
-    let flag = !!this.state.course
+    let flag = true
     let defaults = makeDefaults()
     if (flag) {
       Object.keys(this.state).map(k => {
@@ -129,7 +129,7 @@ class NewQuestion extends Component {
     return flag
   }
   onSubmit = e => {
-    const { picture, desc, name, options, exp, course, answer } = this.state
+    let { picture, desc, name, options, exp, course, answer } = this.state
     if (this.props.coordinator) {
       course = this.props.course
     }
@@ -142,7 +142,7 @@ class NewQuestion extends Component {
             ans: answer,
             desc,
             name,
-            course: course.label,
+            course: this.props.coordinator ? course : course.label,
             exp
           }
         })

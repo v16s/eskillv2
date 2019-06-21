@@ -94,11 +94,11 @@ export default function SimpleCard ({
             </Paper>
           </Grid>
         </Grid>
-        <Paper className={classes.paper} style={{ marginTop: '15px' }}>
+        <div className={classes.paper} style={{ marginTop: '15px' }}>
           <Typography variant='body2' component='p'>
             <Latex>{exp == '' ? 'Explanation for the question' : exp}</Latex>
           </Typography>
-        </Paper>
+        </div>
       </CardContent>
     </Card>
   )

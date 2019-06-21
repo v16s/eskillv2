@@ -47,8 +47,8 @@ const BRANCHES = gql`
   }
 `
 const REMOVE_QUESTION = gql`
-  mutation RemoveQuestion($id: String!) {
-    removeQuestion(id: $id) {
+  mutation RemoveQuestion($id: String!, $course: String!) {
+    removeQuestion(id: $id, course: $course) {
       id
     }
   }
@@ -110,11 +110,14 @@ class Questions extends React.Component {
   show = refetch => {
     this.setState({ show: !this.state.show })
     if (refetch === true) {
-      this.onCourseChange(this.state.course, { target: { name: 'course' } })
+      this.fetch()
     }
   }
-  editQ = () => {
+  editQ = refetch => {
     this.setState({ editQ: !this.state.editQ })
+    if (refetch === true) {
+      this.fetch()
+    }
   }
   add = (newData, table) => {
     return new Promise((resolve, reject) => {
@@ -144,24 +147,15 @@ class Questions extends React.Component {
     })
   }
 
-  onDropdownChange = (value, e) => {
-    let newstate = this.state
-    newstate[e.name] = value
-    let { client } = this.props
-    client
-      .query({
-        query: COURSES,
-        variables: { branch: value.value }
-      })
-      .then(({ data }) => {
-        this.setState({ courses: data.courses })
-      })
-    this.setState(newstate)
-  }
   componentDidMount () {
     let { username } = this.props.user.details
-    let { client } = this.props
+
     this.setState({ course: username.split('-')[0].replace(/_/, ' ') })
+    this.fetch()
+  }
+  fetch = () => {
+    let { username } = this.props.user.details
+    let { client } = this.props
     client
       .query({
         query: QUESTIONS,
@@ -199,9 +193,16 @@ class Questions extends React.Component {
     }
   ]
   removeQuestion = id => {
-    this.props.removeQuestion({ variables: { id } }).then(({ data }) => {
-      this.setState({ questions: this.state.questions.filter(d => d.id != id) })
-    })
+    let { username } = this.props.user.details
+
+    let course = username.split('-')[0].replace(/_/, ' ')
+    this.props
+      .removeQuestion({ variables: { id, course } })
+      .then(({ data }) => {
+        this.setState({
+          questions: this.state.questions.filter(d => d.id != id)
+        })
+      })
   }
   render () {
     const { classes } = this.props

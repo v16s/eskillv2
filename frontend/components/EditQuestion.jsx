@@ -14,8 +14,8 @@ const COURSES = gql`
   }
 `
 
-const ADD_QUESTION = gql`
-  mutation AddQuestion(
+const UPDATE_QUESTION = gql`
+  mutation UpdateQuestion(
     $picture: Upload
     $a: String!
     $b: String!
@@ -26,8 +26,9 @@ const ADD_QUESTION = gql`
     $name: String!
     $course: String!
     $exp: String!
+    $id: String!
   ) {
-    addQuestion(
+    updateQuestion(
       name: $name
       desc: $desc
       exp: $exp
@@ -35,6 +36,7 @@ const ADD_QUESTION = gql`
       picture: $picture
       Obj: { a: $a, b: $b, c: $c, d: $d }
       course: $course
+      id: $id
     ) {
       id
     }
@@ -88,19 +90,26 @@ const GreenRadio = withStyles({
 const makeDefaults = () => ({
   name: '',
   desc: '',
-  opt: {
+  options: {
     a: '',
     b: '',
     c: '',
     d: ''
   },
-  ans: ''
+  answer: ''
 })
 
 class EditQuestion extends Component {
   constructor (props) {
     super(props)
-    this.state = { ...props.question, courses: [], picture: null, exp: '' }
+    this.state = {
+      ...props.question,
+      options: props.question.opt,
+      answer: props.question.ans,
+      courses: [],
+      picture: null,
+      exp: ''
+    }
   }
   onChange = ({ target }) => {
     this.setState({
@@ -109,7 +118,7 @@ class EditQuestion extends Component {
     })
   }
   handleRadioChange = (e, v) => {
-    this.setState({ ans: e.target.value })
+    this.setState({ answer: e.target.value })
   }
   onInputChange = ({ target }) => {
     let newstate = this.state
@@ -122,7 +131,7 @@ class EditQuestion extends Component {
     this.setState(newstate)
   }
   checkQuestion = () => {
-    let flag = !!this.state.course
+    let flag = true
     let defaults = makeDefaults()
     if (flag) {
       Object.keys(this.state).map(k => {
@@ -132,8 +141,8 @@ class EditQuestion extends Component {
       })
     }
     if (flag) {
-      Object.keys(this.state.opt).map(k => {
-        if (this.state.opt[k] === defaults.options[k]) {
+      Object.keys(this.state.options).map(k => {
+        if (this.state.options[k] === defaults.options[k]) {
           flag = false
         }
       })
@@ -141,7 +150,30 @@ class EditQuestion extends Component {
     return flag
   }
   onSubmit = e => {
-    const { picture, desc, name, options, exp, course, answer } = this.state
+    let { picture, desc, name, options, exp, course, answer } = this.state
+    if (this.props.coordinator) {
+      course = this.props.course
+    }
+    let { id } = this.props.question
+    if (this.checkQuestion()) {
+      this.props
+        .mutate({
+          variables: {
+            picture,
+            ...options,
+            ans: answer,
+            desc,
+            name,
+            course: this.props.coordinator ? course : course.label,
+            exp,
+            id
+          }
+        })
+        .then(data => {
+          console.log(data)
+          this.props.close(true)
+        })
+    }
   }
   onDropdownChange = (value, e) => {
     let newstate = this.state
@@ -419,5 +451,5 @@ class EditQuestion extends Component {
 
 export default compose(
   withApollo,
-  graphql(ADD_QUESTION)
+  graphql(UPDATE_QUESTION)
 )(EditQuestion)

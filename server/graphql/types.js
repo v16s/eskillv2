@@ -106,7 +106,7 @@ export default gql`
       ans: String!
       picture: Upload
     ): Question
-    removeQuestion(id: String!, course: String!): Question
+    removeQuestion(id: String!, course: String): Question
     updateQuestion(
       id: String!
       course: String!
