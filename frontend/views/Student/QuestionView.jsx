@@ -5,7 +5,7 @@ import {
   Radio,
   Button,
   Grid,
-  IconButton,
+  Modal,
   Toolbar,
   Typography
 } from '@material-ui/core'
@@ -17,8 +17,7 @@ import {
 import { withStyles } from '@material-ui/styles'
 import { red, green } from '@material-ui/core/colors'
 import Latex from 'react-latex'
-
-
+import { ReportProblem } from '../../components'
 
 const styles = ({ palette }) => ({
   griditem: {
@@ -66,17 +65,19 @@ const styles = ({ palette }) => ({
   },
   green: {
     backgroundColor: green[400],
-      '&$checked': {
-        color: green[400]
-      }
-    },
-    primary: {
-      backgroundColor: palette.primary.main
+    '&$checked': {
+      color: green[400]
     }
-  
+  },
+  primary: {
+    backgroundColor: palette.primary.main
+  }
 })
 class QuestionView extends Component {
-  state = { answer: '' }
+  state = { answer: '', open: false }
+  close = () => {
+    this.setState({ open: !this.state.open })
+  }
   handleRadioChange = (e, v) => {
     this.setState({ answer: e.target.value })
   }
@@ -90,7 +91,11 @@ class QuestionView extends Component {
             <Typography className={classes.appBar} variant='h6' noWrap>
               Question Title
             </Typography>
-            <Button variant='contained' className={classes.danger}>
+            <Button
+              variant='contained'
+              className={classes.danger}
+              onClick={this.close}
+            >
               Report
             </Button>
           </Toolbar>
@@ -137,7 +142,7 @@ class QuestionView extends Component {
             <Grid className={classes.answer} item sm={6}>
               <div className={classes.radioWrap}>
                 <Radio
-                color='primary'
+                  color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
                   className={classes.radio}
                   checked={answer === 'b'}
@@ -156,7 +161,7 @@ class QuestionView extends Component {
             <Grid className={classes.answer} item sm={6}>
               <div className={classes.radioWrap}>
                 <Radio
-                color='primary'
+                  color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
                   className={classes.radio}
                   checked={answer === 'c'}
@@ -175,7 +180,7 @@ class QuestionView extends Component {
             <Grid className={classes.answer} item sm={6}>
               <div className={classes.radioWrap}>
                 <Radio
-                color='primary'
+                  color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
                   className={classes.radio}
                   checked={answer === 'd'}
@@ -227,6 +232,22 @@ class QuestionView extends Component {
             </Grid>
           </Grid>
         </Paper>
+        <Modal
+          aria-labelledby='report-problem'
+          aria-describedby='report-problem-here'
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100vw',
+            alignItems: 'center',
+            padding: 20,
+            boxSizing: 'border-box'
+          }}
+          open={this.state.open}
+          onClose={this.close}
+        >
+          <ReportProblem close={this.close} />
+        </Modal>
       </div>
     )
   }

@@ -11,6 +11,7 @@ import CourseCard from './CourseCard'
 import RequestCourse from './RequestCourse'
 import QuestionCircle from './QuestionCircle'
 import StudentProgressTable from './StudentProgressTable'
+import ReportProblem from './ReportProblem'
 export {
   Dropdown,
   AppBar,
@@ -24,5 +25,6 @@ export {
   CourseCard,
   RequestCourse,
   QuestionCircle,
-  StudentProgressTable
+  StudentProgressTable,
+  ReportProblem
 }
