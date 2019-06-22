@@ -454,7 +454,13 @@ export type ReportOrderByInput =
   | "description_ASC"
   | "description_DESC"
   | "status_ASC"
-  | "status_DESC";
+  | "status_DESC"
+  | "course_ASC"
+  | "course_DESC"
+  | "campus_ASC"
+  | "campus_DESC"
+  | "department_ASC"
+  | "department_DESC";
 
 export type UserOrderByInput =
   | "username_ASC"
@@ -1124,6 +1130,48 @@ export interface ReportWhereInput {
   status_lte?: Maybe<Int>;
   status_gt?: Maybe<Int>;
   status_gte?: Maybe<Int>;
+  course?: Maybe<String>;
+  course_not?: Maybe<String>;
+  course_in?: Maybe<String[] | String>;
+  course_not_in?: Maybe<String[] | String>;
+  course_lt?: Maybe<String>;
+  course_lte?: Maybe<String>;
+  course_gt?: Maybe<String>;
+  course_gte?: Maybe<String>;
+  course_contains?: Maybe<String>;
+  course_not_contains?: Maybe<String>;
+  course_starts_with?: Maybe<String>;
+  course_not_starts_with?: Maybe<String>;
+  course_ends_with?: Maybe<String>;
+  course_not_ends_with?: Maybe<String>;
+  campus?: Maybe<String>;
+  campus_not?: Maybe<String>;
+  campus_in?: Maybe<String[] | String>;
+  campus_not_in?: Maybe<String[] | String>;
+  campus_lt?: Maybe<String>;
+  campus_lte?: Maybe<String>;
+  campus_gt?: Maybe<String>;
+  campus_gte?: Maybe<String>;
+  campus_contains?: Maybe<String>;
+  campus_not_contains?: Maybe<String>;
+  campus_starts_with?: Maybe<String>;
+  campus_not_starts_with?: Maybe<String>;
+  campus_ends_with?: Maybe<String>;
+  campus_not_ends_with?: Maybe<String>;
+  department?: Maybe<String>;
+  department_not?: Maybe<String>;
+  department_in?: Maybe<String[] | String>;
+  department_not_in?: Maybe<String[] | String>;
+  department_lt?: Maybe<String>;
+  department_lte?: Maybe<String>;
+  department_gt?: Maybe<String>;
+  department_gte?: Maybe<String>;
+  department_contains?: Maybe<String>;
+  department_not_contains?: Maybe<String>;
+  department_starts_with?: Maybe<String>;
+  department_not_starts_with?: Maybe<String>;
+  department_ends_with?: Maybe<String>;
+  department_not_ends_with?: Maybe<String>;
   AND?: Maybe<ReportWhereInput[] | ReportWhereInput>;
 }
 
@@ -1540,6 +1588,9 @@ export interface ReportCreateInput {
   studID: String;
   description: String;
   status?: Maybe<Int>;
+  course: String;
+  campus?: Maybe<String>;
+  department?: Maybe<String>;
 }
 
 export interface ReportUpdateInput {
@@ -1547,6 +1598,9 @@ export interface ReportUpdateInput {
   studID?: Maybe<String>;
   description?: Maybe<String>;
   status?: Maybe<Int>;
+  course?: Maybe<String>;
+  campus?: Maybe<String>;
+  department?: Maybe<String>;
 }
 
 export interface ReportUpdateManyMutationInput {
@@ -1554,6 +1608,9 @@ export interface ReportUpdateManyMutationInput {
   studID?: Maybe<String>;
   description?: Maybe<String>;
   status?: Maybe<Int>;
+  course?: Maybe<String>;
+  campus?: Maybe<String>;
+  department?: Maybe<String>;
 }
 
 export interface UserCreateInput {
@@ -2320,6 +2377,9 @@ export interface Report {
   studID: String;
   description: String;
   status: Int;
+  course: String;
+  campus?: String;
+  department?: String;
 }
 
 export interface ReportPromise extends Promise<Report>, Fragmentable {
@@ -2328,6 +2388,9 @@ export interface ReportPromise extends Promise<Report>, Fragmentable {
   studID: () => Promise<String>;
   description: () => Promise<String>;
   status: () => Promise<Int>;
+  course: () => Promise<String>;
+  campus: () => Promise<String>;
+  department: () => Promise<String>;
 }
 
 export interface ReportSubscription
@@ -2338,6 +2401,9 @@ export interface ReportSubscription
   studID: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
   status: () => Promise<AsyncIterator<Int>>;
+  course: () => Promise<AsyncIterator<String>>;
+  campus: () => Promise<AsyncIterator<String>>;
+  department: () => Promise<AsyncIterator<String>>;
 }
 
 export interface ReportNullablePromise
@@ -2348,6 +2414,9 @@ export interface ReportNullablePromise
   studID: () => Promise<String>;
   description: () => Promise<String>;
   status: () => Promise<Int>;
+  course: () => Promise<String>;
+  campus: () => Promise<String>;
+  department: () => Promise<String>;
 }
 
 export interface ReportConnection {
@@ -2860,6 +2929,9 @@ export interface ReportPreviousValues {
   studID: String;
   description: String;
   status: Int;
+  course: String;
+  campus?: String;
+  department?: String;
 }
 
 export interface ReportPreviousValuesPromise
@@ -2870,6 +2942,9 @@ export interface ReportPreviousValuesPromise
   studID: () => Promise<String>;
   description: () => Promise<String>;
   status: () => Promise<Int>;
+  course: () => Promise<String>;
+  campus: () => Promise<String>;
+  department: () => Promise<String>;
 }
 
 export interface ReportPreviousValuesSubscription
@@ -2880,6 +2955,9 @@ export interface ReportPreviousValuesSubscription
   studID: () => Promise<AsyncIterator<String>>;
   description: () => Promise<AsyncIterator<String>>;
   status: () => Promise<AsyncIterator<Int>>;
+  course: () => Promise<AsyncIterator<String>>;
+  campus: () => Promise<AsyncIterator<String>>;
+  department: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserSubscriptionPayload {

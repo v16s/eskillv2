@@ -1,5 +1,13 @@
 import { prisma } from 'prisma'
 import { async } from 'q'
+
+let question = `
+query Questions($id: String!){
+  questions(where:{id:$id}){
+    ans
+  }
+}`
+
 export default {
   global: async (parent, args, ctx, info) => {
     return await prisma.global({ id: 'global' })
@@ -43,5 +51,26 @@ export default {
           resolve(question)
         })
     })
+  },
+  faculties: async (_, _args, { user }) => {
+    try {
+      return await prisma.users({
+        where: {
+          campus: user.campus,
+          departments: user.departments
+        }
+      })
+    } catch (e) {
+      console.log(e)
+      throw new ValidationError(e.toString())
+    }
+  },
+  answer: async (_, _args, { user }) => {
+    try {
+      return await prisma.$graphql(question, { id })
+    } catch (e) {
+      console.log(e)
+      throw new ValidationError(e.toString())
+    }
   }
 }

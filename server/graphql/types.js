@@ -9,6 +9,8 @@ export default gql`
     courses(where: CourseWhereInput): [Course]
     questions(where: QuestionWhereInput): [Question]
     question(id: String!): Question
+    faculties: [User]
+    answer: String
   }
   input CourseWhereInput {
     branch: String
@@ -43,6 +45,9 @@ export default gql`
     studID: String!
     description: String!
     status: Int!
+    course: String!
+    campus: String
+    department: String
   }
   type CourseInstance {
     id: ID!
@@ -140,7 +145,12 @@ export default gql`
       picture: Upload
     ): Question
     requestCourse(course: String!, facultyID: String): CourseInstance
-    createReport(queID: String!, description: String!, status: Int): Report
+    createReport(
+      queID: String!
+      description: String!
+      status: Int
+      course: String!
+    ): Report
   }
   input CourseInput {
     branch: String!

@@ -1211,6 +1211,9 @@ type Report {
   studID: String!
   description: String!
   status: Int!
+  course: String!
+  campus: String
+  department: String
 }
 
 type ReportConnection {
@@ -1225,6 +1228,9 @@ input ReportCreateInput {
   studID: String!
   description: String!
   status: Int
+  course: String!
+  campus: String
+  department: String
 }
 
 type ReportEdge {
@@ -1243,6 +1249,12 @@ enum ReportOrderByInput {
   description_DESC
   status_ASC
   status_DESC
+  course_ASC
+  course_DESC
+  campus_ASC
+  campus_DESC
+  department_ASC
+  department_DESC
 }
 
 type ReportPreviousValues {
@@ -1251,6 +1263,9 @@ type ReportPreviousValues {
   studID: String!
   description: String!
   status: Int!
+  course: String!
+  campus: String
+  department: String
 }
 
 type ReportSubscriptionPayload {
@@ -1274,6 +1289,9 @@ input ReportUpdateInput {
   studID: String
   description: String
   status: Int
+  course: String
+  campus: String
+  department: String
 }
 
 input ReportUpdateManyMutationInput {
@@ -1281,6 +1299,9 @@ input ReportUpdateManyMutationInput {
   studID: String
   description: String
   status: Int
+  course: String
+  campus: String
+  department: String
 }
 
 input ReportWhereInput {
@@ -1348,6 +1369,48 @@ input ReportWhereInput {
   status_lte: Int
   status_gt: Int
   status_gte: Int
+  course: String
+  course_not: String
+  course_in: [String!]
+  course_not_in: [String!]
+  course_lt: String
+  course_lte: String
+  course_gt: String
+  course_gte: String
+  course_contains: String
+  course_not_contains: String
+  course_starts_with: String
+  course_not_starts_with: String
+  course_ends_with: String
+  course_not_ends_with: String
+  campus: String
+  campus_not: String
+  campus_in: [String!]
+  campus_not_in: [String!]
+  campus_lt: String
+  campus_lte: String
+  campus_gt: String
+  campus_gte: String
+  campus_contains: String
+  campus_not_contains: String
+  campus_starts_with: String
+  campus_not_starts_with: String
+  campus_ends_with: String
+  campus_not_ends_with: String
+  department: String
+  department_not: String
+  department_in: [String!]
+  department_not_in: [String!]
+  department_lt: String
+  department_lte: String
+  department_gt: String
+  department_gte: String
+  department_contains: String
+  department_not_contains: String
+  department_starts_with: String
+  department_not_starts_with: String
+  department_ends_with: String
+  department_not_ends_with: String
   AND: [ReportWhereInput!]
 }
 
