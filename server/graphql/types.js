@@ -39,7 +39,8 @@ export default gql`
   }
   type Report {
     id: ID!
-    title: String!
+    queID: String!
+    studID: String!
     description: String!
     status: Int!
   }
@@ -55,6 +56,7 @@ export default gql`
   type Link {
     id: String!
     status: Int!
+    ans: String
   }
   type Tag {
     name: String!
@@ -138,6 +140,7 @@ export default gql`
       picture: Upload
     ): Question
     requestCourse(course: String!, facultyID: String): CourseInstance
+    createReport(queID: String!, description: String!, status: Int): Report
   }
   input CourseInput {
     branch: String!

@@ -678,11 +678,13 @@ input GlobalWhereUniqueInput {
 type Link {
   id: String!
   status: Int!
+  ans: String
 }
 
 input LinkCreateInput {
   id: String!
   status: Int!
+  ans: String
 }
 
 input LinkCreateManyInput {
@@ -712,6 +714,20 @@ input LinkRestrictedWhereInput {
   status_lte: Int
   status_gt: Int
   status_gte: Int
+  ans: String
+  ans_not: String
+  ans_in: [String!]
+  ans_not_in: [String!]
+  ans_lt: String
+  ans_lte: String
+  ans_gt: String
+  ans_gte: String
+  ans_contains: String
+  ans_not_contains: String
+  ans_starts_with: String
+  ans_not_starts_with: String
+  ans_ends_with: String
+  ans_not_ends_with: String
   AND: [LinkRestrictedWhereInput!]
 }
 
@@ -738,6 +754,20 @@ input LinkScalarWhereInput {
   status_lte: Int
   status_gt: Int
   status_gte: Int
+  ans: String
+  ans_not: String
+  ans_in: [String!]
+  ans_not_in: [String!]
+  ans_lt: String
+  ans_lte: String
+  ans_gt: String
+  ans_gte: String
+  ans_contains: String
+  ans_not_contains: String
+  ans_starts_with: String
+  ans_not_starts_with: String
+  ans_ends_with: String
+  ans_not_ends_with: String
   AND: [LinkScalarWhereInput!]
   OR: [LinkScalarWhereInput!]
   NOT: [LinkScalarWhereInput!]
@@ -746,6 +776,7 @@ input LinkScalarWhereInput {
 input LinkUpdateManyDataInput {
   id: String
   status: Int
+  ans: String
 }
 
 input LinkUpdateManyInput {
@@ -782,6 +813,20 @@ input LinkWhereInput {
   status_lte: Int
   status_gt: Int
   status_gte: Int
+  ans: String
+  ans_not: String
+  ans_in: [String!]
+  ans_not_in: [String!]
+  ans_lt: String
+  ans_lte: String
+  ans_gt: String
+  ans_gte: String
+  ans_contains: String
+  ans_not_contains: String
+  ans_starts_with: String
+  ans_not_starts_with: String
+  ans_ends_with: String
+  ans_not_ends_with: String
   AND: [LinkWhereInput!]
 }
 
@@ -1162,7 +1207,8 @@ input QuestionWhereUniqueInput {
 
 type Report {
   id: ID!
-  title: String!
+  queID: String!
+  studID: String!
   description: String!
   status: Int!
 }
@@ -1175,14 +1221,10 @@ type ReportConnection {
 
 input ReportCreateInput {
   id: ID
-  title: String!
+  queID: String!
+  studID: String!
   description: String!
-  status: Int!
-}
-
-input ReportCreateManyInput {
-  create: [ReportCreateInput!]
-  connect: [ReportWhereUniqueInput!]
+  status: Int
 }
 
 type ReportEdge {
@@ -1193,8 +1235,10 @@ type ReportEdge {
 enum ReportOrderByInput {
   id_ASC
   id_DESC
-  title_ASC
-  title_DESC
+  queID_ASC
+  queID_DESC
+  studID_ASC
+  studID_DESC
   description_ASC
   description_DESC
   status_ASC
@@ -1203,65 +1247,10 @@ enum ReportOrderByInput {
 
 type ReportPreviousValues {
   id: ID!
-  title: String!
+  queID: String!
+  studID: String!
   description: String!
   status: Int!
-}
-
-input ReportScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
-  status: Int
-  status_not: Int
-  status_in: [Int!]
-  status_not_in: [Int!]
-  status_lt: Int
-  status_lte: Int
-  status_gt: Int
-  status_gte: Int
-  AND: [ReportScalarWhereInput!]
-  OR: [ReportScalarWhereInput!]
-  NOT: [ReportScalarWhereInput!]
 }
 
 type ReportSubscriptionPayload {
@@ -1280,56 +1269,18 @@ input ReportSubscriptionWhereInput {
   AND: [ReportSubscriptionWhereInput!]
 }
 
-input ReportUpdateDataInput {
-  title: String
-  description: String
-  status: Int
-}
-
 input ReportUpdateInput {
-  title: String
+  queID: String
+  studID: String
   description: String
   status: Int
-}
-
-input ReportUpdateManyDataInput {
-  title: String
-  description: String
-  status: Int
-}
-
-input ReportUpdateManyInput {
-  create: [ReportCreateInput!]
-  update: [ReportUpdateWithWhereUniqueNestedInput!]
-  upsert: [ReportUpsertWithWhereUniqueNestedInput!]
-  delete: [ReportWhereUniqueInput!]
-  connect: [ReportWhereUniqueInput!]
-  set: [ReportWhereUniqueInput!]
-  disconnect: [ReportWhereUniqueInput!]
-  deleteMany: [ReportScalarWhereInput!]
-  updateMany: [ReportUpdateManyWithWhereNestedInput!]
 }
 
 input ReportUpdateManyMutationInput {
-  title: String
+  queID: String
+  studID: String
   description: String
   status: Int
-}
-
-input ReportUpdateManyWithWhereNestedInput {
-  where: ReportScalarWhereInput!
-  data: ReportUpdateManyDataInput!
-}
-
-input ReportUpdateWithWhereUniqueNestedInput {
-  where: ReportWhereUniqueInput!
-  data: ReportUpdateDataInput!
-}
-
-input ReportUpsertWithWhereUniqueNestedInput {
-  where: ReportWhereUniqueInput!
-  update: ReportUpdateDataInput!
-  create: ReportCreateInput!
 }
 
 input ReportWhereInput {
@@ -1347,20 +1298,34 @@ input ReportWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
+  queID: String
+  queID_not: String
+  queID_in: [String!]
+  queID_not_in: [String!]
+  queID_lt: String
+  queID_lte: String
+  queID_gt: String
+  queID_gte: String
+  queID_contains: String
+  queID_not_contains: String
+  queID_starts_with: String
+  queID_not_starts_with: String
+  queID_ends_with: String
+  queID_not_ends_with: String
+  studID: String
+  studID_not: String
+  studID_in: [String!]
+  studID_not_in: [String!]
+  studID_lt: String
+  studID_lte: String
+  studID_gt: String
+  studID_gte: String
+  studID_contains: String
+  studID_not_contains: String
+  studID_starts_with: String
+  studID_not_starts_with: String
+  studID_ends_with: String
+  studID_not_ends_with: String
   description: String
   description_not: String
   description_in: [String!]
@@ -1539,7 +1504,6 @@ type User {
   email: String!
   level: Int!
   id: ID!
-  reports(where: ReportWhereInput, orderBy: ReportOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Report!]
 }
 
 type UserConnection {
@@ -1558,7 +1522,6 @@ input UserCreateInput {
   email: String!
   level: Int!
   id: ID
-  reports: ReportCreateManyInput
 }
 
 type UserEdge {
@@ -1624,7 +1587,6 @@ input UserUpdateInput {
   dob: DateTime
   email: String
   level: Int
-  reports: ReportUpdateManyInput
 }
 
 input UserUpdateManyMutationInput {
@@ -1753,7 +1715,6 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  reports_some: ReportWhereInput
   AND: [UserWhereInput!]
 }
 

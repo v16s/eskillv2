@@ -8,13 +8,13 @@ type User {
   email: String!
   level: Int!
   id: ID! @id
-  reports: [Report] @relation(link: INLINE, name: "ProblemReportRelation")
 }
 type Report {
   id: ID! @id
-  title: String!
+  queID: String!
+  studID: String!
   description: String!
-  status: Int!
+  status: Int!@default(value: 0)
 }
 type CourseInstance {
   id: ID! @id
@@ -28,6 +28,7 @@ type CourseInstance {
 type Link @embedded {
   id: String!
   status: Int!
+  ans: String
 }
 type Global {
   regs: Boolean @default(value: true)

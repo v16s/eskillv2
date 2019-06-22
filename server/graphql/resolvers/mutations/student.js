@@ -30,5 +30,14 @@ export default {
       total,
       course
     })
+  },
+  createReport: async (_parent, { queID, description, status }, { user }) => {
+    let studID = user.id
+    return await prisma.createReport({
+      queID,
+      studID,
+      description,
+      status
+    })
   }
 }
