@@ -306,10 +306,6 @@ input CourseInstanceCreateManyInput {
   connect: [CourseInstanceWhereUniqueInput!]
 }
 
-input CourseInstanceCreatequestionsInput {
-  set: [String!]
-}
-
 type CourseInstanceEdge {
   node: CourseInstance!
   cursor: String!
@@ -328,7 +324,6 @@ enum CourseInstanceOrderByInput {
 
 type CourseInstancePreviousValues {
   id: ID!
-  questions: [String!]!
   completed: Int!
   total: Int!
   course: String!
@@ -401,7 +396,7 @@ input CourseInstanceSubscriptionWhereInput {
 }
 
 input CourseInstanceUpdateDataInput {
-  questions: CourseInstanceUpdatequestionsInput
+  questions: LinkUpdateManyInput
   completed: Int
   total: Int
   course: String
