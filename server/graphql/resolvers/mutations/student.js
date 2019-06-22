@@ -17,21 +17,29 @@ export default {
   requestCourse: async (_parent, { course, facultyID }, { user }) => {
     if (user.level == 4) {
       try {
-        let { questions: ques } = await prisma.$graphql(question, { course })
-        shuffle(ques)
-        let n = ques.length
-        let obj = ques.slice(0, n).map(k => ({ ...k, status: 0 }))
-        let total = n
-        let completed = 0
         let studID = user.id
-        return await prisma.createCourseInstance({
-          studID,
-          facultyID,
-          questions: { create: obj },
-          completed,
-          total,
-          course
+        let courseinstances = await prisma.courseInstances({
+          where: { studID, facultyID, course }
         })
+        if (courseinstances.length == 0) {
+          let { questions: ques } = await prisma.$graphql(question, { course })
+          shuffle(ques)
+          let n = ques.length
+          let obj = ques.slice(0, n).map(k => ({ ...k, status: 0 }))
+          let total = n
+          let completed = 0
+
+          return await prisma.createCourseInstance({
+            studID,
+            facultyID,
+            questions: { create: obj },
+            completed,
+            total,
+            course
+          })
+        } else {
+          throw new ValidationError('Course already exists!')
+        }
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())

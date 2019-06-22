@@ -75,7 +75,7 @@ class Dashboard extends React.Component {
             </Fab>
           )}
           <Modal
-            aria-labelledby='request-course'
+            aria-labelledby='request-course-modal'
             aria-describedby='request-course-here'
             style={{
               display: 'flex',

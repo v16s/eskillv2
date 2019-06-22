@@ -1,6 +1,5 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { validate, auth } from './routes'
 import cors from 'cors'
 import http from 'http'
 import passport from './config/passport'
@@ -33,9 +32,6 @@ async function init (callback) {
       app.use(logger('tiny'))
       app.use(bodyParser.json())
       app.use(bodyParser.urlencoded({ extended: 'false' }))
-
-      app.use('/api/auth', auth)
-      app.use('/api/validate', validate)
       app.use('/graphql', (req, res, next) => {
         passport.authenticate('auth', { session: false }, (err, user) => {
           req.user = user

@@ -11,6 +11,14 @@ const BRANCHES = gql`
     }
   }
 `
+const FACULTIES = gql`
+  query Faculties {
+    faculties {
+      id
+      name
+    }
+  }
+`
 
 const COURSES = gql`
   query Courses($name: String, $branch: String) {
@@ -19,13 +27,21 @@ const COURSES = gql`
     }
   }
 `
+const REQUEST_COURSE = gql`
+  mutation RequestCourse($course: String!, $facultyID: String!) {
+    requestCourse(course: $course, facultyID: $facultyID) {
+      total
+    }
+  }
+`
 
 class RequestCourse extends React.Component {
   state = {
     branch: {},
-    courses: []
+    courses: [],
+    faculties: []
   }
-  onDropdownChange = (value, e) => {
+  onBranchChange = (value, e) => {
     let newstate = this.state
     newstate[e.name] = value
     let { client } = this.props
@@ -39,11 +55,32 @@ class RequestCourse extends React.Component {
       })
     this.setState(newstate)
   }
-  onCourseChange = (value, e) => {
+  onChange = (value, e) => {
     let newstate = this.state
     newstate[e.name] = value
-    let { client } = this.props
     this.setState(newstate)
+  }
+  shouldComponentUpdate (nextProps, nextState) {
+    if (nextProps.faculties.faculties) {
+      nextState.faculties = nextProps.faculties.faculties.map(d => ({
+        label: d.name,
+        value: d.id
+      }))
+    }
+    return true
+  }
+  handleRequestSubmit = e => {
+    this.props
+      .requestCourse({
+        variables: {
+          facultyID: this.state.faculty.value,
+          course: this.state.course.label
+        }
+      })
+      .then(({ data }) => {
+        console.log(data)
+        this.props.close(true)
+      })
   }
   render () {
     let branches = []
@@ -57,6 +94,7 @@ class RequestCourse extends React.Component {
       label: d.name,
       value: d.name
     }))
+    const { faculties } = this.state
     return (
       <Paper
         style={{
@@ -73,7 +111,7 @@ class RequestCourse extends React.Component {
           <Grid item xs={12}>
             <Dropdown
               options={branches}
-              onChange={this.onDropdownChange}
+              onChange={this.onBranchChange}
               label='Branch'
               name='branch'
             />
@@ -81,9 +119,17 @@ class RequestCourse extends React.Component {
           <Grid item xs={12}>
             <Dropdown
               options={courses}
-              onChange={this.onCourseChange}
+              onChange={this.onChange}
               label='Course'
               name='course'
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Dropdown
+              options={faculties}
+              onChange={this.onChange}
+              label='Faculty'
+              name='faculty'
             />
           </Grid>
           <Grid item md={6} xs={12}>
@@ -104,6 +150,7 @@ class RequestCourse extends React.Component {
               }}
               variant='contained'
               color='primary'
+              onClick={this.handleRequestSubmit}
             >
               Request
               <Send
@@ -120,8 +167,10 @@ class RequestCourse extends React.Component {
 }
 export default compose(
   withApollo,
+  graphql(REQUEST_COURSE, { name: 'requestCourse' }),
   graphql(BRANCHES, {
     name: 'branches',
     options: { fetchPolicy: 'network-only' }
-  })
+  }),
+  graphql(FACULTIES, { name: 'faculties' })
 )(RequestCourse)

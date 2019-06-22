@@ -28,6 +28,7 @@ export default gql`
     campuses: [Tag]
   }
   type User {
+    id: String
     username: String!
     password: String!
     name: String!

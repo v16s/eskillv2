@@ -28,7 +28,6 @@ export default {
     return await prisma.branches()
   },
   courses: async (_, { where }) => {
-    console.log(where)
     return await prisma.courses({ where })
   },
   questions: async (_, { where }, { user }) => {
@@ -54,14 +53,15 @@ export default {
   },
   faculties: async (_, _args, { user }) => {
     try {
+      console.log(user.campus, user.department)
       return await prisma.users({
         where: {
           campus: user.campus,
-          departments: user.departments
+          department: user.department,
+          level: 3
         }
       })
     } catch (e) {
-      console.log(e)
       throw new ValidationError(e.toString())
     }
   },
@@ -69,7 +69,6 @@ export default {
     try {
       return await prisma.$graphql(question, { id })
     } catch (e) {
-      console.log(e)
       throw new ValidationError(e.toString())
     }
   }
