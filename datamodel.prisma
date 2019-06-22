@@ -8,7 +8,6 @@ type User {
   email: String!
   level: Int!
   id: ID! @id
-  courses: [CourseInstance] @relation(link: INLINE, name: "UserCourseRelation")
   reports: [Report] @relation(link: INLINE, name: "ProblemReportRelation")
 }
 type Report {
@@ -19,10 +18,16 @@ type Report {
 }
 type CourseInstance {
   id: ID! @id
-  questions: [String]!
+  studID: String!
+  facultyID: String!
+  questions: [Link]!
   completed: Int!
   total: Int!
   course: String!
+}
+type Link @embedded {
+  id: String!
+  status: Int!
 }
 type Global {
   regs: Boolean @default(value: true)
@@ -59,9 +64,9 @@ type Question {
   opt: Options!
   ans: String!
 }
-type Options @embedded{
-    a: String!
-    b: String!
-    c: String!
-    d: String!
+type Options @embedded {
+  a: String!
+  b: String!
+  c: String!
+  d: String!
 }

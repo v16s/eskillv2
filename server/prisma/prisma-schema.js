@@ -281,7 +281,9 @@ type CourseEdge {
 
 type CourseInstance {
   id: ID!
-  questions: [String!]!
+  studID: String!
+  facultyID: String!
+  questions: [Link!]
   completed: Int!
   total: Int!
   course: String!
@@ -295,19 +297,12 @@ type CourseInstanceConnection {
 
 input CourseInstanceCreateInput {
   id: ID
-  questions: CourseInstanceCreatequestionsInput
+  studID: String!
+  facultyID: String!
+  questions: LinkCreateManyInput
   completed: Int!
   total: Int!
   course: String!
-}
-
-input CourseInstanceCreateManyInput {
-  create: [CourseInstanceCreateInput!]
-  connect: [CourseInstanceWhereUniqueInput!]
-}
-
-input CourseInstanceCreatequestionsInput {
-  set: [String!]
 }
 
 type CourseInstanceEdge {
@@ -318,6 +313,10 @@ type CourseInstanceEdge {
 enum CourseInstanceOrderByInput {
   id_ASC
   id_DESC
+  studID_ASC
+  studID_DESC
+  facultyID_ASC
+  facultyID_DESC
   completed_ASC
   completed_DESC
   total_ASC
@@ -328,60 +327,11 @@ enum CourseInstanceOrderByInput {
 
 type CourseInstancePreviousValues {
   id: ID!
-  questions: [String!]!
+  studID: String!
+  facultyID: String!
   completed: Int!
   total: Int!
   course: String!
-}
-
-input CourseInstanceScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  completed: Int
-  completed_not: Int
-  completed_in: [Int!]
-  completed_not_in: [Int!]
-  completed_lt: Int
-  completed_lte: Int
-  completed_gt: Int
-  completed_gte: Int
-  total: Int
-  total_not: Int
-  total_in: [Int!]
-  total_not_in: [Int!]
-  total_lt: Int
-  total_lte: Int
-  total_gt: Int
-  total_gte: Int
-  course: String
-  course_not: String
-  course_in: [String!]
-  course_not_in: [String!]
-  course_lt: String
-  course_lte: String
-  course_gt: String
-  course_gte: String
-  course_contains: String
-  course_not_contains: String
-  course_starts_with: String
-  course_not_starts_with: String
-  course_ends_with: String
-  course_not_ends_with: String
-  AND: [CourseInstanceScalarWhereInput!]
-  OR: [CourseInstanceScalarWhereInput!]
-  NOT: [CourseInstanceScalarWhereInput!]
 }
 
 type CourseInstanceSubscriptionPayload {
@@ -400,64 +350,21 @@ input CourseInstanceSubscriptionWhereInput {
   AND: [CourseInstanceSubscriptionWhereInput!]
 }
 
-input CourseInstanceUpdateDataInput {
-  questions: CourseInstanceUpdatequestionsInput
-  completed: Int
-  total: Int
-  course: String
-}
-
 input CourseInstanceUpdateInput {
-  questions: CourseInstanceUpdatequestionsInput
+  studID: String
+  facultyID: String
+  questions: LinkUpdateManyInput
   completed: Int
   total: Int
   course: String
-}
-
-input CourseInstanceUpdateManyDataInput {
-  questions: CourseInstanceUpdatequestionsInput
-  completed: Int
-  total: Int
-  course: String
-}
-
-input CourseInstanceUpdateManyInput {
-  create: [CourseInstanceCreateInput!]
-  update: [CourseInstanceUpdateWithWhereUniqueNestedInput!]
-  upsert: [CourseInstanceUpsertWithWhereUniqueNestedInput!]
-  delete: [CourseInstanceWhereUniqueInput!]
-  connect: [CourseInstanceWhereUniqueInput!]
-  set: [CourseInstanceWhereUniqueInput!]
-  disconnect: [CourseInstanceWhereUniqueInput!]
-  deleteMany: [CourseInstanceScalarWhereInput!]
-  updateMany: [CourseInstanceUpdateManyWithWhereNestedInput!]
 }
 
 input CourseInstanceUpdateManyMutationInput {
-  questions: CourseInstanceUpdatequestionsInput
+  studID: String
+  facultyID: String
   completed: Int
   total: Int
   course: String
-}
-
-input CourseInstanceUpdateManyWithWhereNestedInput {
-  where: CourseInstanceScalarWhereInput!
-  data: CourseInstanceUpdateManyDataInput!
-}
-
-input CourseInstanceUpdatequestionsInput {
-  set: [String!]
-}
-
-input CourseInstanceUpdateWithWhereUniqueNestedInput {
-  where: CourseInstanceWhereUniqueInput!
-  data: CourseInstanceUpdateDataInput!
-}
-
-input CourseInstanceUpsertWithWhereUniqueNestedInput {
-  where: CourseInstanceWhereUniqueInput!
-  update: CourseInstanceUpdateDataInput!
-  create: CourseInstanceCreateInput!
 }
 
 input CourseInstanceWhereInput {
@@ -475,6 +382,37 @@ input CourseInstanceWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  studID: String
+  studID_not: String
+  studID_in: [String!]
+  studID_not_in: [String!]
+  studID_lt: String
+  studID_lte: String
+  studID_gt: String
+  studID_gte: String
+  studID_contains: String
+  studID_not_contains: String
+  studID_starts_with: String
+  studID_not_starts_with: String
+  studID_ends_with: String
+  studID_not_ends_with: String
+  facultyID: String
+  facultyID_not: String
+  facultyID_in: [String!]
+  facultyID_not_in: [String!]
+  facultyID_lt: String
+  facultyID_lte: String
+  facultyID_gt: String
+  facultyID_gte: String
+  facultyID_contains: String
+  facultyID_not_contains: String
+  facultyID_starts_with: String
+  facultyID_not_starts_with: String
+  facultyID_ends_with: String
+  facultyID_not_ends_with: String
+  questions_some: LinkWhereInput
+  questions_every: LinkRestrictedWhereInput
+  questions_none: LinkRestrictedWhereInput
   completed: Int
   completed_not: Int
   completed_in: [Int!]
@@ -735,6 +673,116 @@ input GlobalWhereInput {
 input GlobalWhereUniqueInput {
   id: String
   _id: ID
+}
+
+type Link {
+  id: String!
+  status: Int!
+}
+
+input LinkCreateInput {
+  id: String!
+  status: Int!
+}
+
+input LinkCreateManyInput {
+  create: [LinkCreateInput!]
+}
+
+input LinkRestrictedWhereInput {
+  id: String
+  id_not: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_lt: String
+  id_lte: String
+  id_gt: String
+  id_gte: String
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_not_starts_with: String
+  id_ends_with: String
+  id_not_ends_with: String
+  status: Int
+  status_not: Int
+  status_in: [Int!]
+  status_not_in: [Int!]
+  status_lt: Int
+  status_lte: Int
+  status_gt: Int
+  status_gte: Int
+  AND: [LinkRestrictedWhereInput!]
+}
+
+input LinkScalarWhereInput {
+  id: String
+  id_not: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_lt: String
+  id_lte: String
+  id_gt: String
+  id_gte: String
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_not_starts_with: String
+  id_ends_with: String
+  id_not_ends_with: String
+  status: Int
+  status_not: Int
+  status_in: [Int!]
+  status_not_in: [Int!]
+  status_lt: Int
+  status_lte: Int
+  status_gt: Int
+  status_gte: Int
+  AND: [LinkScalarWhereInput!]
+  OR: [LinkScalarWhereInput!]
+  NOT: [LinkScalarWhereInput!]
+}
+
+input LinkUpdateManyDataInput {
+  id: String
+  status: Int
+}
+
+input LinkUpdateManyInput {
+  create: [LinkCreateInput!]
+  deleteMany: [LinkScalarWhereInput!]
+  updateMany: [LinkUpdateManyWithWhereNestedInput!]
+}
+
+input LinkUpdateManyWithWhereNestedInput {
+  where: LinkScalarWhereInput!
+  data: LinkUpdateManyDataInput!
+}
+
+input LinkWhereInput {
+  id: String
+  id_not: String
+  id_in: [String!]
+  id_not_in: [String!]
+  id_lt: String
+  id_lte: String
+  id_gt: String
+  id_gte: String
+  id_contains: String
+  id_not_contains: String
+  id_starts_with: String
+  id_not_starts_with: String
+  id_ends_with: String
+  id_not_ends_with: String
+  status: Int
+  status_not: Int
+  status_in: [Int!]
+  status_not_in: [Int!]
+  status_lt: Int
+  status_lte: Int
+  status_gt: Int
+  status_gte: Int
+  AND: [LinkWhereInput!]
 }
 
 scalar Long
@@ -1491,7 +1539,6 @@ type User {
   email: String!
   level: Int!
   id: ID!
-  courses(where: CourseInstanceWhereInput, orderBy: CourseInstanceOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseInstance!]
   reports(where: ReportWhereInput, orderBy: ReportOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Report!]
 }
 
@@ -1511,7 +1558,6 @@ input UserCreateInput {
   email: String!
   level: Int!
   id: ID
-  courses: CourseInstanceCreateManyInput
   reports: ReportCreateManyInput
 }
 
@@ -1578,7 +1624,6 @@ input UserUpdateInput {
   dob: DateTime
   email: String
   level: Int
-  courses: CourseInstanceUpdateManyInput
   reports: ReportUpdateManyInput
 }
 
@@ -1708,7 +1753,6 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  courses_some: CourseInstanceWhereInput
   reports_some: ReportWhereInput
   AND: [UserWhereInput!]
 }
