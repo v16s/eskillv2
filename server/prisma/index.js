@@ -9,6 +9,18 @@ var models = [
     embedded: false
   },
   {
+    name: "Report",
+    embedded: false
+  },
+  {
+    name: "CourseInstance",
+    embedded: false
+  },
+  {
+    name: "Link",
+    embedded: true
+  },
+  {
     name: "Global",
     embedded: false
   },

@@ -35,6 +35,25 @@ export default gql`
     email: String!
     level: Int!
     jwt: String
+    courses: [CourseInstance]
+    reports: [Report]
+  }
+  type Report {
+    id: ID! @id
+    title: String!
+    description: String!
+    status: Int!
+  }
+  type CourseInstance {
+    id: ID! @id
+    questions: [Link]!
+    completed: Int!
+    total: Int!
+    course: String!
+  }
+  type Link @embedded {
+    id: String!
+    status: Int!
   }
   type Tag {
     name: String!
@@ -106,7 +125,7 @@ export default gql`
       ans: String!
       picture: Upload
     ): Question
-    removeQuestion(id: String!, course: String): Question
+    removeQuestion(id: String!, course: String!): Question
     updateQuestion(
       id: String!
       course: String!
@@ -117,6 +136,7 @@ export default gql`
       ans: String!
       picture: Upload
     ): Question
+    requestCourse(course: String!, facultyID: String!): CourseInstance
   }
   input CourseInput {
     branch: String!
