@@ -198,13 +198,13 @@ export default class DashboardTable extends React.Component {
         })
     })
   }
-  removeInside = (name, newName) => {
+  removeInside = (name, insidename) => {
     return new Promise(resolve => {
       this.props
         .removeInside({
           variables: {
             name,
-            id: newName
+            deptname: insidename
           }
         })
         .then(data => {

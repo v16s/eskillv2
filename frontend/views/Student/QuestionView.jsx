@@ -18,14 +18,7 @@ import { withStyles } from '@material-ui/styles'
 import { red, green } from '@material-ui/core/colors'
 import Latex from 'react-latex'
 
-const GreenRadio = withStyles(theme => ({
-  root: {
-    '&$checked': {
-      color: green[400]
-    }
-  },
-  checked: {}
-}))(props => <Radio color='default' {...props} />)
+
 
 const styles = ({ palette }) => ({
   griditem: {
@@ -72,8 +65,15 @@ const styles = ({ palette }) => ({
       palette.type == 'dark' ? palette.grey[700] : palette.grey[200]
   },
   green: {
-    backgroundColor: green[400]
-  }
+    backgroundColor: green[400],
+      '&$checked': {
+        color: green[400]
+      }
+    },
+    primary: {
+      backgroundColor: palette.primary.main
+    }
+  
 })
 class QuestionView extends Component {
   state = { answer: '' }
@@ -117,7 +117,8 @@ class QuestionView extends Component {
             </Grid>
             <Grid className={classes.answer} item sm={6}>
               <div className={classes.radioWrap}>
-                <GreenRadio
+                <Radio
+                  color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
                   className={classes.radio}
                   checked={answer === 'a'}
@@ -127,7 +128,7 @@ class QuestionView extends Component {
               </div>
               <Paper
                 className={` ${classes.radiopaper}  ${
-                  answer === 'a' ? classes.green : classes.grey
+                  answer === 'a' ? classes.primary : classes.grey
                 }`}
               >
                 asdasdasd
@@ -135,7 +136,8 @@ class QuestionView extends Component {
             </Grid>
             <Grid className={classes.answer} item sm={6}>
               <div className={classes.radioWrap}>
-                <GreenRadio
+                <Radio
+                color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
                   className={classes.radio}
                   checked={answer === 'b'}
@@ -145,7 +147,7 @@ class QuestionView extends Component {
               </div>
               <Paper
                 className={` ${classes.radiopaper}  ${
-                  answer === 'b' ? classes.green : classes.grey
+                  answer === 'b' ? classes.primary : classes.grey
                 }`}
               >
                 asdasdasd
@@ -153,7 +155,8 @@ class QuestionView extends Component {
             </Grid>
             <Grid className={classes.answer} item sm={6}>
               <div className={classes.radioWrap}>
-                <GreenRadio
+                <Radio
+                color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
                   className={classes.radio}
                   checked={answer === 'c'}
@@ -163,7 +166,7 @@ class QuestionView extends Component {
               </div>
               <Paper
                 className={` ${classes.radiopaper}  ${
-                  answer === 'c' ? classes.green : classes.grey
+                  answer === 'c' ? classes.primary : classes.grey
                 }`}
               >
                 asdasdasd
@@ -171,7 +174,8 @@ class QuestionView extends Component {
             </Grid>
             <Grid className={classes.answer} item sm={6}>
               <div className={classes.radioWrap}>
-                <GreenRadio
+                <Radio
+                color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
                   className={classes.radio}
                   checked={answer === 'd'}
@@ -181,7 +185,7 @@ class QuestionView extends Component {
               </div>
               <Paper
                 className={` ${classes.radiopaper}  ${
-                  answer === 'd' ? classes.green : classes.grey
+                  answer === 'd' ? classes.primary : classes.grey
                 }`}
               >
                 asdasdasd

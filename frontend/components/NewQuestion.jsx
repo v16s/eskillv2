@@ -179,24 +179,24 @@ class NewQuestion extends Component {
       <Paper style={styles.paper}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
           {!this.props.coordinator && (
-            <div>
-              <Grid item sm={6}>
-                <Dropdown
-                  options={this.props.branches}
-                  onChange={this.onDropdownChange}
-                  label='Branch'
-                  name='branch'
-                />
-              </Grid>
-              <Grid item sm={6}>
-                <Dropdown
-                  options={courses}
-                  onChange={this.onDropdownChange}
-                  label='Course'
-                  name='course'
-                />
-              </Grid>
-            </div>
+            <Grid item sm={6}>
+              <Dropdown
+                options={this.props.branches}
+                onChange={this.onDropdownChange}
+                label='Branch'
+                name='branch'
+              />
+            </Grid>
+          )}
+          {!this.props.coordinator && (
+            <Grid item sm={6}>
+              <Dropdown
+                options={courses}
+                onChange={this.onDropdownChange}
+                label='Course'
+                name='course'
+              />
+            </Grid>
           )}
           <Grid item sm={12}>
             <TextField

@@ -246,11 +246,12 @@ export default {
   removeDepartment: async (parent, { id, name }, { user }) => {
     if (user.level < 1) {
       try {
+        console.log(id, name)
         return await prisma.updateCampus({
           where: { name },
           data: {
             departments: {
-              deleteMany: { id }
+              deleteMany: { name: id }
             }
           }
         })
