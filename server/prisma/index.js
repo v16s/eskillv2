@@ -1,57 +1,57 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var prisma_lib_1 = require("prisma-client-lib");
-var typeDefs = require("./prisma-schema").typeDefs;
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+var prisma_lib_1 = require('prisma-client-lib')
+var typeDefs = require('./prisma-schema').typeDefs
 
 var models = [
   {
-    name: "User",
+    name: 'User',
     embedded: false
   },
   {
-    name: "Report",
+    name: 'Report',
     embedded: false
   },
   {
-    name: "CourseInstance",
+    name: 'CourseInstance',
     embedded: false
   },
   {
-    name: "Link",
+    name: 'Link',
     embedded: true
   },
   {
-    name: "Global",
+    name: 'Global',
     embedded: false
   },
   {
-    name: "Tag",
+    name: 'Tag',
     embedded: true
   },
   {
-    name: "Campus",
+    name: 'Campus',
     embedded: false
   },
   {
-    name: "Branch",
+    name: 'Branch',
     embedded: false
   },
   {
-    name: "Course",
+    name: 'Course',
     embedded: false
   },
   {
-    name: "Question",
+    name: 'Question',
     embedded: false
   },
   {
-    name: "Options",
+    name: 'Options',
     embedded: true
   }
-];
+]
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
   endpoint: `http://localhost:4466`
-});
-exports.prisma = new exports.Prisma();
+})
+exports.prisma = new exports.Prisma()

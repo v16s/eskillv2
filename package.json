@@ -43,7 +43,7 @@
     "passport-jwt": "^4.0.0",
     "prisma-client-lib": "^1.30.4",
     "random-number": "^0.0.9",
-    "react": "^16.8.0",
+    "react": "^0.14.0 || ^15.0.0 || ^16.0.0",
     "react-dom": "^16.8.0",
     "views": "^1.0.2"
   },

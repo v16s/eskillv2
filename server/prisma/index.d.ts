@@ -1150,6 +1150,174 @@ export interface BranchUpdateInput {
   name?: Maybe<String>;
 }
 
+export interface OptionsCreateOneInput {
+  create?: Maybe<OptionsCreateInput>;
+}
+
+export interface CourseInstanceScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  completed?: Maybe<Int>;
+  completed_not?: Maybe<Int>;
+  completed_in?: Maybe<Int[] | Int>;
+  completed_not_in?: Maybe<Int[] | Int>;
+  completed_lt?: Maybe<Int>;
+  completed_lte?: Maybe<Int>;
+  completed_gt?: Maybe<Int>;
+  completed_gte?: Maybe<Int>;
+  total?: Maybe<Int>;
+  total_not?: Maybe<Int>;
+  total_in?: Maybe<Int[] | Int>;
+  total_not_in?: Maybe<Int[] | Int>;
+  total_lt?: Maybe<Int>;
+  total_lte?: Maybe<Int>;
+  total_gt?: Maybe<Int>;
+  total_gte?: Maybe<Int>;
+  course?: Maybe<String>;
+  course_not?: Maybe<String>;
+  course_in?: Maybe<String[] | String>;
+  course_not_in?: Maybe<String[] | String>;
+  course_lt?: Maybe<String>;
+  course_lte?: Maybe<String>;
+  course_gt?: Maybe<String>;
+  course_gte?: Maybe<String>;
+  course_contains?: Maybe<String>;
+  course_not_contains?: Maybe<String>;
+  course_starts_with?: Maybe<String>;
+  course_not_starts_with?: Maybe<String>;
+  course_ends_with?: Maybe<String>;
+  course_not_ends_with?: Maybe<String>;
+  AND?: Maybe<
+    CourseInstanceScalarWhereInput[] | CourseInstanceScalarWhereInput
+  >;
+  OR?: Maybe<CourseInstanceScalarWhereInput[] | CourseInstanceScalarWhereInput>;
+  NOT?: Maybe<
+    CourseInstanceScalarWhereInput[] | CourseInstanceScalarWhereInput
+  >;
+}
+
+export interface CourseInstanceUpdateDataInput {
+  questions?: Maybe<CourseInstanceUpdatequestionsInput>;
+  completed?: Maybe<Int>;
+  total?: Maybe<Int>;
+  course?: Maybe<String>;
+}
+
+export interface CourseInstanceUpdateWithWhereUniqueNestedInput {
+  where: CourseInstanceWhereUniqueInput;
+  data: CourseInstanceUpdateDataInput;
+}
+
+export interface BranchCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+}
+
+export interface QuestionWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  course?: Maybe<String>;
+  course_not?: Maybe<String>;
+  course_in?: Maybe<String[] | String>;
+  course_not_in?: Maybe<String[] | String>;
+  course_lt?: Maybe<String>;
+  course_lte?: Maybe<String>;
+  course_gt?: Maybe<String>;
+  course_gte?: Maybe<String>;
+  course_contains?: Maybe<String>;
+  course_not_contains?: Maybe<String>;
+  course_starts_with?: Maybe<String>;
+  course_not_starts_with?: Maybe<String>;
+  course_ends_with?: Maybe<String>;
+  course_not_ends_with?: Maybe<String>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  desc?: Maybe<String>;
+  desc_not?: Maybe<String>;
+  desc_in?: Maybe<String[] | String>;
+  desc_not_in?: Maybe<String[] | String>;
+  desc_lt?: Maybe<String>;
+  desc_lte?: Maybe<String>;
+  desc_gt?: Maybe<String>;
+  desc_gte?: Maybe<String>;
+  desc_contains?: Maybe<String>;
+  desc_not_contains?: Maybe<String>;
+  desc_starts_with?: Maybe<String>;
+  desc_not_starts_with?: Maybe<String>;
+  desc_ends_with?: Maybe<String>;
+  desc_not_ends_with?: Maybe<String>;
+  exp?: Maybe<String>;
+  exp_not?: Maybe<String>;
+  exp_in?: Maybe<String[] | String>;
+  exp_not_in?: Maybe<String[] | String>;
+  exp_lt?: Maybe<String>;
+  exp_lte?: Maybe<String>;
+  exp_gt?: Maybe<String>;
+  exp_gte?: Maybe<String>;
+  exp_contains?: Maybe<String>;
+  exp_not_contains?: Maybe<String>;
+  exp_starts_with?: Maybe<String>;
+  exp_not_starts_with?: Maybe<String>;
+  exp_ends_with?: Maybe<String>;
+  exp_not_ends_with?: Maybe<String>;
+  opt?: Maybe<OptionsWhereInput>;
+  ans?: Maybe<String>;
+  ans_not?: Maybe<String>;
+  ans_in?: Maybe<String[] | String>;
+  ans_not_in?: Maybe<String[] | String>;
+  ans_lt?: Maybe<String>;
+  ans_lte?: Maybe<String>;
+  ans_gt?: Maybe<String>;
+  ans_gte?: Maybe<String>;
+  ans_contains?: Maybe<String>;
+  ans_not_contains?: Maybe<String>;
+  ans_starts_with?: Maybe<String>;
+  ans_not_starts_with?: Maybe<String>;
+  ans_ends_with?: Maybe<String>;
+  ans_not_ends_with?: Maybe<String>;
+  AND?: Maybe<QuestionWhereInput[] | QuestionWhereInput>;
+}
+
+export interface BranchUpdateInput {
+  name?: Maybe<String>;
+}
+
 export interface UserUpdateInput {
   username?: Maybe<String>;
   password?: Maybe<String>;
@@ -1260,6 +1428,75 @@ export interface CampusCreateInput {
   admin_id: String;
   departments?: Maybe<TagCreateManyInput>;
   name: String;
+}
+
+export interface CourseCreateInput {
+  id?: Maybe<ID_Input>;
+  branch: String;
+  coordinator_id: String;
+  name: String;
+}
+
+export type CourseInstanceWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface CourseUpdateInput {
+  branch?: Maybe<String>;
+  coordinator_id?: Maybe<String>;
+  name?: Maybe<String>;
+}
+
+export interface CourseInstanceUpdateManyDataInput {
+  questions?: Maybe<CourseInstanceUpdatequestionsInput>;
+  completed?: Maybe<Int>;
+  total?: Maybe<Int>;
+  course?: Maybe<String>;
+}
+
+export interface CourseUpdateManyMutationInput {
+  branch?: Maybe<String>;
+  coordinator_id?: Maybe<String>;
+  name?: Maybe<String>;
+}
+
+export interface CourseInstanceUpdateManyInput {
+  create?: Maybe<CourseInstanceCreateInput[] | CourseInstanceCreateInput>;
+  update?: Maybe<
+    | CourseInstanceUpdateWithWhereUniqueNestedInput[]
+    | CourseInstanceUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | CourseInstanceUpsertWithWhereUniqueNestedInput[]
+    | CourseInstanceUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<
+    CourseInstanceWhereUniqueInput[] | CourseInstanceWhereUniqueInput
+  >;
+  connect?: Maybe<
+    CourseInstanceWhereUniqueInput[] | CourseInstanceWhereUniqueInput
+  >;
+  set?: Maybe<
+    CourseInstanceWhereUniqueInput[] | CourseInstanceWhereUniqueInput
+  >;
+  disconnect?: Maybe<
+    CourseInstanceWhereUniqueInput[] | CourseInstanceWhereUniqueInput
+  >;
+  deleteMany?: Maybe<
+    CourseInstanceScalarWhereInput[] | CourseInstanceScalarWhereInput
+  >;
+  updateMany?: Maybe<
+    | CourseInstanceUpdateManyWithWhereNestedInput[]
+    | CourseInstanceUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface CourseInstanceCreateInput {
+  id?: Maybe<ID_Input>;
+  questions?: Maybe<CourseInstanceCreatequestionsInput>;
+  completed: Int;
+  total: Int;
+  course: String;
 }
 
 export interface TagRestrictedWhereInput {
@@ -1831,6 +2068,111 @@ export interface UserPreviousValuesPromise
   email: () => Promise<String>;
   level: () => Promise<Int>;
   id: () => Promise<ID_Output>;
+}
+
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  username: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  campus: () => Promise<AsyncIterator<String>>;
+  department: () => Promise<AsyncIterator<String>>;
+  dob: () => Promise<AsyncIterator<DateTimeOutput>>;
+  email: () => Promise<AsyncIterator<String>>;
+  level: () => Promise<AsyncIterator<Int>>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+}
+
+export interface CourseInstance {
+  id: ID_Output;
+  questions: String[];
+  completed: Int;
+  total: Int;
+  course: String;
+}
+
+export interface CourseInstancePromise
+  extends Promise<CourseInstance>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  questions: () => Promise<String[]>;
+  completed: () => Promise<Int>;
+  total: () => Promise<Int>;
+  course: () => Promise<String>;
+}
+
+export interface CourseInstanceSubscription
+  extends Promise<AsyncIterator<CourseInstance>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  questions: () => Promise<AsyncIterator<String[]>>;
+  completed: () => Promise<AsyncIterator<Int>>;
+  total: () => Promise<AsyncIterator<Int>>;
+  course: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CourseInstanceNullablePromise
+  extends Promise<CourseInstance | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  questions: () => Promise<String[]>;
+  completed: () => Promise<Int>;
+  total: () => Promise<Int>;
+  course: () => Promise<String>;
+}
+
+export interface AggregateBranch {
+  count: Int;
+}
+
+export interface AggregateBranchPromise
+  extends Promise<AggregateBranch>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateBranchSubscription
+  extends Promise<AsyncIterator<AggregateBranch>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface AggregateCourse {
+  count: Int;
+}
+
+export interface AggregateCoursePromise
+  extends Promise<AggregateCourse>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCourseSubscription
+  extends Promise<AsyncIterator<AggregateCourse>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface CourseEdge {
+  node: Course;
+  cursor: String;
 }
 
 export interface UserPreviousValuesSubscription
@@ -2643,6 +2985,18 @@ export interface CampusSubscription
 export interface CampusNullablePromise
   extends Promise<Campus | null>,
     Fragmentable {
+  node: <T = CampusSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface Report {
+  id: ID_Output;
+  title: String;
+  description: String;
+  status: Int;
+}
+
+export interface ReportPromise extends Promise<Report>, Fragmentable {
   id: () => Promise<ID_Output>;
   admin_id: () => Promise<String>;
   departments: <T = FragmentableArray<Tag>>() => T;
@@ -2708,22 +3062,20 @@ export interface CourseInstanceSubscriptionPayloadSubscription
   previousValues: <T = CourseInstancePreviousValuesSubscription>() => T;
 }
 
-export interface QuestionEdge {
-  node: Question;
+export interface GlobalEdge {
+  node: Global;
   cursor: String;
 }
 
-export interface QuestionEdgePromise
-  extends Promise<QuestionEdge>,
-    Fragmentable {
-  node: <T = QuestionPromise>() => T;
+export interface GlobalEdgePromise extends Promise<GlobalEdge>, Fragmentable {
+  node: <T = GlobalPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface QuestionEdgeSubscription
-  extends Promise<AsyncIterator<QuestionEdge>>,
+export interface GlobalEdgeSubscription
+  extends Promise<AsyncIterator<GlobalEdge>>,
     Fragmentable {
-  node: <T = QuestionSubscription>() => T;
+  node: <T = GlobalSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -2819,23 +3171,23 @@ export interface CampusConnectionSubscription
 
 export interface BranchConnection {
   pageInfo: PageInfo;
-  edges: BranchEdge[];
+  edges: CampusEdge[];
 }
 
-export interface BranchConnectionPromise
-  extends Promise<BranchConnection>,
+export interface CampusConnectionPromise
+  extends Promise<CampusConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<BranchEdge>>() => T;
-  aggregate: <T = AggregateBranchPromise>() => T;
+  edges: <T = FragmentableArray<CampusEdge>>() => T;
+  aggregate: <T = AggregateCampusPromise>() => T;
 }
 
-export interface BranchConnectionSubscription
-  extends Promise<AsyncIterator<BranchConnection>>,
+export interface CampusConnectionSubscription
+  extends Promise<AsyncIterator<CampusConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<BranchEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateBranchSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CampusEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCampusSubscription>() => T;
 }
 
 export interface GlobalSubscriptionPayload {
@@ -2891,7 +3243,10 @@ export interface AggregateUser {
 export interface AggregateUserPromise
   extends Promise<AggregateUser>,
     Fragmentable {
-  count: () => Promise<Int>;
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  admin_id: () => Promise<AsyncIterator<String>>;
+  departments: <T = Promise<AsyncIterator<TagSubscription>>>() => T;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateUserSubscription

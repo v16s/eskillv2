@@ -21,8 +21,7 @@ const styles = theme => ({
   root: {
     display: 'flex',
     color: '#fff',
-    paddingTop: 20,
-    minHeight: '100vh'
+    paddingTop: 20
   },
   cardcontent: {
     display: 'flex',
