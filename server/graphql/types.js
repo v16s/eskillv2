@@ -35,23 +35,24 @@ export default gql`
     email: String!
     level: Int!
     jwt: String
-    courses: [CourseInstance]
     reports: [Report]
   }
   type Report {
-    id: ID! @id
+    id: ID!
     title: String!
     description: String!
     status: Int!
   }
   type CourseInstance {
-    id: ID! @id
+    id: ID!
+    studID: String!
+    facultyID: String!
     questions: [Link]!
     completed: Int!
     total: Int!
     course: String!
   }
-  type Link @embedded {
+  type Link {
     id: String!
     status: Int!
   }
@@ -136,7 +137,7 @@ export default gql`
       ans: String!
       picture: Upload
     ): Question
-    requestCourse(course: String!, facultyID: String!): CourseInstance
+    requestCourse(course: String!, facultyID: String): CourseInstance
   }
   input CourseInput {
     branch: String!

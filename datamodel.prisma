@@ -8,7 +8,6 @@ type User {
   email: String!
   level: Int!
   id: ID! @id
-  courses: [CourseInstance] @relation(link: INLINE, name: "UserCourseRelation")
   reports: [Report] @relation(link: INLINE, name: "ProblemReportRelation")
 }
 type Report {
@@ -19,6 +18,8 @@ type Report {
 }
 type CourseInstance {
   id: ID! @id
+  studID: String!
+  facultyID: String!
   questions: [Link]!
   completed: Int!
   total: Int!
