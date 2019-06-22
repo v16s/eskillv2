@@ -10,7 +10,6 @@ export default withStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignSelf: 'center',
-    width: '90%',
     maxWidth: '800px',
     zIndex: 1
   }
@@ -54,35 +53,23 @@ export default withStyles(theme => ({
           <div style={{ zIndex: 2 }}>
             <AppBar />
           </div>
-          <div
-            style={{
-              position: 'absolute',
-              height: '100vh',
-              width: '100vw',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              top: 0,
-              left: 0
-            }}
-          >
-            <Paper className={classes.paper}>
-              <Tabs
-                variant='fullWidth'
-                value={value}
-                indicatorColor='primary'
-                textColor='primary'
-                onChange={this.handleChange}
-              >
-                <Tab label='Student Progress' />
-                <Tab label='Problem Reports' />
-              </Tabs>
 
-              <Switch>
-                <Route path='/' component={Dashboard} />
-              </Switch>
-            </Paper>
-          </div>
+          <Paper className={classes.paper}>
+            <Tabs
+              variant='fullWidth'
+              value={value}
+              indicatorColor='primary'
+              textColor='primary'
+              onChange={this.handleChange}
+            >
+              <Tab label='Student Progress' />
+              <Tab label='Problem Reports' />
+            </Tabs>
+
+            <Switch>
+              <Route path='/' component={Dashboard} />
+            </Switch>
+          </Paper>
         </div>
       )
     }

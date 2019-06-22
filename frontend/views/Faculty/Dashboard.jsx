@@ -1,22 +1,10 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
-import { CourseCard, RequestCourse } from '../../components'
 import { withStyles } from '@material-ui/styles'
-import { Fab, Modal } from '@material-ui/core'
-import {
-  Card,
-  Button,
-  Grid,
-  Typography,
-  LinearProgress,
-  CardMedia,
-  CardActionArea,
-  CardHeader,
-  CardContent
-} from '@material-ui/core'
-import { Add } from '@material-ui/icons'
-import { CircularProgressbar } from 'react-circular-progressbar'
+import { Grid, LinearProgress, IconButton } from '@material-ui/core'
+import { DeleteForever } from '@material-ui/icons'
+import { StudentProgressTable } from '../../components'
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -37,7 +25,37 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
-          WIP Table
+          <StudentProgressTable
+            columns={[
+              { title: 'Name', field: 'name' },
+              {
+                title: 'Progress',
+                render: rowData => (
+                  <LinearProgress variant='determinate' value={20} />
+                )
+              },
+              {
+                title: '%',
+                render: rowData => '20%'
+              },
+              {
+                title: '',
+                render: rowData => (
+                  <IconButton color='secondary'>
+                    <DeleteForever />
+                  </IconButton>
+                )
+              }
+            ]}
+            data={[
+              {
+                name: 'student2'
+              },
+              {
+                name: 'student1'
+              }
+            ]}
+          />
         </Grid>
       </div>
     )
