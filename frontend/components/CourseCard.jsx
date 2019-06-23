@@ -28,6 +28,14 @@ const styles = theme => ({
     alignItems: 'center',
     width: '100%',
     margin: '15px 0'
+  },
+  card: {
+    maxWidth: '350px'
+  },
+  griditem: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 class CourseCard extends Component {
@@ -36,14 +44,14 @@ class CourseCard extends Component {
       classes,
       course,
       complete,
-      correct,
+      completed,
       theme,
       history: { push }
     } = this.props
 
     return (
-      <Grid item md={3} lg={2} sm={4} xs={12}>
-        <Card>
+      <Grid className={classes.griditem} item md={3} lg={2} sm={4} xs={12}>
+        <Card className={classes.card}>
           <CardActionArea
             onClick={e => {
               e.preventDefault()
@@ -71,7 +79,7 @@ class CourseCard extends Component {
               </div>
               <div className={classes.column}>
                 <Typography variant='caption'>
-                  {complete} Questions Attempted
+                  {completed} Questions Completed
                 </Typography>
                 {/* <Typography variant='caption'>
                   {correct} Answered Correctly

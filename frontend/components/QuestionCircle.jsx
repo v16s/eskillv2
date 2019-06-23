@@ -110,7 +110,7 @@ class QuestionCircle extends Component {
                         ? red[400]
                         : q.status == 2
                           ? green[400]
-                          : q.answer && q.answer != ''
+                          : q.ans && q.ans != null
                             ? '#3281ff'
                             : yellow[400]
                     return (
@@ -172,7 +172,7 @@ class QuestionCircle extends Component {
                                     ? red[400]
                                     : arc.data.status == 2
                                       ? green[400]
-                                      : arc.data.answer && arc.data.answer != ''
+                                      : arc.data.ans == null
                                         ? '#3281ff'
                                         : yellow[400]
                                 }

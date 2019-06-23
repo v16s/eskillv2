@@ -79,8 +79,10 @@ export default {
   },
   verifyQuestion: async (_parent, { question, cid }, { user }) => {
     if (user.level == 4) {
+      let instance = await prisma.courseInstance({ id: cid })
+
+      let { completed } = instance
       try {
-        let instance = await prisma.courseInstance({ id: cid })
         if (!instance) throw new ValidationError('no course')
         let { ans: verify } = await prisma.question({ id: question })
         let status = (() => {
@@ -91,10 +93,10 @@ export default {
             return 1
           }
         })()
-        console.log(status)
         instance = await prisma.updateCourseInstance({
           where: { id: cid },
           data: {
+            completed: completed + 1,
             questions: {
               updateMany: {
                 where: { id: question },

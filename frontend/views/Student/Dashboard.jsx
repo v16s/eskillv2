@@ -65,8 +65,10 @@ class Dashboard extends React.Component {
         <div className={classes.root}>
           {instances.map(({ course, completed, total, id }) => (
             <Grid container spacing={3} style={{ height: 'auto' }}>
+              {console.log(completed)}
               <CourseCard
                 course={course}
+                completed={completed}
                 complete={parseInt((completed / total) * 100)}
                 id={id}
               />

@@ -67,7 +67,6 @@ class QuestionView extends Component {
     this.props
       .check({ variables: { question, name: course } })
       .then(({ data }) => {
-        this.props.irefetch()
         this.props.refetch()
       })
       .catch(err => {
@@ -103,6 +102,29 @@ class QuestionView extends Component {
           .catch(err => {})
       }
     }
+  }
+  shouldComponentUpdate (nextProps, nextState) {
+    const { client } = this.props
+    if (nextState.correct == 'correct') {
+      if (nextProps.status == 1) {
+        return new Promise((resolve, reject) => {
+          client
+            .query({
+              query: FETCH_ANSWER,
+              variables: { id: nextProps.question }
+            })
+            .then(({ data: { question } }) => {
+              console.log(question)
+              nextState.correct = question.ans
+              resolve(true)
+            })
+            .catch(err => {
+              resolve(true)
+            })
+        })
+      }
+    }
+    return true
   }
 
   render () {
