@@ -123,13 +123,12 @@ export default gql`
     addBranch(name: String!): Branch
     removeBranch(name: String!): Branch
     updateBranch(name: String!, newName: String!): Branch
-    addCourse(name: String!, branch: String!, automated: Boolean): Course
+    addCourse(name: String!, branch: String!): Course
     removeCourse(name: String!): Course
     updateCourse(
       name: String!
       newName: String!
       branch: String!
-      automated: Boolean
     ): Course
     adminAddCourse(name: String!, branch: String!): Course
     adminRemoveCourse(name: String!): Course

@@ -29,7 +29,9 @@ export default {
           let obj = ques.slice(0, n).map(k => ({ ...k, status: 0 }))
           let total = n
           let completed = 0
-
+          let c = await prisma.courses({ where: { name: course } })
+          let { automated } = c
+          let status = automated
           return await prisma.createCourseInstance({
             studID,
             facultyID,
@@ -38,7 +40,8 @@ export default {
             total,
             course,
             campus,
-            department
+            department,
+            status
           })
         } else {
           throw new ValidationError('Course already exists!')

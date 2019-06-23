@@ -138,7 +138,7 @@ export default {
   //   }
   // },
 
-  addCourse: async (parent, { name, branch, automated }, { user }) => {
+  addCourse: async (parent, { name, branch}, { user }) => {
     if (user.level < 1) {
       try {
         let branches = await prisma.branches({ where: { name: branch } })
@@ -158,8 +158,7 @@ export default {
         return await prisma.createCourse({
           name,
           coordinator_id: username,
-          branch,
-          automated
+          branch         
         })
       } catch (e) {
         console.log(e)
@@ -191,7 +190,7 @@ export default {
     }
   },
 
-  updateCourse: async (parent, { name, newName, branch, automated }, { user }) => {
+  updateCourse: async (parent, { name, newName, branch }, { user }) => {
     if (user.level < 1) {
       try {
         let identity = `${name}-${branch}`
@@ -214,7 +213,7 @@ export default {
         })
         return await prisma.updateCourse({
           where: { name },
-          data: { name: newName, branch: newBranch, automated }
+          data: { name: newName, branch: newBranch }
         })
       } catch (e) {
         throw new ValidationError(e.toString())
