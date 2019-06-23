@@ -29,6 +29,7 @@ type CourseInstance {
   course: String!
   campus: String!
   department: String!
+  status: Boolean!
 }
 type Link @embedded {
   id: String!
@@ -60,6 +61,7 @@ type Course {
   branch: String!
   coordinator_id: String!
   name: String! @unique
+  automated: Boolean! @default(value: false)
 }
 type Question {
   id: ID! @id
