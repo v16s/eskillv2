@@ -287,6 +287,8 @@ type CourseInstance {
   completed: Int!
   total: Int!
   course: String!
+  campus: String!
+  department: String!
 }
 
 type CourseInstanceConnection {
@@ -303,6 +305,8 @@ input CourseInstanceCreateInput {
   completed: Int!
   total: Int!
   course: String!
+  campus: String!
+  department: String!
 }
 
 type CourseInstanceEdge {
@@ -323,6 +327,10 @@ enum CourseInstanceOrderByInput {
   total_DESC
   course_ASC
   course_DESC
+  campus_ASC
+  campus_DESC
+  department_ASC
+  department_DESC
 }
 
 type CourseInstancePreviousValues {
@@ -332,6 +340,8 @@ type CourseInstancePreviousValues {
   completed: Int!
   total: Int!
   course: String!
+  campus: String!
+  department: String!
 }
 
 type CourseInstanceSubscriptionPayload {
@@ -357,6 +367,8 @@ input CourseInstanceUpdateInput {
   completed: Int
   total: Int
   course: String
+  campus: String
+  department: String
 }
 
 input CourseInstanceUpdateManyMutationInput {
@@ -365,6 +377,8 @@ input CourseInstanceUpdateManyMutationInput {
   completed: Int
   total: Int
   course: String
+  campus: String
+  department: String
 }
 
 input CourseInstanceWhereInput {
@@ -443,6 +457,34 @@ input CourseInstanceWhereInput {
   course_not_starts_with: String
   course_ends_with: String
   course_not_ends_with: String
+  campus: String
+  campus_not: String
+  campus_in: [String!]
+  campus_not_in: [String!]
+  campus_lt: String
+  campus_lte: String
+  campus_gt: String
+  campus_gte: String
+  campus_contains: String
+  campus_not_contains: String
+  campus_starts_with: String
+  campus_not_starts_with: String
+  campus_ends_with: String
+  campus_not_ends_with: String
+  department: String
+  department_not: String
+  department_in: [String!]
+  department_not_in: [String!]
+  department_lt: String
+  department_lte: String
+  department_gt: String
+  department_gte: String
+  department_contains: String
+  department_not_contains: String
+  department_starts_with: String
+  department_not_starts_with: String
+  department_ends_with: String
+  department_not_ends_with: String
   AND: [CourseInstanceWhereInput!]
 }
 

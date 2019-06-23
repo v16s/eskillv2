@@ -11,6 +11,8 @@ export default gql`
     question(id: String!): Question
     faculties: [User]
     answer: String
+    instances: [CourseInstance]
+    instance(id: String!): CourseInstance
   }
   input CourseWhereInput {
     branch: String
@@ -152,6 +154,12 @@ export default gql`
       status: Int
       course: String!
     ): Report
+    updateQuestionInstance(
+      question: String!
+      cid: String!
+      answer: String!
+    ): CourseInstance
+    verifyQuestion(question: String!, cid: String!): CourseInstance
   }
   input CourseInput {
     branch: String!

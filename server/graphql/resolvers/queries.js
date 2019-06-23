@@ -1,5 +1,6 @@
 import { prisma } from 'prisma'
 import { async } from 'q'
+import { AuthenticationError, ValidationError } from 'apollo-server-express'
 
 let question = `
 query Questions($id: String!){
@@ -71,5 +72,36 @@ export default {
     } catch (e) {
       throw new ValidationError(e.toString())
     }
+  },
+  instances: async (_, args, { user }) => {
+    try {
+      let where
+      if (user.level == 4) {
+        where = {
+          studID: user.id
+        }
+      } else if (user.level == 3) {
+        where = {
+          facultyID: facultyID
+        }
+      } else if (user.level == 2) {
+        let course = user.username.replace(/_/, ' ').split('-')[0]
+        where = {
+          course
+        }
+      } else if (user.level < 2) {
+        where = {}
+      } else {
+        throw new AuthenticationError()
+      }
+      return await prisma.courseInstances({
+        where
+      })
+    } catch (e) {
+      throw new ValidationError(e.toString())
+    }
+  },
+  instance: async(_, {id}) => {
+    return await prisma.courseInstance({id})
   }
 }

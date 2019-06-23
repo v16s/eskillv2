@@ -418,7 +418,11 @@ export type CourseInstanceOrderByInput =
   | "total_ASC"
   | "total_DESC"
   | "course_ASC"
-  | "course_DESC";
+  | "course_DESC"
+  | "campus_ASC"
+  | "campus_DESC"
+  | "department_ASC"
+  | "department_DESC";
 
 export type GlobalOrderByInput =
   | "regs_ASC"
@@ -784,6 +788,34 @@ export interface CourseInstanceWhereInput {
   course_not_starts_with?: Maybe<String>;
   course_ends_with?: Maybe<String>;
   course_not_ends_with?: Maybe<String>;
+  campus?: Maybe<String>;
+  campus_not?: Maybe<String>;
+  campus_in?: Maybe<String[] | String>;
+  campus_not_in?: Maybe<String[] | String>;
+  campus_lt?: Maybe<String>;
+  campus_lte?: Maybe<String>;
+  campus_gt?: Maybe<String>;
+  campus_gte?: Maybe<String>;
+  campus_contains?: Maybe<String>;
+  campus_not_contains?: Maybe<String>;
+  campus_starts_with?: Maybe<String>;
+  campus_not_starts_with?: Maybe<String>;
+  campus_ends_with?: Maybe<String>;
+  campus_not_ends_with?: Maybe<String>;
+  department?: Maybe<String>;
+  department_not?: Maybe<String>;
+  department_in?: Maybe<String[] | String>;
+  department_not_in?: Maybe<String[] | String>;
+  department_lt?: Maybe<String>;
+  department_lte?: Maybe<String>;
+  department_gt?: Maybe<String>;
+  department_gte?: Maybe<String>;
+  department_contains?: Maybe<String>;
+  department_not_contains?: Maybe<String>;
+  department_starts_with?: Maybe<String>;
+  department_not_starts_with?: Maybe<String>;
+  department_ends_with?: Maybe<String>;
+  department_not_ends_with?: Maybe<String>;
   AND?: Maybe<CourseInstanceWhereInput[] | CourseInstanceWhereInput>;
 }
 
@@ -1417,6 +1449,8 @@ export interface CourseInstanceCreateInput {
   completed: Int;
   total: Int;
   course: String;
+  campus: String;
+  department: String;
 }
 
 export interface LinkCreateManyInput {
@@ -1436,6 +1470,8 @@ export interface CourseInstanceUpdateInput {
   completed?: Maybe<Int>;
   total?: Maybe<Int>;
   course?: Maybe<String>;
+  campus?: Maybe<String>;
+  department?: Maybe<String>;
 }
 
 export interface LinkUpdateManyInput {
@@ -1505,6 +1541,8 @@ export interface CourseInstanceUpdateManyMutationInput {
   completed?: Maybe<Int>;
   total?: Maybe<Int>;
   course?: Maybe<String>;
+  campus?: Maybe<String>;
+  department?: Maybe<String>;
 }
 
 export interface GlobalCreateInput {
@@ -2031,6 +2069,8 @@ export interface CourseInstance {
   completed: Int;
   total: Int;
   course: String;
+  campus: String;
+  department: String;
 }
 
 export interface CourseInstancePromise
@@ -2043,6 +2083,8 @@ export interface CourseInstancePromise
   completed: () => Promise<Int>;
   total: () => Promise<Int>;
   course: () => Promise<String>;
+  campus: () => Promise<String>;
+  department: () => Promise<String>;
 }
 
 export interface CourseInstanceSubscription
@@ -2055,6 +2097,8 @@ export interface CourseInstanceSubscription
   completed: () => Promise<AsyncIterator<Int>>;
   total: () => Promise<AsyncIterator<Int>>;
   course: () => Promise<AsyncIterator<String>>;
+  campus: () => Promise<AsyncIterator<String>>;
+  department: () => Promise<AsyncIterator<String>>;
 }
 
 export interface CourseInstanceNullablePromise
@@ -2067,6 +2111,8 @@ export interface CourseInstanceNullablePromise
   completed: () => Promise<Int>;
   total: () => Promise<Int>;
   course: () => Promise<String>;
+  campus: () => Promise<String>;
+  department: () => Promise<String>;
 }
 
 export interface Link {
@@ -2768,6 +2814,8 @@ export interface CourseInstancePreviousValues {
   completed: Int;
   total: Int;
   course: String;
+  campus: String;
+  department: String;
 }
 
 export interface CourseInstancePreviousValuesPromise
@@ -2779,6 +2827,8 @@ export interface CourseInstancePreviousValuesPromise
   completed: () => Promise<Int>;
   total: () => Promise<Int>;
   course: () => Promise<String>;
+  campus: () => Promise<String>;
+  department: () => Promise<String>;
 }
 
 export interface CourseInstancePreviousValuesSubscription
@@ -2790,6 +2840,8 @@ export interface CourseInstancePreviousValuesSubscription
   completed: () => Promise<AsyncIterator<Int>>;
   total: () => Promise<AsyncIterator<Int>>;
   course: () => Promise<AsyncIterator<String>>;
+  campus: () => Promise<AsyncIterator<String>>;
+  department: () => Promise<AsyncIterator<String>>;
 }
 
 export interface GlobalSubscriptionPayload {

@@ -4,19 +4,8 @@ import { compose, graphql } from 'react-apollo'
 import { CourseCard, RequestCourse } from '../../components'
 import { withStyles } from '@material-ui/styles'
 import { Fab, Modal } from '@material-ui/core'
-import {
-  Card,
-  Button,
-  Grid,
-  Typography,
-  LinearProgress,
-  CardMedia,
-  CardActionArea,
-  CardHeader,
-  CardContent
-} from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { Add } from '@material-ui/icons'
-import { CircularProgressbar } from 'react-circular-progressbar'
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -47,21 +36,42 @@ const styles = theme => ({
   }
 })
 
+const COURSES = gql`
+  query Instances {
+    instances {
+      total
+      course
+      completed
+      id
+    }
+  }
+`
+
 class Dashboard extends React.Component {
   state = {
     show: false
   }
-  close = () => {
+  close = refresh => {
+    if (refresh) {
+      this.props.data.refetch()
+    }
     this.setState({ show: !this.state.show })
   }
   render () {
-    const { classes } = this.props
+    const { classes, data } = this.props
+    let instances = data.instances || []
     return (
       <div>
         <div className={classes.root}>
-          <Grid container spacing={3} style={{ height: 'auto' }}>
-            <CourseCard course={'Course 1'} complete={15} correct={5} />
-          </Grid>
+          {instances.map(({ course, completed, total, id }) => (
+            <Grid container spacing={3} style={{ height: 'auto' }}>
+              <CourseCard
+                course={course}
+                complete={parseInt((completed / total) * 100)}
+                id={id}
+              />
+            </Grid>
+          ))}
           {!this.state.show && (
             <Fab
               className={classes.fab}
@@ -96,4 +106,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default withStyles(styles)(Dashboard)
+export default compose(graphql(COURSES))(withStyles(styles)(Dashboard))

@@ -27,11 +27,13 @@ type CourseInstance {
   completed: Int!
   total: Int!
   course: String!
+  campus: String!
+  department: String!
 }
 type Link @embedded {
   id: String!
-  status: Int!
-  ans: String
+  status: Int! @default(value: 0)
+  ans: String @default(value: "")
 }
 type Global {
   regs: Boolean @default(value: true)

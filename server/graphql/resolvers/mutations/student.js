@@ -18,6 +18,7 @@ export default {
     if (user.level == 4) {
       try {
         let studID = user.id
+        let { campus, department } = user
         let courseinstances = await prisma.courseInstances({
           where: { studID, facultyID, course }
         })
@@ -35,7 +36,9 @@ export default {
             questions: { create: obj },
             completed,
             total,
-            course
+            course,
+            campus,
+            department
           })
         } else {
           throw new ValidationError('Course already exists!')
@@ -72,6 +75,66 @@ export default {
       }
     } else {
       throw new AuthenticationError('Unauthorized')
+    }
+  },
+  verifyQuestion: async (_parent, { question, cid }, { user }) => {
+    if (user.level == 4) {
+      try {
+        let instance = await prisma.courseInstance({ id: cid })
+        if (!instance) throw new ValidationError('no course')
+        let { ans: verify } = await prisma.question({ id: question })
+        let status = (() => {
+          let { ans } = instance.questions.find(d => d.id == question)
+          if (ans == verify) {
+            return 2
+          } else {
+            return 1
+          }
+        })()
+        console.log(status)
+        instance = await prisma.updateCourseInstance({
+          where: { id: cid },
+          data: {
+            questions: {
+              updateMany: {
+                where: { id: question },
+                data: {
+                  status
+                }
+              }
+            }
+          }
+        })
+        return instance
+      } catch (e) {
+        throw new ValidationError(e.toString())
+      }
+    }
+  },
+  updateQuestionInstance: async (
+    _parent,
+    { question, cid, answer },
+    { user }
+  ) => {
+    if (user.level == 4) {
+      try {
+        let instance = await prisma.updateCourseInstance({
+          where: { id: cid },
+          data: {
+            questions: {
+              updateMany: {
+                where: { id: question },
+                data: {
+                  ans: answer
+                }
+              }
+            }
+          }
+        })
+        return instance
+      } catch (e) {
+        throw new ValidationError(e.toString())
+      }
     }
   }
 }

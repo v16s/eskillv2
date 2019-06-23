@@ -9,14 +9,19 @@ import {
   Badge,
   MenuItem,
   Menu,
-  Button
+  Button,
+  SwipeableDrawer,
+  List,
+  ListItemIcon,
+  ListItem,
+  ListItemText,
+  Divider
 } from '@material-ui/core'
 import {
-  Mail as MailIcon,
   Notifications as NotificationsIcon,
-  MoreVert as MoreIcon,
   ExitToAppRounded as LogoutIcon,
-  Tonality
+  Tonality,
+  Menu as MenuIcon
 } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 import { history } from '../util'
@@ -74,10 +79,10 @@ const useStyles = makeStyles(theme => ({
 function PrimarySearchAppBar ({ dark, changeDark }) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null)
+  const [menuv, setMenu] = React.useState(false)
 
   const isMenuOpen = Boolean(anchorEl)
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
+  const isMobileMenuOpen = menuv
 
   function handleProfileMenuOpen (event) {
     setAnchorEl(event.currentTarget)
@@ -95,51 +100,87 @@ function PrimarySearchAppBar ({ dark, changeDark }) {
   function handleMobileMenuOpen (event) {
     setMobileMoreAnchorEl(event.currentTarget)
   }
+  const toggleDrawer = open => event => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return
+    }
 
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+    setMenu(open)
+  }
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
+  const sideList = side => (
+    <div
+      role='presentation'
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+      style={{ width: 250 }}
     >
-      <MenuItem>
-        <IconButton
-          color='inherit'
+      <List>
+        <ListItem
+          button
           onClick={e => {
+            console.log(dark)
             changeDark({ variables: { dark: !dark.dark } })
           }}
         >
-          <Tonality />
-        </IconButton>
-        <p>Mode</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton color='inherit'>
-          <Badge badgeContent={11} color='secondary'>
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem
-        onClick={e => {
-          localStorage.removeItem('jwtToken')
-          window.location.reload()
-        }}
-      >
-        <IconButton color='inherit'>
-          <LogoutIcon />
-        </IconButton>
-        <p>Logout</p>
-      </MenuItem>
-    </Menu>
+          <ListItemIcon>
+            <Tonality />
+          </ListItemIcon>
+          <ListItemText primary={'Mode'} />
+        </ListItem>
+        <Divider />
+        <ListItem>
+          <ListItemIcon>
+            <Badge badgeContent={11} color='secondary'>
+              <NotificationsIcon />
+            </Badge>
+          </ListItemIcon>
+          <ListItemText primary={'Notifications'} />
+        </ListItem>
+        <Divider />
+        <ListItem
+          button
+          onClick={e => {
+            localStorage.removeItem('jwtToken')
+            window.location.reload()
+          }}
+        >
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText primary={'Logout'} />
+        </ListItem>
+      </List>
+    </div>
+  )
+  const renderMobileMenu = (
+    <SwipeableDrawer
+      disableBackdropTransition={!iOS}
+      disableDiscovery={iOS}
+      open={menuv}
+      onClose={toggleDrawer(false)}
+      onOpen={toggleDrawer(true)}
+    >
+      {sideList('left')}
+    </SwipeableDrawer>
   )
   return (
     <div className={classes.grow}>
       <AppBar position='static' className={classes.appBar}>
         <Toolbar>
+          <IconButton
+            className={classes.sectionMobile}
+            edge='start'
+            onClick={toggleDrawer(true)}
+            color='inherit'
+          >
+            <MenuIcon />
+          </IconButton>
+
           <Button
             color='primary'
             onClick={e => {
@@ -161,11 +202,7 @@ function PrimarySearchAppBar ({ dark, changeDark }) {
             >
               <Tonality />
             </IconButton>
-            <IconButton color='inherit'>
-              <Badge badgeContent={17} color='secondary'>
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+
             <IconButton
               edge='end'
               color='inherit'
@@ -175,15 +212,6 @@ function PrimarySearchAppBar ({ dark, changeDark }) {
               }}
             >
               <LogoutIcon />
-            </IconButton>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-haspopup='true'
-              onClick={handleMobileMenuOpen}
-              color='inherit'
-            >
-              <MoreIcon />
             </IconButton>
           </div>
         </Toolbar>

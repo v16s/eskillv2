@@ -108,7 +108,8 @@ class EditQuestion extends Component {
       answer: props.question.ans,
       courses: [],
       picture: null,
-      exp: ''
+      exp: '',
+      course: { value: props.question.course, label: props.question.course }
     }
   }
   onChange = ({ target }) => {
@@ -193,6 +194,7 @@ class EditQuestion extends Component {
     this.setState({ picture: null, preview: undefined })
   }
   componentDidMount () {
+    this.setState({ answer: this.props.question.ans })
     const { id } = this.state
     const { client } = this.props
     client
@@ -233,6 +235,7 @@ class EditQuestion extends Component {
                 onChange={this.onDropdownChange}
                 label='Course'
                 name='course'
+                value={this.state.course}
               />
             </Grid>
           )}
@@ -419,7 +422,7 @@ class EditQuestion extends Component {
             <PreviewCard
               {...{
                 ...this.state,
-                answer: this.state.ans,
+                answer: this.state.answer,
                 options: this.state.opt
               }}
             />

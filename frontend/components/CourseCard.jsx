@@ -47,7 +47,7 @@ class CourseCard extends Component {
           <CardActionArea
             onClick={e => {
               e.preventDefault()
-              push(`/course/${course.replace(/ /g, '_')}`)
+              push(`/course/${this.props.id}`)
             }}
             style={{ height: '100%' }}
           >
@@ -73,9 +73,9 @@ class CourseCard extends Component {
                 <Typography variant='caption'>
                   {complete} Questions Attempted
                 </Typography>
-                <Typography variant='caption'>
+                {/* <Typography variant='caption'>
                   {correct} Answered Correctly
-                </Typography>
+                </Typography> */}
               </div>
             </CardContent>
           </CardActionArea>

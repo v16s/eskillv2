@@ -1,10 +1,9 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { AppBar } from '../../components'
-import { history } from '../../util'
 import Dashboard from './Dashboard'
 import CourseQuestions from './CourseQuestions'
-import QuestionView from './QuestionView'
+import Question from './Question'
 import { ReportProblem } from '../../components'
 export default class Student extends React.Component {
   render () {
@@ -18,7 +17,7 @@ export default class Student extends React.Component {
         <AppBar />
         <Switch>
           <Route path='/report' component={ReportProblem} />
-          <Route path='/qptest' component={QuestionView} />
+          <Route path='/course/:name/:question' component={Question} />
           <Route path='/course/:name' component={CourseQuestions} />
           <Route path='/' component={Dashboard} />
         </Switch>
