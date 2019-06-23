@@ -67,6 +67,7 @@ class QuestionView extends Component {
     this.props
       .check({ variables: { question, name: course } })
       .then(({ data }) => {
+        this.props.irefetch()
         this.props.refetch()
       })
       .catch(err => {

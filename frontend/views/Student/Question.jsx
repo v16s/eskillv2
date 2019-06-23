@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import {
-  Modal
-} from '@material-ui/core'
+import { Modal } from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
 import { red, green } from '@material-ui/core/colors'
 import gql from 'graphql-tag'
@@ -113,19 +111,24 @@ class Question extends Component {
       <div>
         <Query
           query={QUESTION}
+          fetchPolicy='network-only'
           variables={{ id: match.params.question, cid: match.params.name }}
         >
           {({ loading, data, refetch }) => {
-            if (loading) return <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              minHeight: '600px'
-            }}
-          >
-            <Loading />
-          </div>
+            if (loading) {
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: '600px'
+                  }}
+                >
+                  <Loading />
+                </div>
+              )
+            }
             const position = data.instance.questions.findIndex(
               d => d.id == match.params.question
             )
