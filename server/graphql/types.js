@@ -163,6 +163,7 @@ export default gql`
       picture: Upload
     ): Question
     requestCourse(course: String!, facultyID: String): CourseInstance
+    rejectCourseInstance(id: String!): CourseInstance
     createReport(
       queID: String!
       description: String!

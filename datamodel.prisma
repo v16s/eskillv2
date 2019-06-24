@@ -24,8 +24,8 @@ type CourseInstance {
   studID: String!
   facultyID: String!
   questions: [Link]!
-  completed: Int!
-  total: Int!
+  completed: Int!@default(value: 0)
+  total: Int!@default(value: 0)
   course: String!
   campus: String!
   department: String!

@@ -23,16 +23,22 @@ export default {
           where: { studID, facultyID, course }
         })
         if (courseinstances.length == 0) {
-          let { questions: ques } = await prisma.$graphql(question, { course })
-          shuffle(ques)
-          let n = ques.length
-          let obj = ques.slice(0, n).map(k => ({ ...k, status: 0 }))
-          let total = n
-          let completed = 0
           let c = await prisma.courses({ where: { name: course } })
           const { automated } = c[0]
-
           let status = automated
+          let obj, n, total, completed
+          if (status == true) {
+            let { questions: ques } = await prisma.$graphql(question, {
+              course
+            })
+            shuffle(ques)
+            n = ques.length
+            obj = ques.slice(0, n).map(k => ({ ...k, status: 0 }))
+            total = n
+            completed = 0
+          } else {
+            obj = []
+          }
           return await prisma.createCourseInstance({
             studID,
             facultyID,
@@ -55,6 +61,7 @@ export default {
       throw new AuthenticationError('Unauthorized')
     }
   },
+
   createReport: async (
     _parent,
     { queID, description, status, course },

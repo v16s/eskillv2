@@ -179,7 +179,7 @@ export default {
           await prisma.deleteBranch({ name: branch })
         }
         try {
-          await prisma.deleteUser({ username: coordinator_id })
+        let a = await prisma.deleteUser({ username: coordinator_id })
         } catch (e) {}
         return await prisma.deleteCourse({ name })
       } catch (e) {

@@ -67,7 +67,7 @@ export default {
     ) {
       try {
         let { coordinator_id } = await prisma.course({ name })
-        await prisma.deleteUser({ username: coordinator_id })
+        let a = await prisma.deleteUser({ username: coordinator_id })
         return await prisma.deleteCourse({ name })
       } catch (e) {
         console.log(e)

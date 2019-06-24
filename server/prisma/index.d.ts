@@ -1457,8 +1457,8 @@ export interface CourseInstanceCreateInput {
   studID: String;
   facultyID: String;
   questions?: Maybe<LinkCreateManyInput>;
-  completed: Int;
-  total: Int;
+  completed?: Maybe<Int>;
+  total?: Maybe<Int>;
   course: String;
   campus: String;
   department: String;

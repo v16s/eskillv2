@@ -305,8 +305,8 @@ input CourseInstanceCreateInput {
   studID: String!
   facultyID: String!
   questions: LinkCreateManyInput
-  completed: Int!
-  total: Int!
+  completed: Int
+  total: Int
   course: String!
   campus: String!
   department: String!

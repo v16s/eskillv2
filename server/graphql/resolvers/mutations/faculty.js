@@ -8,5 +8,13 @@ export default {
     await prisma.updateCourseInstance({ where: { id }, data: { status: true } })
     return true
   },
-  rejectCourseInstance: async (_, { id }, { user }) => {}
+  rejectCourseInstance: async (_parent, { id }, { user }) => {
+    if (user.level == 3) {
+      try {
+        return await prisma.deleteCourseInstance({ id })
+      } catch (e) {
+        throw new ValidationError(e.toString())
+      }
+    }
+  }
 }
