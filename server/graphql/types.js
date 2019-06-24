@@ -109,6 +109,7 @@ export default gql`
     toggleStudentRegistration: ToggleResult
     toggleFacultyRegistration: ToggleResult
     addDepartment(tag: TagInput, name: String!): Campus
+    toggleCourseAutomation(name: String!): Course
     removeDepartment(id: String!, name: String!): Campus
     updateDepartment(name: String!, update: UpdateTag!): Campus
     adminAddDepartment(tag: TagInput, name: String!): Campus
@@ -123,7 +124,7 @@ export default gql`
     addBranch(name: String!): Branch
     removeBranch(name: String!): Branch
     updateBranch(name: String!, newName: String!): Branch
-    addCourse(name: String!, branch: String!, automated: Boolean): Course
+    addCourse(name: String!, branch: String!): Course
     removeCourse(name: String!): Course
     updateCourse(
       name: String!
@@ -131,7 +132,7 @@ export default gql`
       branch: String!
       newAuto: Boolean
     ): Course
-    adminAddCourse(name: String!, branch: String!, automated: Boolean): Course
+    adminAddCourse(name: String!, branch: String!): Course
     adminRemoveCourse(name: String!): Course
     adminUpdateCourse(
       name: String!

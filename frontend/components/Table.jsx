@@ -171,13 +171,19 @@ export default class DashboardTable extends React.Component {
   componentDidMount () {
     let nextState = this.state
     if (this.props.data.loading == false) {
-      nextState.data = this.props.data[this.props.name]
+      nextState.data = this.props.data[this.props.name].map(d => ({
+        ...d,
+        refetch: this.props.data.refetch
+      }))
     }
     this.setState(nextState)
   }
-  componentWillUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.data.loading == false) {
-      nextState.data = nextProps.data[nextProps.name]
+      nextState.data = nextProps.data[nextProps.name].map(d => ({
+        ...d,
+        refetch: nextProps.data.refetch
+      }))
     }
     return true
   }

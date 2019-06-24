@@ -138,7 +138,7 @@ export default {
   //   }
   // },
 
-  addCourse: async (parent, { name, branch, automated }, { user }) => {
+  addCourse: async (parent, { name, branch }, { user }) => {
     if (user.level < 1) {
       try {
         let branches = await prisma.branches({ where: { name: branch } })
@@ -159,7 +159,7 @@ export default {
           name,
           coordinator_id: username,
           branch,
-          automated
+          automated: false
         })
       } catch (e) {
         console.log(e)
@@ -278,6 +278,24 @@ export default {
             departments: {
               updateMany
             }
+          }
+        })
+      } catch (e) {
+        console.log(e)
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('Unauthorized')
+    }
+  },
+  toggleCourseAutomation: async (_p, { name }, { user: { level } }) => {
+    if (level < 1) {
+      try {
+        let { automated } = await prisma.course({ name })
+        return await prisma.updateCourse({
+          where: { name },
+          data: {
+            automated: !automated
           }
         })
       } catch (e) {

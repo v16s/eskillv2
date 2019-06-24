@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table, RegisterControl } from '../../components'
 import gql from 'graphql-tag'
+import { Switch } from '@material-ui/core'
 import { compose, graphql } from 'react-apollo'
 
 const CAMPUSES = gql`
@@ -21,6 +22,7 @@ const COURSES = gql`
       branch
       name
       coordinator_id
+      automated
     }
   }
 `
@@ -75,6 +77,13 @@ const REMOVE_CAMPUS = gql`
 const ADD_COURSE = gql`
   mutation AddCourse($name: String!, $branch: String!) {
     addCourse(name: $name, branch: $branch) {
+      name
+    }
+  }
+`
+const TOGGLE = gql`
+  mutation ToggleAutomate($name: String!) {
+    toggleCourseAutomation(name: $name) {
       name
     }
   }
@@ -151,7 +160,26 @@ class Dashboard extends React.Component {
                   field: 'coordinator_id',
                   editable: 'never'
                 },
-                { title: 'Branch', field: 'branch' }
+                { title: 'Branch', field: 'branch' },
+                {
+                  title: 'Automated',
+                  render: ({ automated, refetch, name }) => {
+                    return (
+                      <Switch
+                        checked={automated}
+                        onChange={() => {
+                          this.props
+                            .mutate({ variables: { name } })
+                            .then(data => {
+                              refetch()
+                            })
+                        }}
+                        value='faculty'
+                        color='primary'
+                      />
+                    )
+                  }
+                }
               ]}
               title='Course'
               name='courses'
@@ -165,4 +193,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard
+export default graphql(TOGGLE)(Dashboard)

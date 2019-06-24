@@ -27,7 +27,7 @@ export default {
     }
   },
 
-  adminAddCourse: async (parent, { name, branch, automated }, { user }) => {
+  adminAddCourse: async (parent, { name, branch }, { user }) => {
     if (
       (user.level == 1 &&
         user.username == `${name.replace(/ /g, '-')}-Admin`) ||
@@ -48,7 +48,7 @@ export default {
           name,
           coordinator_id: username,
           branch,
-          automated
+          automated: false
         })
       } catch (e) {
         console.log(e)
