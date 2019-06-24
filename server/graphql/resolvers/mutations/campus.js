@@ -27,8 +27,12 @@ export default {
     }
   },
 
-  adminAddCourse: async (parent, { name, branch }, { user }) => {
-    if (user.level < 2) {
+  adminAddCourse: async (parent, { name, branch, automated }, { user }) => {
+    if (
+      (user.level == 1 &&
+        user.username == `${name.replace(/ /g, '-')}-Admin`) ||
+      user.level < 1
+    ) {
       try {
         let identity = `${name}-${branch}`
         let salt = await promisify(bcrypt.genSalt)(10)
@@ -43,7 +47,8 @@ export default {
         return await prisma.createCourse({
           name,
           coordinator_id: username,
-          branch
+          branch,
+          automated
         })
       } catch (e) {
         console.log(e)
@@ -55,7 +60,11 @@ export default {
   },
 
   adminRemoveCourse: async (parent, { name }, { user }) => {
-    if (user.level < 2) {
+    if (
+      (user.level == 1 &&
+        user.username == `${name.replace(/ /g, '-')}-Admin`) ||
+      user.level < 1
+    ) {
       try {
         let { coordinator_id } = await prisma.course({ name })
         await prisma.deleteUser({ username: coordinator_id })
@@ -69,8 +78,12 @@ export default {
     }
   },
 
-  adminUpdateCourse: async (parent, { name, newName, branch }, { user }) => {
-    if (user.level < 2) {
+  adminUpdateCourse: async (parent, { name, newName, branch, newAuto }, { user }) => {
+    if (
+      (user.level == 1 &&
+        user.username == `${name.replace(/ /g, '-')}-Admin`) ||
+      user.level < 1
+    ) {
       try {
         let identity = `${name}-${branch}`
         let iden = `${newName}-${branch}`
@@ -83,7 +96,7 @@ export default {
         })
         return await prisma.updateCourse({
           where: { name },
-          data: { name: newName }
+          data: { name: newName,automated:newAuto }
         })
       } catch (e) {
         console.log(e)

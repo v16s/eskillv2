@@ -61,7 +61,7 @@ type Course {
   branch: String!
   coordinator_id: String!
   name: String! @unique
-  automated: Boolean! @default(value: false)
+  automated: Boolean @default(value: false)
 }
 type Question {
   id: ID! @id

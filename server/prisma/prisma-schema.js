@@ -259,6 +259,7 @@ type Course {
   branch: String!
   coordinator_id: String!
   name: String!
+  automated: Boolean
 }
 
 type CourseConnection {
@@ -272,6 +273,7 @@ input CourseCreateInput {
   branch: String!
   coordinator_id: String!
   name: String!
+  automated: Boolean
 }
 
 type CourseEdge {
@@ -289,6 +291,7 @@ type CourseInstance {
   course: String!
   campus: String!
   department: String!
+  status: Boolean!
 }
 
 type CourseInstanceConnection {
@@ -307,6 +310,7 @@ input CourseInstanceCreateInput {
   course: String!
   campus: String!
   department: String!
+  status: Boolean!
 }
 
 type CourseInstanceEdge {
@@ -331,6 +335,8 @@ enum CourseInstanceOrderByInput {
   campus_DESC
   department_ASC
   department_DESC
+  status_ASC
+  status_DESC
 }
 
 type CourseInstancePreviousValues {
@@ -342,6 +348,7 @@ type CourseInstancePreviousValues {
   course: String!
   campus: String!
   department: String!
+  status: Boolean!
 }
 
 type CourseInstanceSubscriptionPayload {
@@ -369,6 +376,7 @@ input CourseInstanceUpdateInput {
   course: String
   campus: String
   department: String
+  status: Boolean
 }
 
 input CourseInstanceUpdateManyMutationInput {
@@ -379,6 +387,7 @@ input CourseInstanceUpdateManyMutationInput {
   course: String
   campus: String
   department: String
+  status: Boolean
 }
 
 input CourseInstanceWhereInput {
@@ -485,6 +494,8 @@ input CourseInstanceWhereInput {
   department_not_starts_with: String
   department_ends_with: String
   department_not_ends_with: String
+  status: Boolean
+  status_not: Boolean
   AND: [CourseInstanceWhereInput!]
 }
 
@@ -501,6 +512,8 @@ enum CourseOrderByInput {
   coordinator_id_DESC
   name_ASC
   name_DESC
+  automated_ASC
+  automated_DESC
 }
 
 type CoursePreviousValues {
@@ -508,6 +521,7 @@ type CoursePreviousValues {
   branch: String!
   coordinator_id: String!
   name: String!
+  automated: Boolean
 }
 
 type CourseSubscriptionPayload {
@@ -530,12 +544,14 @@ input CourseUpdateInput {
   branch: String
   coordinator_id: String
   name: String
+  automated: Boolean
 }
 
 input CourseUpdateManyMutationInput {
   branch: String
   coordinator_id: String
   name: String
+  automated: Boolean
 }
 
 input CourseWhereInput {
@@ -595,6 +611,8 @@ input CourseWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  automated: Boolean
+  automated_not: Boolean
   AND: [CourseWhereInput!]
 }
 
@@ -725,7 +743,7 @@ type Link {
 
 input LinkCreateInput {
   id: String!
-  status: Int!
+  status: Int
   ans: String
 }
 

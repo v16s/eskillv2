@@ -79,7 +79,7 @@ export default gql`
     branch: String!
     name: String!
     coordinator_id: String!
-    automated: Boolean!
+    automated: Boolean
   }
   type Question {
     id: String!
@@ -123,16 +123,22 @@ export default gql`
     addBranch(name: String!): Branch
     removeBranch(name: String!): Branch
     updateBranch(name: String!, newName: String!): Branch
-    addCourse(name: String!, branch: String!): Course
+    addCourse(name: String!, branch: String!, automated: Boolean): Course
     removeCourse(name: String!): Course
     updateCourse(
       name: String!
       newName: String!
       branch: String!
+      newAuto: Boolean
     ): Course
-    adminAddCourse(name: String!, branch: String!): Course
+    adminAddCourse(name: String!, branch: String!, automated: Boolean): Course
     adminRemoveCourse(name: String!): Course
-    adminUpdateCourse(name: String!, newName: String!, branch: String!): Course
+    adminUpdateCourse(
+      name: String!
+      newName: String!
+      branch: String!
+      newAuto: Boolean
+    ): Course
     addQuestion(
       course: String!
       name: String!

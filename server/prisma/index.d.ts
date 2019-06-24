@@ -404,7 +404,9 @@ export type CourseOrderByInput =
   | "coordinator_id_ASC"
   | "coordinator_id_DESC"
   | "name_ASC"
-  | "name_DESC";
+  | "name_DESC"
+  | "automated_ASC"
+  | "automated_DESC";
 
 export type CourseInstanceOrderByInput =
   | "id_ASC"
@@ -422,7 +424,9 @@ export type CourseInstanceOrderByInput =
   | "campus_ASC"
   | "campus_DESC"
   | "department_ASC"
-  | "department_DESC";
+  | "department_DESC"
+  | "status_ASC"
+  | "status_DESC";
 
 export type GlobalOrderByInput =
   | "regs_ASC"
@@ -705,6 +709,8 @@ export interface CourseWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  automated?: Maybe<Boolean>;
+  automated_not?: Maybe<Boolean>;
   AND?: Maybe<CourseWhereInput[] | CourseWhereInput>;
 }
 
@@ -816,6 +822,8 @@ export interface CourseInstanceWhereInput {
   department_not_starts_with?: Maybe<String>;
   department_ends_with?: Maybe<String>;
   department_not_ends_with?: Maybe<String>;
+  status?: Maybe<Boolean>;
+  status_not?: Maybe<Boolean>;
   AND?: Maybe<CourseInstanceWhereInput[] | CourseInstanceWhereInput>;
 }
 
@@ -1427,18 +1435,21 @@ export interface CourseCreateInput {
   branch: String;
   coordinator_id: String;
   name: String;
+  automated?: Maybe<Boolean>;
 }
 
 export interface CourseUpdateInput {
   branch?: Maybe<String>;
   coordinator_id?: Maybe<String>;
   name?: Maybe<String>;
+  automated?: Maybe<Boolean>;
 }
 
 export interface CourseUpdateManyMutationInput {
   branch?: Maybe<String>;
   coordinator_id?: Maybe<String>;
   name?: Maybe<String>;
+  automated?: Maybe<Boolean>;
 }
 
 export interface CourseInstanceCreateInput {
@@ -1451,6 +1462,7 @@ export interface CourseInstanceCreateInput {
   course: String;
   campus: String;
   department: String;
+  status: Boolean;
 }
 
 export interface LinkCreateManyInput {
@@ -1459,7 +1471,7 @@ export interface LinkCreateManyInput {
 
 export interface LinkCreateInput {
   id: String;
-  status: Int;
+  status?: Maybe<Int>;
   ans?: Maybe<String>;
 }
 
@@ -1472,6 +1484,7 @@ export interface CourseInstanceUpdateInput {
   course?: Maybe<String>;
   campus?: Maybe<String>;
   department?: Maybe<String>;
+  status?: Maybe<Boolean>;
 }
 
 export interface LinkUpdateManyInput {
@@ -1543,6 +1556,7 @@ export interface CourseInstanceUpdateManyMutationInput {
   course?: Maybe<String>;
   campus?: Maybe<String>;
   department?: Maybe<String>;
+  status?: Maybe<Boolean>;
 }
 
 export interface GlobalCreateInput {
@@ -1980,6 +1994,7 @@ export interface Course {
   branch: String;
   coordinator_id: String;
   name: String;
+  automated?: Boolean;
 }
 
 export interface CoursePromise extends Promise<Course>, Fragmentable {
@@ -1987,6 +2002,7 @@ export interface CoursePromise extends Promise<Course>, Fragmentable {
   branch: () => Promise<String>;
   coordinator_id: () => Promise<String>;
   name: () => Promise<String>;
+  automated: () => Promise<Boolean>;
 }
 
 export interface CourseSubscription
@@ -1996,6 +2012,7 @@ export interface CourseSubscription
   branch: () => Promise<AsyncIterator<String>>;
   coordinator_id: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  automated: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface CourseNullablePromise
@@ -2005,6 +2022,7 @@ export interface CourseNullablePromise
   branch: () => Promise<String>;
   coordinator_id: () => Promise<String>;
   name: () => Promise<String>;
+  automated: () => Promise<Boolean>;
 }
 
 export interface CourseConnection {
@@ -2071,6 +2089,7 @@ export interface CourseInstance {
   course: String;
   campus: String;
   department: String;
+  status: Boolean;
 }
 
 export interface CourseInstancePromise
@@ -2085,6 +2104,7 @@ export interface CourseInstancePromise
   course: () => Promise<String>;
   campus: () => Promise<String>;
   department: () => Promise<String>;
+  status: () => Promise<Boolean>;
 }
 
 export interface CourseInstanceSubscription
@@ -2099,6 +2119,7 @@ export interface CourseInstanceSubscription
   course: () => Promise<AsyncIterator<String>>;
   campus: () => Promise<AsyncIterator<String>>;
   department: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface CourseInstanceNullablePromise
@@ -2113,6 +2134,7 @@ export interface CourseInstanceNullablePromise
   course: () => Promise<String>;
   campus: () => Promise<String>;
   department: () => Promise<String>;
+  status: () => Promise<Boolean>;
 }
 
 export interface Link {
@@ -2762,6 +2784,7 @@ export interface CoursePreviousValues {
   branch: String;
   coordinator_id: String;
   name: String;
+  automated?: Boolean;
 }
 
 export interface CoursePreviousValuesPromise
@@ -2771,6 +2794,7 @@ export interface CoursePreviousValuesPromise
   branch: () => Promise<String>;
   coordinator_id: () => Promise<String>;
   name: () => Promise<String>;
+  automated: () => Promise<Boolean>;
 }
 
 export interface CoursePreviousValuesSubscription
@@ -2780,6 +2804,7 @@ export interface CoursePreviousValuesSubscription
   branch: () => Promise<AsyncIterator<String>>;
   coordinator_id: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  automated: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface CourseInstanceSubscriptionPayload {
@@ -2816,6 +2841,7 @@ export interface CourseInstancePreviousValues {
   course: String;
   campus: String;
   department: String;
+  status: Boolean;
 }
 
 export interface CourseInstancePreviousValuesPromise
@@ -2829,6 +2855,7 @@ export interface CourseInstancePreviousValuesPromise
   course: () => Promise<String>;
   campus: () => Promise<String>;
   department: () => Promise<String>;
+  status: () => Promise<Boolean>;
 }
 
 export interface CourseInstancePreviousValuesSubscription
@@ -2842,6 +2869,7 @@ export interface CourseInstancePreviousValuesSubscription
   course: () => Promise<AsyncIterator<String>>;
   campus: () => Promise<AsyncIterator<String>>;
   department: () => Promise<AsyncIterator<String>>;
+  status: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface GlobalSubscriptionPayload {
