@@ -1,7 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
-import { CourseCard, RequestCourse } from '../../components'
+import { CourseCard, RequestCourse, ApprovalCard } from '../../components'
 import { withStyles } from '@material-ui/styles'
 import { Fab, Modal } from '@material-ui/core'
 import { Grid } from '@material-ui/core'
@@ -43,6 +43,7 @@ const COURSES = gql`
       course
       completed
       id
+      status
     }
   }
 `
@@ -63,15 +64,18 @@ class Dashboard extends React.Component {
     return (
       <div>
         <div className={classes.root}>
-          {instances.map(({ course, completed, total, id }) => (
-            <Grid container spacing={3} style={{ height: 'auto' }}>
-              {console.log(completed)}
-              <CourseCard
-                course={course}
-                completed={completed}
-                complete={parseInt((completed / total) * 100)}
-                id={id}
-              />
+          {instances.map(({ course, completed, total, id, status }) => (
+            <Grid key={id} container spacing={3} style={{ height: 'auto' }}>
+              {status ? (
+                <CourseCard
+                  course={course}
+                  completed={completed}
+                  complete={parseInt((completed / total) * 100)}
+                  id={id}
+                />
+              ) : (
+                <ApprovalCard course={course} id={id} />
+              )}
             </Grid>
           ))}
           {!this.state.show && (

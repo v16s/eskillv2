@@ -13,6 +13,7 @@ import QuestionCircle from './QuestionCircle'
 import StudentProgressTable from './StudentProgressTable'
 import ReportProblem from './ReportProblem'
 import QuestionView from './QuestionView'
+import ApprovalCard from './ApprovalCard'
 export {
   Dropdown,
   AppBar,
@@ -28,5 +29,6 @@ export {
   QuestionCircle,
   StudentProgressTable,
   ReportProblem,
-  QuestionView
+  QuestionView,
+  ApprovalCard
 }

@@ -31,7 +31,6 @@ export default {
           let completed = 0
           let c = await prisma.courses({ where: { name: course } })
           const { automated } = c[0]
-          console.log(automated)
 
           let status = automated
           return await prisma.createCourseInstance({

@@ -45,6 +45,7 @@ const INSTANCE = gql`
         status
         ans
       }
+      status
     }
   }
 `
@@ -93,7 +94,8 @@ class QuestionCircle extends Component {
               </div>
             )
           }
-          const { course, questions } = data.instance
+          const { course, questions, status } = data.instance
+          if(!status) return "You aren't supposed to be here"
           if (windowWidth < 768) {
             return (
               <Paper>

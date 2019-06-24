@@ -5,6 +5,7 @@ import { Tabs, Tab, Paper } from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
 import { history } from '../../util'
 import Dashboard from './Dashboard'
+import Progress from './Progress'
 export default withStyles(theme => ({
   paper: {
     display: 'flex',
@@ -19,8 +20,11 @@ export default withStyles(theme => ({
       super(props)
       let location = 0
       switch (history.location.pathname) {
-        case '/reports':
+        case '/progress':
           location = 1
+          break
+        case '/reports':
+          location = 2
           break
       }
       this.state = {
@@ -33,6 +37,9 @@ export default withStyles(theme => ({
           history.push('/')
           break
         case 1:
+          history.push('/progress')
+          break
+        case 2:
           history.push('/reports')
           break
       }
@@ -62,11 +69,13 @@ export default withStyles(theme => ({
               textColor='primary'
               onChange={this.handleChange}
             >
+              <Tab label='Incoming Requests' />
               <Tab label='Student Progress' />
               <Tab label='Problem Reports' />
             </Tabs>
 
             <Switch>
+              <Route path='/progress' component={Progress} />
               <Route path='/' component={Dashboard} />
             </Switch>
           </Paper>

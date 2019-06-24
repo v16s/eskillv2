@@ -4,6 +4,7 @@ import admin from './admin'
 import campus from './campus'
 import question from './question'
 import student from './student'
+import faculty from './faculty'
 
 export default {
   ...global,
@@ -11,5 +12,6 @@ export default {
   ...admin,
   ...campus,
   ...question,
-  ...student
+  ...student,
+  ...faculty
 }

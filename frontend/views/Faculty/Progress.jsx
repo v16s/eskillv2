@@ -25,7 +25,37 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
-          accept-reject table
+          <StudentProgressTable
+            columns={[
+              { title: 'Name', field: 'name' },
+              {
+                title: 'Progress',
+                render: rowData => (
+                  <LinearProgress variant='determinate' value={20} />
+                )
+              },
+              {
+                title: '%',
+                render: rowData => '20%'
+              },
+              {
+                title: '',
+                render: rowData => (
+                  <IconButton color='secondary'>
+                    <DeleteForever />
+                  </IconButton>
+                )
+              }
+            ]}
+            data={[
+              {
+                name: 'student2'
+              },
+              {
+                name: 'student1'
+              }
+            ]}
+          />
         </Grid>
       </div>
     )

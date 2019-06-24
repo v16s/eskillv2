@@ -163,22 +163,27 @@ class Dashboard extends React.Component {
                 { title: 'Branch', field: 'branch' },
                 {
                   title: 'Automated',
-                  render: ({ automated, refetch, name }) => {
-                    return (
-                      <Switch
-                        checked={automated}
-                        onChange={() => {
-                          this.props
-                            .mutate({ variables: { name } })
-                            .then(data => {
-                              refetch()
-                            })
-                        }}
-                        value='faculty'
-                        color='primary'
-                      />
-                    )
-                  }
+                  render: rowdata => {
+                    if (rowdata != undefined) {
+                      const { automated, refetch, name } = rowdata
+                      return (
+                        <Switch
+                          checked={automated}
+                          onChange={() => {
+                            this.props
+                              .mutate({ variables: { name } })
+                              .then(data => {
+                                refetch()
+                              })
+                          }}
+                          value='faculty'
+                          color='primary'
+                        />
+                      )
+                    }
+                    return ''
+                  },
+                  editable: 'never'
                 }
               ]}
               title='Course'
