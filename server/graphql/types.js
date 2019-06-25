@@ -126,8 +126,7 @@ export default gql`
     updateBranch(name: String!, newName: String!): Branch
     addCourse(name: String!, branch: String!): Course
     removeCourse(name: String!): Course
-    acceptCourseInstance(id: String!): Boolean
-    rejectCourseInstance(id: String!): Boolean
+    acceptCourseInstance(id: String!): CourseInstance
     updateCourse(
       name: String!
       newName: String!
