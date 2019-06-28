@@ -61,23 +61,25 @@ class Dashboard extends React.Component {
   render () {
     const { classes, data } = this.props
     let instances = data.instances || []
+    console.log(instances)
     return (
       <div>
         <div className={classes.root}>
-          {instances.map(({ course, completed, total, id, status }) => (
-            <Grid key={id} container spacing={3} style={{ height: 'auto' }}>
-              {status ? (
-                <CourseCard
-                  course={course}
-                  completed={completed}
-                  complete={parseInt((completed / total) * 100)}
-                  id={id}
-                />
-              ) : (
-                <ApprovalCard course={course} id={id} />
-              )}
-            </Grid>
-          ))}
+          <Grid container spacing={3} style={{ height: 'auto' }}>
+            {instances.map(({ course, completed, total, id, status }) => {
+              if (status) {
+                return (
+                  <CourseCard
+                    key={id}
+                    course={course}
+                    completed={completed}
+                    complete={parseInt((completed / total) * 100)}
+                    id={id}
+                  />
+                )
+              } else return <ApprovalCard key={id} course={course} id={id} />
+            })}
+          </Grid>
           {!this.state.show && (
             <Fab
               className={classes.fab}

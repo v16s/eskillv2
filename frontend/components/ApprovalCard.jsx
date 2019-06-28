@@ -19,7 +19,7 @@ const styles = theme => ({
     alignItems: 'center',
     height: '75%',
     padding: 10,
-    justifyContent: 'space-between'
+    justifyContent: 'center'
   },
   column: {
     display: 'flex',
@@ -29,12 +29,15 @@ const styles = theme => ({
     margin: '15px 0'
   },
   card: {
-    maxWidth: '350px'
+    maxWidth: '350px',
+    width: '100%',
+    height: '100%'
   },
   griditem: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexGrow: 1
   }
 })
 class CourseCard extends Component {
