@@ -13,6 +13,8 @@ export default gql`
     answer: String
     instances: [CourseInstance]
     instance(id: String!): CourseInstance
+    progress: [CourseInstance]
+    acceptReject: [CourseInstance]
   }
   input CourseWhereInput {
     branch: String
@@ -61,6 +63,8 @@ export default gql`
     total: Int!
     course: String!
     status: Boolean!
+    studentName: String!
+    studentReg: String!
   }
   type Link {
     id: String!

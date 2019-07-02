@@ -14,7 +14,7 @@ type Report {
   queID: String!
   studID: String!
   description: String!
-  status: Int!@default(value: 0)
+  status: Int! @default(value: 0)
   course: String!
   campus: String
   department: String
@@ -24,12 +24,14 @@ type CourseInstance {
   studID: String!
   facultyID: String!
   questions: [Link]!
-  completed: Int!@default(value: 0)
-  total: Int!@default(value: 0)
+  completed: Int! @default(value: 0)
+  total: Int! @default(value: 0)
   course: String!
   campus: String!
   department: String!
   status: Boolean!
+  studentName: String!
+  studentReg: String!
 }
 type Link @embedded {
   id: String!

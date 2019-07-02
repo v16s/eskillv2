@@ -48,7 +48,9 @@ export default {
             course,
             campus,
             department,
-            status
+            status,
+            studentReg: user.username,
+            studentName: user.name
           })
         } else {
           throw new ValidationError('Course already exists!')

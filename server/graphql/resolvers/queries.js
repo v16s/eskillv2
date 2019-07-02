@@ -82,7 +82,7 @@ export default {
         }
       } else if (user.level == 3) {
         where = {
-          facultyID: facultyID
+          facultyID: user.id
         }
       } else if (user.level == 2) {
         let course = user.username.replace(/_/, ' ').split('-')[0]
@@ -101,7 +101,28 @@ export default {
       throw new ValidationError(e.toString())
     }
   },
-  instance: async(_, {id}) => {
-    return await prisma.courseInstance({id})
+  instance: async (_, { id }) => {
+    return await prisma.courseInstance({ id })
+  },
+  progress: async (_, _arg, { user }) => {
+    return await prisma.courseInstances({
+      where: {
+        status: true,
+        facultyID: user.id
+      }
+    })
+  },
+  acceptReject: async (_, _arg, { user }) => {
+    if (user.level == 3) {
+      let inst = await prisma.courseInstances({
+        where: {
+          status: false,
+          facultyID: user.id
+        }
+      })
+      return inst
+    } else {
+      throw new AuthenticationError()
+    }
   }
 }

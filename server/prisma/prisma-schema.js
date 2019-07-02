@@ -292,6 +292,8 @@ type CourseInstance {
   campus: String!
   department: String!
   status: Boolean!
+  studentName: String!
+  studentReg: String!
 }
 
 type CourseInstanceConnection {
@@ -311,6 +313,8 @@ input CourseInstanceCreateInput {
   campus: String!
   department: String!
   status: Boolean!
+  studentName: String!
+  studentReg: String!
 }
 
 type CourseInstanceEdge {
@@ -337,6 +341,10 @@ enum CourseInstanceOrderByInput {
   department_DESC
   status_ASC
   status_DESC
+  studentName_ASC
+  studentName_DESC
+  studentReg_ASC
+  studentReg_DESC
 }
 
 type CourseInstancePreviousValues {
@@ -349,6 +357,8 @@ type CourseInstancePreviousValues {
   campus: String!
   department: String!
   status: Boolean!
+  studentName: String!
+  studentReg: String!
 }
 
 type CourseInstanceSubscriptionPayload {
@@ -377,6 +387,8 @@ input CourseInstanceUpdateInput {
   campus: String
   department: String
   status: Boolean
+  studentName: String
+  studentReg: String
 }
 
 input CourseInstanceUpdateManyMutationInput {
@@ -388,6 +400,8 @@ input CourseInstanceUpdateManyMutationInput {
   campus: String
   department: String
   status: Boolean
+  studentName: String
+  studentReg: String
 }
 
 input CourseInstanceWhereInput {
@@ -496,6 +510,34 @@ input CourseInstanceWhereInput {
   department_not_ends_with: String
   status: Boolean
   status_not: Boolean
+  studentName: String
+  studentName_not: String
+  studentName_in: [String!]
+  studentName_not_in: [String!]
+  studentName_lt: String
+  studentName_lte: String
+  studentName_gt: String
+  studentName_gte: String
+  studentName_contains: String
+  studentName_not_contains: String
+  studentName_starts_with: String
+  studentName_not_starts_with: String
+  studentName_ends_with: String
+  studentName_not_ends_with: String
+  studentReg: String
+  studentReg_not: String
+  studentReg_in: [String!]
+  studentReg_not_in: [String!]
+  studentReg_lt: String
+  studentReg_lte: String
+  studentReg_gt: String
+  studentReg_gte: String
+  studentReg_contains: String
+  studentReg_not_contains: String
+  studentReg_starts_with: String
+  studentReg_not_starts_with: String
+  studentReg_ends_with: String
+  studentReg_not_ends_with: String
   AND: [CourseInstanceWhereInput!]
 }
 

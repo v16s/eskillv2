@@ -12,7 +12,25 @@ const styles = theme => ({
     padding: '30px'
   }
 })
+const REQUESTS = gql`
+  query Progress {
+    progress {
+      id
+      studentReg
+      studentName
+      completed
+      total
+    }
+  }
+`
 
+const REJECT = gql`
+  mutation($id: String!) {
+    rejectCourseInstance(id: $id) {
+      id
+    }
+  }
+`
 class Dashboard extends React.Component {
   state = {
     show: false
@@ -20,41 +38,47 @@ class Dashboard extends React.Component {
   close = () => {
     this.setState({ show: !this.state.show })
   }
+  delete = id => {
+    this.props.reject({ variables: { id } })
+    this.props.data.refetch()
+  }
   render () {
-    const { classes } = this.props
+    const { classes, data } = this.props
+    console.log(data.progress)
     return (
       <div className={classes.root}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
           <StudentProgressTable
             columns={[
-              { title: 'Name', field: 'name' },
+              { title: 'Register Number', field: 'studentReg' },
+              { title: 'Name', field: 'studentName' },
               {
                 title: 'Progress',
-                render: rowData => (
-                  <LinearProgress variant='determinate' value={20} />
+                render: ({ completed, total }) => (
+                  <LinearProgress
+                    variant='determinate'
+                    value={parseInt(completed / total)}
+                  />
                 )
               },
               {
                 title: '%',
-                render: rowData => '20%'
+                render: ({ completed, total }) =>
+                  `${parseInt(completed / total)}`
               },
               {
                 title: '',
                 render: rowData => (
-                  <IconButton color='secondary'>
+                  <IconButton
+                    color='secondary'
+                    onClick={e => this.delete(rowData.id)}
+                  >
                     <DeleteForever />
                   </IconButton>
                 )
               }
             ]}
-            data={[
-              {
-                name: 'student2'
-              },
-              {
-                name: 'student1'
-              }
-            ]}
+            data={data.progress || []}
           />
         </Grid>
       </div>
@@ -62,4 +86,7 @@ class Dashboard extends React.Component {
   }
 }
 
-export default withStyles(styles)(Dashboard)
+export default compose(
+  graphql(REQUESTS),
+  graphql(REJECT, { name: 'reject' })
+)(withStyles(styles)(Dashboard))

@@ -14,6 +14,7 @@ import StudentProgressTable from './StudentProgressTable'
 import ReportProblem from './ReportProblem'
 import QuestionView from './QuestionView'
 import ApprovalCard from './ApprovalCard'
+import AcceptRejectTable from './AcceptRejectTable'
 export {
   Dropdown,
   AppBar,
@@ -30,5 +31,6 @@ export {
   StudentProgressTable,
   ReportProblem,
   QuestionView,
-  ApprovalCard
+  ApprovalCard,
+  AcceptRejectTable
 }

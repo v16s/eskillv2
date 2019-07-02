@@ -31,7 +31,8 @@ const styles = theme => ({
   card: {
     maxWidth: '350px',
     width: '100%',
-    height: '100%'
+    height: '100%',
+    minHeight: 300
   },
   griditem: {
     display: 'flex',
