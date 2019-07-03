@@ -32,7 +32,7 @@ export default {
               course
             })
             shuffle(ques)
-            n = ques.length
+            n = ques.length > 100 ? 100 : ques.length
             obj = ques.slice(0, n).map(k => ({ ...k, status: 0 }))
             total = n
             completed = 0
