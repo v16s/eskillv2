@@ -79,7 +79,7 @@ class QuestionCircle extends Component {
     const centerY = height / 2
     const centerX = width / 2
     return (
-      <Query query={INSTANCE} variables={{ id }}>
+      <Query query={INSTANCE} variables={{ id }} fetchPolicy='network-only'>
         {({ data, loading }) => {
           if (loading) {
             return (
@@ -112,7 +112,7 @@ class QuestionCircle extends Component {
                         ? red[400]
                         : q.status == 2
                           ? green[400]
-                          : q.ans && q.ans != null
+                          : q.ans ===""
                             ? '#3281ff'
                             : yellow[400]
                     return (
@@ -154,9 +154,6 @@ class QuestionCircle extends Component {
                         const opacity = 1
                         const [centroidX, centroidY] = pie.path.centroid(arc)
                         const { startAngle, endAngle } = arc
-                        {
-                          /* const hasSpaceForLabel = endAngle - startAngle >= 0.1 */
-                        }
                         return (
                           <g key={`browser-${arc.data.id}-${i}`}>
                             <a
@@ -174,7 +171,7 @@ class QuestionCircle extends Component {
                                     ? red[400]
                                     : arc.data.status == 2
                                       ? green[400]
-                                      : arc.data.ans == null
+                                      : arc.data.ans === ""
                                         ? '#3281ff'
                                         : yellow[400]
                                 }

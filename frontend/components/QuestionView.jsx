@@ -83,14 +83,21 @@ class QuestionView extends Component {
     }
   }
   isCorrect = value => {
+    console.log(this.state.correct, value)
     if (value == this.state.correct) return this.props.classes.green
-    else return ''
+    else return this.props.classes.grey
   }
   componentDidMount () {
     const { client } = this.props
     if (this.state.correct == 'correct') {
       if (this.props.status == 1) {
-        client
+        this.updateWithAnswer()
+    }
+  }
+  }
+  updateWithAnswer = () => {
+    const {client} = this.props
+    client
           .query({
             query: FETCH_ANSWER,
             variables: { id: this.props.question }
@@ -100,31 +107,14 @@ class QuestionView extends Component {
             this.setState({ correct: question.ans })
           })
           .catch(err => {})
-      }
+  }
+ componentDidUpdate () {
+    const { client } = this.props
+    if (this.state.correct == 'correct') {
+      if (this.props.status == 1) {
+        this.updateWithAnswer()
     }
   }
-  shouldComponentUpdate (nextProps, nextState) {
-    const { client } = this.props
-    if (nextState.correct == 'correct') {
-      if (nextProps.status == 1) {
-        return new Promise((resolve, reject) => {
-          client
-            .query({
-              query: FETCH_ANSWER,
-              variables: { id: nextProps.question }
-            })
-            .then(({ data: { question } }) => {
-              console.log(question)
-              nextState.correct = question.ans
-              resolve(true)
-            })
-            .catch(err => {
-              resolve(true)
-            })
-        })
-      }
-    }
-    return true
   }
 
   render () {
@@ -188,8 +178,8 @@ class QuestionView extends Component {
                 />
               </div>
               <Paper
-                className={` ${classes.radiopaper} ${this.isCorrect('a')}  ${
-                  answer === 'a' ? this.getClass(status, classes) : classes.grey
+                className={` ${classes.radiopaper} ${
+                  answer === 'a' ? this.getClass(status, classes) : this.isCorrect('a')
                 }`}
               >
                 <Latex>{opt.a}</Latex>
@@ -208,8 +198,8 @@ class QuestionView extends Component {
                 />
               </div>
               <Paper
-                className={` ${classes.radiopaper} ${this.isCorrect('b')}  ${
-                  answer === 'b' ? this.getClass(status, classes) : classes.grey
+                className={` ${classes.radiopaper} ${
+                  answer === 'b' ? this.getClass(status, classes) : this.isCorrect('b')
                 }`}
               >
                 {opt.b}
@@ -228,8 +218,8 @@ class QuestionView extends Component {
                 />
               </div>
               <Paper
-                className={` ${classes.radiopaper} ${this.isCorrect('c')}  ${
-                  answer === 'c' ? this.getClass(status, classes) : classes.grey
+                className={` ${classes.radiopaper} ${
+                  answer === 'c' ? this.getClass(status, classes) : this.isCorrect('c')
                 }`}
               >
                 {opt.c}
@@ -248,8 +238,8 @@ class QuestionView extends Component {
                 />
               </div>
               <Paper
-                className={` ${classes.radiopaper} ${this.isCorrect('d')}  ${
-                  answer === 'd' ? this.getClass(status, classes) : classes.grey
+                className={` ${classes.radiopaper}  ${
+                  answer === 'd' ? this.getClass(status, classes) : this.isCorrect('d')
                 }`}
               >
                 {opt.d}

@@ -22,7 +22,7 @@ export default {
           course
         })
         shuffle(ques)
-        let n = ques.length
+        let n = ques.length > 100 ? 100 : ques.length
         let obj = ques.slice(0, n).map(k => ({ ...k, status: 0 }))
         let total = n
         let completed = 0
