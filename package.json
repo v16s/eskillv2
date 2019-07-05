@@ -52,7 +52,8 @@
     "build": "babel ./server --out-dir bin",
     "dev-server": "babel-node ./server",
     "production": "npm run build && node bin",
-    "frontend": "parcel ./frontend/index.html --open"
+    "frontend": "parcel ./frontend/index.html --open",
+    "fbuild": "parcel build ./frontend/index.html"
   },
   "devDependencies": {
     "@material-ui/core": "^4.0.2",
