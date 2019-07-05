@@ -15,9 +15,5 @@ services:
             connector: mongo
             uri: 'mongodb://localhost:27017'
     networks:
-      - prisma
-
-networks:
-  prisma:
-    driver: host
+      - host
 
