@@ -1,4 +1,4 @@
 {
-  "dburl": "mongodb+srv://root:root@testdb-6kjha.mongodb.net",
+  "dburl": "mongodb://localhost:27017",
   "dbname": "default_default"
 }
