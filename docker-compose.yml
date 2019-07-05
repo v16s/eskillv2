@@ -1,6 +1,7 @@
 version: '3'
 services:
   prisma:
+    network: host
     image: prismagraphql/prisma:1.34
     restart: always
     ports:
@@ -13,4 +14,4 @@ services:
         databases:
           default:
             connector: mongo
-            uri: 'mongodb+srv://root:root@testdb-6kjha.mongodb.net/test'
+            uri: 'mongodb://localhost:27017'
