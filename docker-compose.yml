@@ -14,6 +14,5 @@ services:
           default:
             connector: mongo
             uri: 'mongodb://localhost:27017'
-    networks:
-      - host
+    network_mode: "host"
 
