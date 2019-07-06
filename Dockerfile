@@ -1,5 +1,5 @@
 FROM node:10.16-alpine
-WORKDIR /usr/src/app
+WORKDIR /home/care/Desktop/eskillv2
 RUN yarn
 RUN yarn global add serve
 RUN yarn fbuild
