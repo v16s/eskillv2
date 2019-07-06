@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/styles'
 import { history } from '../../util'
 import Dashboard from './Dashboard'
 import Progress from './Progress'
+import Problems from '../Problems'
 export default withStyles(theme => ({
   paper: {
     display: 'flex',
@@ -75,6 +76,7 @@ export default withStyles(theme => ({
             </Tabs>
 
             <Switch>
+              <Route path='/reports' component={Problems} />
               <Route path='/progress' component={Progress} />
               <Route path='/' component={Dashboard} />
             </Switch>
