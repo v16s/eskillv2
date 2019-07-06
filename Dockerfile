@@ -1,6 +1,7 @@
 FROM node:10.16-alpine
 WORKDIR /app
 ADD ./ /app
+ENV PARCEL_WORKERS 1
 RUN yarn
 RUN yarn global add serve
 RUN yarn fbuild
