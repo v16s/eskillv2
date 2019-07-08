@@ -8,6 +8,7 @@ import { ApolloServer } from 'apollo-server-express'
 import { typeDefs, resolvers } from './graphql'
 import mongodb from 'mongodb'
 import { dburl, dbname } from './config'
+import '@babel/polyfill'
 
 const app = express()
 const port = process.env.PORT || 5000
