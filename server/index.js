@@ -7,7 +7,7 @@ import logger from 'morgan'
 import { ApolloServer } from 'apollo-server-express'
 import { typeDefs, resolvers } from './graphql'
 import mongodb from 'mongodb'
-import { dburl, dbname } from './config'
+import { dburl, dbname } from './config/db'
 import '@babel/polyfill'
 
 const app = express()

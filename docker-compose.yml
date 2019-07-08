@@ -13,6 +13,4 @@ services:
         databases:
           default:
             connector: mongo
-            uri: 'mongodb://localhost:27017'
-    network_mode: "host"
-
+            uri: 'mongodb+srv://root:root@testdb-6kjha.mongodb.net/test'
