@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Login, Register, Admin, Student, Coordinator, Faculty } from './views'
 import { Loading } from './components'
+import { endpoints } from './util'
 
 const GET_USER = gql`
   {
@@ -35,7 +36,7 @@ class Router extends React.Component {
       return <Loading color='#3281ff' />
     }
     return (
-      <BrowserRouter history={history}>
+      <BrowserRouter basename={endpoints.path} history={history}>
         {data.loggedIn == false && (
           <Switch>
             <Route path='/register' component={() => <Register />} />
