@@ -1,6 +1,6 @@
 FROM node:10.16-alpine
 WORKDIR /app
-ADD ../ /app
+ADD ./ /app
 RUN yarn
 RUN yarn build
 RUN rm -rf ./node_modules

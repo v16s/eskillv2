@@ -17,7 +17,7 @@ services:
             uri: 'mongodb//localhost:27017'
   client:
     network_mode: "host"
-    build: "./frontend"
+    build: "./client.Dockerfile"
   server:
     network_mode: "host"
-    build: "./server"
+    build: "./server.Dockerfile"
