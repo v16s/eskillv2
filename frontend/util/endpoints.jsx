@@ -1,4 +1,4 @@
 export default {
-  dev: '/eskillnew/graphql',
+  dev: 'http://care.srmuniv.ac.in/eskillnew/graphql',
   path: '/'
 }
