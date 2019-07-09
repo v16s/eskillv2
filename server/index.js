@@ -26,13 +26,13 @@ async function init (callback) {
         context: ({ req }) => ({
           user: req.user,
           bucket: new mongodb.GridFSBucket(db)
-        })
+        }),
+	introspection: true,
+	playground: true
       })
 
-      app.use(cors())
+      
       app.use(logger('tiny'))
-      app.use(bodyParser.json())
-      app.use(bodyParser.urlencoded({ extended: 'false' }))
       app.use('/graphql', (req, res, next) => {
         passport.authenticate('auth', { session: false }, (err, user) => {
           req.user = user
@@ -40,7 +40,8 @@ async function init (callback) {
         })(req, res, next)
       })
       await apollo.applyMiddleware({
-        app
+        app,
+	path: '/graphql'
       })
       let server = http.createServer(app)
 
