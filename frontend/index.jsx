@@ -14,7 +14,6 @@ import { createMuiTheme, withStyles } from '@material-ui/core/styles'
 import { lightBlue } from '@material-ui/core/colors'
 import '@babel/polyfill'
 
-
 const cache = new InMemoryCache()
 
 const httpLink = createUploadLink({
@@ -94,7 +93,6 @@ let Index = ({ classes }) => (
 )
 Index = withStyles(styles)(Index)
 let ThemeWrapper = ({ data }) => {
-  console.log(data.dark)
   let theme = createMuiTheme({
     palette: {
       type: data.dark ? 'dark' : 'light',
