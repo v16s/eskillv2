@@ -123,7 +123,6 @@ function PrimarySearchAppBar ({ dark, changeDark }) {
         <ListItem
           button
           onClick={e => {
-            console.log(dark)
             changeDark({ variables: { dark: !dark.dark } })
           }}
         >
