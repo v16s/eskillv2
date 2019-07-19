@@ -12,12 +12,12 @@ import { typeDefs, resolvers } from './types'
 import { ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme, withStyles } from '@material-ui/core/styles'
 import { lightBlue } from '@material-ui/core/colors'
-import '@babel/polyfill'
+let production = process.env.NODE_ENV == 'production'
 
 const cache = new InMemoryCache()
 
 const httpLink = createUploadLink({
-  uri: endpoints.dev
+  uri: production ? endpoints.production : endpoints.dev
 })
 const GET_DARK = gql`
   {
