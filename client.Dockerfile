@@ -5,7 +5,6 @@ ENV PARCEL_WORKERS 1
 RUN yarn
 RUN yarn global add serve
 RUN yarn fbuild
-RUN rm -rf ./node_modules
 ENV NODE_ENV production
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN yarn install --production && mv node_modules ../

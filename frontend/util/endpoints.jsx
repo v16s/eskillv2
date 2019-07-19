@@ -1,4 +1,5 @@
 export default {
-  dev: 'http://care.srmuniv.ac.in/eskillnew/graphql',
-  path: '/'
+  production: 'http://care.srmuniv.ac.in/eskillnew/graphql',
+  path: '/',
+  dev: 'http://localhost:5000/graphql'
 }

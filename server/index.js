@@ -8,7 +8,6 @@ import { ApolloServer } from 'apollo-server-express'
 import { typeDefs, resolvers } from './graphql'
 import mongodb from 'mongodb'
 import { dburl, dbname } from './config/db'
-import '@babel/polyfill'
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -27,11 +26,9 @@ async function init (callback) {
           user: req.user,
           bucket: new mongodb.GridFSBucket(db)
         }),
-	introspection: true,
-	playground: true
+        introspection: true
       })
 
-      
       app.use(logger('tiny'))
       app.use('/graphql', (req, res, next) => {
         passport.authenticate('auth', { session: false }, (err, user) => {
@@ -41,7 +38,7 @@ async function init (callback) {
       })
       await apollo.applyMiddleware({
         app,
-	path: '/graphql'
+        path: '/graphql'
       })
       let server = http.createServer(app)
 

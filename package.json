@@ -53,7 +53,8 @@
     "dev-server": "babel-node ./server",
     "production": "npm run build && node bin",
     "frontend": "parcel ./frontend/index.html --open",
-    "fbuild": "parcel build ./frontend/index.html --public-url /eskillnew"
+    "fbuild": "parcel build ./frontend/index.html --public-url /eskillnew",
+    "prisma": "docker-compose up -d prisma_dev"
   },
   "devDependencies": {
     "@material-ui/core": "^4.0.2",
