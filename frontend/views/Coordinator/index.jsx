@@ -3,12 +3,12 @@ import { Switch, Route } from 'react-router-dom'
 import Questions from './Questions'
 import { Tabs, Tab } from '@material-ui/core'
 import { AppBar } from '../../components'
-import { history } from '../../util'
+import { withRouter } from 'react-router-dom'
 export default class Coordinator extends React.Component {
   constructor (props) {
     super(props)
     let location = 0
-    switch (history.location.pathname) {
+    switch (props.history.location.pathname) {
       case '/reports':
         location = 1
         break
@@ -20,10 +20,10 @@ export default class Coordinator extends React.Component {
   handleChange = (e, value) => {
     switch (value) {
       case 0:
-        history.push('/')
+        this.props.history.push('/')
         break
       case 1:
-        history.push('/reports')
+        this.props.history.push('/reports')
         break
     }
     this.setState({ value })

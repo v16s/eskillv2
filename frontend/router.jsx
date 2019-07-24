@@ -1,6 +1,5 @@
 import React from 'react'
-import { Router as BrowserRouter, Route, Switch } from 'react-router-dom'
-import { history } from './util'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Login, Register, Admin, Student, Coordinator, Faculty } from './views'
@@ -36,7 +35,9 @@ class Router extends React.Component {
       return <Loading color='#3281ff' />
     }
     return (
-      <BrowserRouter basename={endpoints.path} history={history}>
+      <BrowserRouter
+        basename={process.env.NODE_ENV == 'production' && endpoints.path}
+      >
         {data.loggedIn == false && (
           <Switch>
             <Route path='/register' component={() => <Register />} />

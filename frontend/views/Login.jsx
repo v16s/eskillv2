@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 import gql from 'graphql-tag'
 import { graphql, withApollo, compose } from 'react-apollo'
-import { history } from '../util'
+import { withRouter } from 'react-router-dom'
 import { Tonality } from '@material-ui/icons'
 
 const LOGIN = gql`
@@ -102,7 +102,7 @@ class Login extends React.Component {
       })
   }
   render () {
-    const { classes, dark, client, registerPermit } = this.props
+    const { classes, dark, client, registerPermit, history } = this.props
     const { username, password } = this.state
     return (
       <Paper className={classes.paper}>
@@ -170,7 +170,7 @@ class Login extends React.Component {
     )
   }
 }
-Login = withStyles(styles)(Login)
+Login = withStyles(styles)(withRouter(Login))
 export default compose(
   withApollo,
   graphql(LOGIN),
