@@ -24,7 +24,7 @@ import {
   Menu as MenuIcon
 } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-import { history } from '../util'
+import { withRouter } from 'react-router-dom'
 const GET_DARK = gql`
   {
     dark @client
@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.main
   }
 }))
-function PrimarySearchAppBar ({ dark, changeDark }) {
+function PrimarySearchAppBar ({ dark, changeDark, history }) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [menuv, setMenu] = React.useState(false)
@@ -223,4 +223,4 @@ function PrimarySearchAppBar ({ dark, changeDark }) {
 export default compose(
   graphql(GET_DARK, { name: 'dark' }),
   graphql(CHANGE_DARK, { name: 'changeDark' })
-)(PrimarySearchAppBar)
+)(withRouter(PrimarySearchAppBar))

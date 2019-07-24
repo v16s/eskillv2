@@ -9,7 +9,7 @@ import {
   Tab,
   IconButton
 } from '@material-ui/core'
-import { history } from '../util'
+import { withRouter } from 'react-router-dom'
 import { Dropdown } from '../components'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -194,7 +194,7 @@ class Register extends React.Component {
     }
   }
   render () {
-    const { classes, dark } = this.props
+    const { classes, dark, history } = this.props
     const {
       campus,
       tab,
@@ -214,11 +214,13 @@ class Register extends React.Component {
     departments = departments
       ? departments.map(k => ({ label: k.name, value: k.id }))
       : []
-  let regs=false, regf=false
+    let regs = false
+
+    let regf = false
     if (this.props.registerPermit.global) {
       regs = this.props.registerPermit.global.regs
-      regf =  this.props.registerPermit.global.regf
-       }
+      regf = this.props.registerPermit.global.regf
+    }
     console.log(this.props.registerPermit)
     return (
       <div className={classes.root}>
@@ -251,7 +253,7 @@ class Register extends React.Component {
               {regf == true && <Tab value={1} label='Faculty' />}
             </Tabs>
           )}
-          {(regs == true || regf == true) ? (
+          {regs == true || regf == true ? (
             <form onSubmit={this.onSubmit}>
               <div className={classes.input}>
                 <TextField
@@ -331,13 +333,19 @@ class Register extends React.Component {
               </Button>
             </form>
           ) : (
-              <Typography color='primary'
+            <Typography
+              color='primary'
               variant='p'
-                className={classes.heading}
-              style={{padding: '20px 0',justifyContent: 'center', width: '100%', display: 'flex'}}
-              >
-                Registrations are currently closed
-              </Typography>
+              className={classes.heading}
+              style={{
+                padding: '20px 0',
+                justifyContent: 'center',
+                width: '100%',
+                display: 'flex'
+              }}
+            >
+              Registrations are currently closed
+            </Typography>
           )}
         </Paper>
         <Button
@@ -354,7 +362,7 @@ class Register extends React.Component {
     )
   }
 }
-Register = withStyles(styles)(Register)
+Register = withStyles(styles)(withRouter(Register))
 export default compose(
   graphql(GET_CAMPUSES),
   graphql(REGISTER),

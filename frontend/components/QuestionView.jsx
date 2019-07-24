@@ -16,7 +16,7 @@ import {
   KeyboardArrowRight,
   KeyboardArrowUp as ArrowBack
 } from '@material-ui/icons'
-import { history } from '../util'
+import { withRouter } from 'react-router-dom'
 import Latex from 'react-latex'
 
 const OPTION_UPDATE = gql`
@@ -92,29 +92,29 @@ class QuestionView extends Component {
     if (this.state.correct == 'correct') {
       if (this.props.status == 1) {
         this.updateWithAnswer()
+      }
     }
   }
-  }
   updateWithAnswer = () => {
-    const {client} = this.props
+    const { client } = this.props
     client
-          .query({
-            query: FETCH_ANSWER,
-            variables: { id: this.props.question }
-          })
-          .then(({ data: { question } }) => {
-            console.log(question)
-            this.setState({ correct: question.ans })
-          })
-          .catch(err => {})
+      .query({
+        query: FETCH_ANSWER,
+        variables: { id: this.props.question }
+      })
+      .then(({ data: { question } }) => {
+        console.log(question)
+        this.setState({ correct: question.ans })
+      })
+      .catch(err => {})
   }
- componentDidUpdate () {
+  componentDidUpdate () {
     const { client } = this.props
     if (this.state.correct == 'correct') {
       if (this.props.status == 1) {
         this.updateWithAnswer()
+      }
     }
-  }
   }
 
   render () {
@@ -130,7 +130,8 @@ class QuestionView extends Component {
       questions,
       last,
       position,
-      opt
+      opt,
+      history
     } = this.props
     const disabled = status != 0
     const { answer } = this.state
@@ -179,7 +180,9 @@ class QuestionView extends Component {
               </div>
               <Paper
                 className={` ${classes.radiopaper} ${
-                  answer === 'a' ? this.getClass(status, classes) : this.isCorrect('a')
+                  answer === 'a'
+                    ? this.getClass(status, classes)
+                    : this.isCorrect('a')
                 }`}
               >
                 <Latex>{opt.a}</Latex>
@@ -199,7 +202,9 @@ class QuestionView extends Component {
               </div>
               <Paper
                 className={` ${classes.radiopaper} ${
-                  answer === 'b' ? this.getClass(status, classes) : this.isCorrect('b')
+                  answer === 'b'
+                    ? this.getClass(status, classes)
+                    : this.isCorrect('b')
                 }`}
               >
                 {opt.b}
@@ -219,7 +224,9 @@ class QuestionView extends Component {
               </div>
               <Paper
                 className={` ${classes.radiopaper} ${
-                  answer === 'c' ? this.getClass(status, classes) : this.isCorrect('c')
+                  answer === 'c'
+                    ? this.getClass(status, classes)
+                    : this.isCorrect('c')
                 }`}
               >
                 {opt.c}
@@ -239,7 +246,9 @@ class QuestionView extends Component {
               </div>
               <Paper
                 className={` ${classes.radiopaper}  ${
-                  answer === 'd' ? this.getClass(status, classes) : this.isCorrect('d')
+                  answer === 'd'
+                    ? this.getClass(status, classes)
+                    : this.isCorrect('d')
                 }`}
               >
                 {opt.d}
@@ -305,4 +314,4 @@ export default compose(
   withApollo,
   graphql(VERIFY_QUESTION, { name: 'check' }),
   graphql(OPTION_UPDATE, { name: 'updateAnswer' })
-)(QuestionView)
+)(withRouter(QuestionView))
