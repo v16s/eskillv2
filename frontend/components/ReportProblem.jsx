@@ -5,9 +5,17 @@ import { Dropdown } from './index'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
-// const CREATE_PROBLEM = gql`
-// mutation CreateProblem()
-// `
+const CREATE_PROBLEM = gql`
+  mutation CreateProblem(
+    $queID: String!
+    $course: String!
+    $description: String!
+  ) {
+    createProblem(queID: $queID, course: $course, description: $description) {
+      id
+    }
+  }
+`
 
 const styles = theme => ({
   paper: {
@@ -32,17 +40,41 @@ class ReportProblem extends Component {
     problem: ''
   }
   onDropdownChange = option => {
-    this.setState({ option })
+    let value = option.label
+    if (option.label == 'Custom') {
+      value = ''
+    }
+    this.setState({ option, problem: value })
   }
   onInputChange = ({ target: { value } }) => {
     this.setState({ problem: value })
+  }
+  submit = () => {
+    const { course, question } = this.props
+    console.log(this.state.problem)
+    if (this.state.problem != '') {
+      this.props
+        .mutate({
+          variables: {
+            queID: question,
+            course,
+            description: this.state.problem
+          }
+        })
+        .then(data => {
+          this.props.close()
+        })
+        .catch(err => {
+          // write a handler here
+        })
+    }
   }
   render () {
     const { classes, question, course } = this.props
     const { option } = this.state
     console.log(question, course)
     return (
-      <Paper className={classes.paper}>
+      <Paper tabIndex={-1} className={classes.paper}>
         <Dropdown
           options={[
             { label: 'Question Description is not defined', value: 1 },
@@ -79,6 +111,7 @@ class ReportProblem extends Component {
               variant='contained'
               color='primary'
               className={classes.button}
+              onClick={this.submit}
             >
               Submit
             </Button>
@@ -89,4 +122,4 @@ class ReportProblem extends Component {
   }
 }
 ReportProblem = withStyles(styles)(ReportProblem)
-export default ReportProblem
+export default graphql(CREATE_PROBLEM)(ReportProblem)

@@ -69,15 +69,26 @@ export default {
       try {
         let studID = user.id
         let { campus, department } = user
-        return await prisma.createProblem({
-          queID,
-          studID,
-          description,
-          status: 0,
-          course,
-          campus,
-          department
+        let existing = await prisma.problems({
+          where: {
+            queID,
+            studID,
+            status: 0
+          }
         })
+        if (existing.length > 0) {
+          throw new ValidationError('Unresolved problems already exist')
+        } else {
+          return await prisma.createProblem({
+            queID,
+            studID,
+            description,
+            status: 0,
+            course,
+            campus,
+            department
+          })
+        }
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
