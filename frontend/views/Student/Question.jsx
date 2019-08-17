@@ -53,8 +53,8 @@ const styles = ({ palette }) => ({
   },
   green: {
     backgroundColor: green[400],
-    '&$checked': {
-      '&$disabled': {
+    '&:checked': {
+      '&:disabled': {
         color: green[400]
       },
       color: green[400]
@@ -65,8 +65,8 @@ const styles = ({ palette }) => ({
   },
   red: {
     backgroundColor: red[400],
-    '&$checked': {
-      '&$disabled': {
+    '&:checked': {
+      '&:disabled': {
         color: red[400]
       },
       color: red[400]
@@ -133,7 +133,7 @@ class Question extends Component {
               d => d.id == match.params.question
             )
             const current = data.instance.questions[position]
-            console.log(current)
+
             const last = data.instance.questions.length - 1
             return (
               <QuestionView
@@ -167,7 +167,11 @@ class Question extends Component {
           open={this.state.open}
           onClose={this.close}
         >
-          <ReportProblem close={this.close} />
+          <ReportProblem
+            close={this.close}
+            question={match.params.question}
+            course={match.params.name}
+          />
         </Modal>
       </div>
     )

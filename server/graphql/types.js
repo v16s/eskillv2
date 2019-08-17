@@ -15,6 +15,7 @@ export default gql`
     instance(id: String!): CourseInstance
     progress: [CourseInstance]
     acceptReject: [CourseInstance]
+    problems: [Problem]
   }
   input CourseWhereInput {
     branch: String
@@ -170,7 +171,6 @@ export default gql`
     createProblem(
       queID: String!
       description: String!
-      status: Int
       course: String!
     ): Problem
     updateQuestionInstance(

@@ -124,5 +124,8 @@ export default {
     } else {
       throw new AuthenticationError()
     }
+  },
+  problems: async () => {
+    return await prisma.problems()
   }
 }

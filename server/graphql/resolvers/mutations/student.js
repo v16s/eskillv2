@@ -64,11 +64,7 @@ export default {
     }
   },
 
-  createProblem: async (
-    _parent,
-    { queID, description, status, course },
-    { user }
-  ) => {
+  createProblem: async (_parent, { queID, description, course }, { user }) => {
     if (user.level == 4) {
       try {
         let studID = user.id
@@ -77,7 +73,7 @@ export default {
           queID,
           studID,
           description,
-          status,
+          status: 0,
           course,
           campus,
           department
