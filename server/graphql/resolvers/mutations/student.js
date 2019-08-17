@@ -64,7 +64,7 @@ export default {
     }
   },
 
-  createReport: async (
+  createProblem: async (
     _parent,
     { queID, description, status, course },
     { user }
@@ -73,7 +73,7 @@ export default {
       try {
         let studID = user.id
         let { campus, department } = user
-        return await prisma.createReport({
+        return await prisma.createProblem({
           queID,
           studID,
           description,

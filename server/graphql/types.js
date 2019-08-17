@@ -42,9 +42,9 @@ export default gql`
     email: String!
     level: Int!
     jwt: String
-    reports: [Report]
+    problems: [Problem]
   }
-  type Report {
+  type Problem {
     id: ID!
     queID: String!
     studID: String!
@@ -167,12 +167,12 @@ export default gql`
     ): Question
     requestCourse(course: String!, facultyID: String): CourseInstance
     rejectCourseInstance(id: String!): CourseInstance
-    createReport(
+    createProblem(
       queID: String!
       description: String!
       status: Int
       course: String!
-    ): Report
+    ): Problem
     updateQuestionInstance(
       question: String!
       cid: String!

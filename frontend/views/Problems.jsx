@@ -55,6 +55,7 @@ class Problems extends Component {
           { title: 'C Programming', desc: 'problem desc here' }
         ].map((d, idx) => (
           <ExpansionPanel
+            key={idx}
             className={classes.expansionPanel}
             expanded={expanded === idx}
             onChange={e => this.handleChange(idx)}

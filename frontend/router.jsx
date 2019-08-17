@@ -36,7 +36,7 @@ class Router extends React.Component {
     }
     return (
       <BrowserRouter
-        basename={process.env.NODE_ENV == 'production' && endpoints.path}
+        basename={process.env.NODE_ENV == 'production' ? endpoints.path : ''}
       >
         {data.loggedIn == false && (
           <Switch>

@@ -11,7 +11,6 @@ import Router from './router'
 import { typeDefs, resolvers } from './types'
 import { ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme, withStyles } from '@material-ui/core/styles'
-import { lightBlue } from '@material-ui/core/colors'
 let production = process.env.NODE_ENV == 'production'
 
 const cache = new InMemoryCache()
@@ -78,7 +77,7 @@ const styles = theme => ({
   }
 })
 class Root extends React.Component {
-  render () {
+  render() {
     return (
       <ApolloProvider client={client}>
         <ThemeWrapper />

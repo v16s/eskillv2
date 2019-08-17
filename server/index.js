@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000
 async function init (callback) {
   mongodb.MongoClient.connect(
     dburl,
-    { useNewUrlParser: true },
+    { useNewUrlParser: true, useUnifiedTopology: true },
     async (error, client) => {
       const db = client.db(dbname)
 
