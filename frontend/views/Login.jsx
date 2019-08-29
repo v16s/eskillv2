@@ -105,7 +105,7 @@ class Login extends React.Component {
     const { classes, dark, client, registerPermit, history } = this.props
     const { username, password } = this.state
     return (
-      <Paper className={classes.paper}>
+      <div className={classes.paper}>
         <div className={classes.titleBar}>
           <Typography color='primary' variant='h5' className={classes.heading}>
             eSkill
@@ -166,7 +166,7 @@ class Login extends React.Component {
               Register
           </Button>
         )}
-      </Paper>
+      </div>
     )
   }
 }

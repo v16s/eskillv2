@@ -30,6 +30,7 @@ const styles = theme => ({
     margin: '15px 0'
   },
   card: {
+    height: '100%',
     maxWidth: '350px'
   },
   griditem: {

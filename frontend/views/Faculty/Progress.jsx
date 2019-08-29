@@ -44,7 +44,6 @@ class Dashboard extends React.Component {
   }
   render () {
     const { classes, data } = this.props
-    console.log(data.progress)
     return (
       <div className={classes.root}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
@@ -54,17 +53,25 @@ class Dashboard extends React.Component {
               { title: 'Name', field: 'studentName' },
               {
                 title: 'Progress',
-                render: ({ completed, total }) => (
-                  <LinearProgress
-                    variant='determinate'
-                    value={parseInt(completed / total)}
-                  />
-                )
+                render: args => {
+                  const { completed, total } = args
+                  console.log(completed / total)
+                  return (
+                    <LinearProgress
+                      variant='determinate'
+                      value={parseInt(
+                        (parseFloat(completed) * 100.0) / parseFloat(total)
+                      )}
+                    />
+                  )
+                }
               },
               {
                 title: '%',
                 render: ({ completed, total }) =>
-                  `${parseInt(completed / total)}`
+                  `${parseInt(
+                    (parseFloat(completed) * 100.0) / parseFloat(total)
+                  )}`
               },
               {
                 title: '',

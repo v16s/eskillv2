@@ -9,7 +9,7 @@ type User {
   level: Int!
   id: ID! @id
 }
-type Report {
+type Problem {
   id: ID! @id
   queID: String!
   studID: String!

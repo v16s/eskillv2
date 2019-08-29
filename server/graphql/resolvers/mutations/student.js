@@ -64,24 +64,31 @@ export default {
     }
   },
 
-  createReport: async (
-    _parent,
-    { queID, description, status, course },
-    { user }
-  ) => {
+  createProblem: async (_parent, { queID, description, course }, { user }) => {
     if (user.level == 4) {
       try {
         let studID = user.id
         let { campus, department } = user
-        return await prisma.createReport({
-          queID,
-          studID,
-          description,
-          status,
-          course,
-          campus,
-          department
+        let existing = await prisma.problems({
+          where: {
+            queID,
+            studID,
+            status: 0
+          }
         })
+        if (existing.length > 0) {
+          throw new ValidationError('Unresolved problems already exist')
+        } else {
+          return await prisma.createProblem({
+            queID,
+            studID,
+            description,
+            status: 0,
+            course,
+            campus,
+            department
+          })
+        }
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())

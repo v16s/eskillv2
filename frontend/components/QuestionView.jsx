@@ -83,7 +83,6 @@ class QuestionView extends Component {
     }
   }
   isCorrect = value => {
-    console.log(this.state.correct, value)
     if (value == this.state.correct) return this.props.classes.green
     else return this.props.classes.grey
   }
@@ -103,7 +102,6 @@ class QuestionView extends Component {
         variables: { id: this.props.question }
       })
       .then(({ data: { question } }) => {
-        console.log(question)
         this.setState({ correct: question.ans })
       })
       .catch(err => {})
@@ -172,7 +170,6 @@ class QuestionView extends Component {
                   disabled={disabled}
                   color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
-                  className={classes.radio}
                   checked={answer === 'a'}
                   onChange={this.handleRadioChange}
                   value='a'
@@ -194,7 +191,6 @@ class QuestionView extends Component {
                   disabled={disabled}
                   color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
-                  className={classes.radio}
                   checked={answer === 'b'}
                   onChange={this.handleRadioChange}
                   value='b'
@@ -216,7 +212,6 @@ class QuestionView extends Component {
                   disabled={disabled}
                   color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
-                  className={classes.radio}
                   checked={answer === 'c'}
                   onChange={this.handleRadioChange}
                   value='c'
@@ -238,7 +233,6 @@ class QuestionView extends Component {
                   disabled={disabled}
                   color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
-                  className={classes.radio}
                   checked={answer === 'd'}
                   onChange={this.handleRadioChange}
                   value='d'
