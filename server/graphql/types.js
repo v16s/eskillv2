@@ -54,6 +54,7 @@ export default gql`
     course: String!
     campus: String
     department: String
+    facultyID: String!
   }
   type CourseInstance {
     id: ID!

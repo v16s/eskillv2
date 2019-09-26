@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { compose, graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import { withStyles } from '@material-ui/styles'
 import {
   ExpansionPanel,
@@ -11,6 +12,16 @@ import {
   Divider
 } from '@material-ui/core'
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
+const PROBLEMS = gql`
+  {
+    problems {
+      description
+      studID
+      status
+      queID
+    }
+  }
+`
 const styles = theme => ({
   root: {
     color: theme.palette.text.primary,
@@ -44,55 +55,52 @@ class Problems extends Component {
     this.setState({ expanded })
   }
   render () {
-    const { classes } = this.props
+    const { classes, data } = this.props
     const { expanded } = this.state
+    const { loading, problems } = data
     return (
       <div className={classes.root}>
-        {[
-          { title: 'C Programming', desc: 'problem desc here' },
-          { title: 'C Programming', desc: 'problem desc here' },
-          { title: 'C Programming', desc: 'problem desc here' },
-          { title: 'C Programming', desc: 'problem desc here' }
-        ].map((d, idx) => (
-          <ExpansionPanel
-            key={idx}
-            className={classes.expansionPanel}
-            expanded={expanded === idx}
-            onChange={e => this.handleChange(idx)}
-          >
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls='panel1bh-content'
-              id='panel1bh-header'
+        {!loading &&
+          problems.map((d, idx) => (
+            <ExpansionPanel
+              key={idx}
+              className={classes.expansionPanel}
+              expanded={expanded === idx}
+              onChange={e => this.handleChange(idx)}
             >
-              <Typography className={classes.heading}>{d.title}</Typography>
-              <Typography className={classes.secondaryHeading}>
-                {d.desc.length < 20
-                  ? d.desc
-                  : expanded === idx
-                    ? ''
-                    : `${d.desc.slice(0, 20)}...`}
-              </Typography>
-            </ExpansionPanelSummary>
-            {d.desc.length > 20 && (
-              <ExpansionPanelDetails>
-                <Typography>{d.desc}</Typography>
-              </ExpansionPanelDetails>
-            )}
-            <Divider />
-            <ExpansionPanelActions>
-              <Button size='small' color='secondary' variant='contained'>
-                Reject
-              </Button>
-              <Button size='small' color='primary' variant='contained'>
-                Resolve
-              </Button>
-            </ExpansionPanelActions>
-          </ExpansionPanel>
-        ))}
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls='panel1bh-content'
+                id='panel1bh-header'
+              >
+                <Typography className={classes.heading}>{d.status}</Typography>
+                <Typography className={classes.secondaryHeading}>
+                  {d.description.length < 20
+                    ? d.description
+                    : expanded === idx
+                      ? ''
+                      : `${d.description.slice(0, 20)}...`}
+                </Typography>
+              </ExpansionPanelSummary>
+              {d.description.length > 20 && (
+                <ExpansionPanelDetails>
+                  <Typography>{d.description}</Typography>
+                </ExpansionPanelDetails>
+              )}
+              <Divider />
+              <ExpansionPanelActions>
+                <Button size='small' color='secondary' variant='contained'>
+                  Reject
+                </Button>
+                <Button size='small' color='primary' variant='contained'>
+                  Resolve
+                </Button>
+              </ExpansionPanelActions>
+            </ExpansionPanel>
+          ))}
       </div>
     )
   }
 }
-
+Problems = graphql(PROBLEMS)(Problems)
 export default withStyles(styles)(Problems)

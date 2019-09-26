@@ -2,7 +2,7 @@ import { prisma } from 'prisma'
 import bcrypt from 'bcrypt-nodejs'
 import { promisify } from 'util'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
-import { async } from 'q'
+
 export default {
   addQuestion: async (
     _parent,

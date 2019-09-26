@@ -125,7 +125,13 @@ export default {
       throw new AuthenticationError()
     }
   },
-  problems: async () => {
+  problems: async (_, _arg, { user }) => {
+    if (user.level == 3) {
+      console.log(user.id)
+      let problems = await prisma.problems({ where: { facultyID: user.id } })
+
+      return problems
+    }
     return await prisma.problems()
   }
 }

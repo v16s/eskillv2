@@ -6,6 +6,7 @@ import { ApolloServer } from 'apollo-server-express'
 import { typeDefs, resolvers } from './graphql'
 import mongodb from 'mongodb'
 import { dburl, dbname } from './config/db'
+import cors from 'cors'
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -26,7 +27,7 @@ async function init (callback) {
         }),
         introspection: true
       })
-
+      app.use(cors())
       app.use(logger('tiny'))
       app.use('/graphql', (req, res, next) => {
         passport.authenticate('auth', { session: false }, (err, user) => {

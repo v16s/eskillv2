@@ -1,8 +1,5 @@
 import { prisma } from 'prisma'
-import bcrypt from 'bcrypt-nodejs'
-import { promisify } from 'util'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
-import { async } from 'q'
 let question = `
 query Questions($course: String!) {
     questions(where: {course: $course}){
@@ -68,6 +65,7 @@ export default {
     if (user.level == 4) {
       try {
         let studID = user.id
+        let { facultyID } = await prisma.courseInstance({ id: course })
         let { campus, department } = user
         let existing = await prisma.problems({
           where: {
@@ -86,7 +84,8 @@ export default {
             status: 0,
             course,
             campus,
-            department
+            department,
+            facultyID
           })
         }
       } catch (e) {
