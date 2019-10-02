@@ -402,7 +402,9 @@ export type CourseOrderByInput =
   | "name_ASC"
   | "name_DESC"
   | "automated_ASC"
-  | "automated_DESC";
+  | "automated_DESC"
+  | "campus_ASC"
+  | "campus_DESC";
 
 export type CourseInstanceOrderByInput =
   | "id_ASC"
@@ -821,7 +823,6 @@ export interface LinkScalarWhereInput {
 
 export type CourseWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
-  name?: Maybe<String>;
 }>;
 
 export type QuestionWhereUniqueInput = AtLeastOne<{
@@ -887,6 +888,20 @@ export interface CourseWhereInput {
   name_not_ends_with?: Maybe<String>;
   automated?: Maybe<Boolean>;
   automated_not?: Maybe<Boolean>;
+  campus?: Maybe<String>;
+  campus_not?: Maybe<String>;
+  campus_in?: Maybe<String[] | String>;
+  campus_not_in?: Maybe<String[] | String>;
+  campus_lt?: Maybe<String>;
+  campus_lte?: Maybe<String>;
+  campus_gt?: Maybe<String>;
+  campus_gte?: Maybe<String>;
+  campus_contains?: Maybe<String>;
+  campus_not_contains?: Maybe<String>;
+  campus_starts_with?: Maybe<String>;
+  campus_not_starts_with?: Maybe<String>;
+  campus_ends_with?: Maybe<String>;
+  campus_not_ends_with?: Maybe<String>;
   AND?: Maybe<CourseWhereInput[] | CourseWhereInput>;
 }
 
@@ -1370,6 +1385,7 @@ export interface CourseUpdateManyMutationInput {
   coordinator_id?: Maybe<String>;
   name?: Maybe<String>;
   automated?: Maybe<Boolean>;
+  campus?: Maybe<String>;
 }
 
 export interface GlobalUpdateInput {
@@ -1383,6 +1399,7 @@ export interface CourseUpdateInput {
   coordinator_id?: Maybe<String>;
   name?: Maybe<String>;
   automated?: Maybe<Boolean>;
+  campus?: Maybe<String>;
 }
 
 export interface BranchSubscriptionWhereInput {
@@ -1569,6 +1586,7 @@ export interface CourseCreateInput {
   coordinator_id: String;
   name: String;
   automated?: Maybe<Boolean>;
+  campus: String;
 }
 
 export interface CourseSubscriptionWhereInput {
@@ -1915,6 +1933,7 @@ export interface Course {
   coordinator_id: String;
   name: String;
   automated?: Boolean;
+  campus: String;
 }
 
 export interface CoursePromise extends Promise<Course>, Fragmentable {
@@ -1923,6 +1942,7 @@ export interface CoursePromise extends Promise<Course>, Fragmentable {
   coordinator_id: () => Promise<String>;
   name: () => Promise<String>;
   automated: () => Promise<Boolean>;
+  campus: () => Promise<String>;
 }
 
 export interface CourseSubscription
@@ -1933,6 +1953,7 @@ export interface CourseSubscription
   coordinator_id: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   automated: () => Promise<AsyncIterator<Boolean>>;
+  campus: () => Promise<AsyncIterator<String>>;
 }
 
 export interface CourseNullablePromise
@@ -1943,6 +1964,7 @@ export interface CourseNullablePromise
   coordinator_id: () => Promise<String>;
   name: () => Promise<String>;
   automated: () => Promise<Boolean>;
+  campus: () => Promise<String>;
 }
 
 export interface Branch {
@@ -2588,6 +2610,7 @@ export interface CoursePreviousValues {
   coordinator_id: String;
   name: String;
   automated?: Boolean;
+  campus: String;
 }
 
 export interface CoursePreviousValuesPromise
@@ -2598,6 +2621,7 @@ export interface CoursePreviousValuesPromise
   coordinator_id: () => Promise<String>;
   name: () => Promise<String>;
   automated: () => Promise<Boolean>;
+  campus: () => Promise<String>;
 }
 
 export interface CoursePreviousValuesSubscription
@@ -2608,6 +2632,7 @@ export interface CoursePreviousValuesSubscription
   coordinator_id: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   automated: () => Promise<AsyncIterator<Boolean>>;
+  campus: () => Promise<AsyncIterator<String>>;
 }
 
 export interface User {

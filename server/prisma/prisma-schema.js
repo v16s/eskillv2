@@ -260,6 +260,7 @@ type Course {
   coordinator_id: String!
   name: String!
   automated: Boolean
+  campus: String!
 }
 
 type CourseConnection {
@@ -274,6 +275,7 @@ input CourseCreateInput {
   coordinator_id: String!
   name: String!
   automated: Boolean
+  campus: String!
 }
 
 type CourseEdge {
@@ -556,6 +558,8 @@ enum CourseOrderByInput {
   name_DESC
   automated_ASC
   automated_DESC
+  campus_ASC
+  campus_DESC
 }
 
 type CoursePreviousValues {
@@ -564,6 +568,7 @@ type CoursePreviousValues {
   coordinator_id: String!
   name: String!
   automated: Boolean
+  campus: String!
 }
 
 type CourseSubscriptionPayload {
@@ -587,6 +592,7 @@ input CourseUpdateInput {
   coordinator_id: String
   name: String
   automated: Boolean
+  campus: String
 }
 
 input CourseUpdateManyMutationInput {
@@ -594,6 +600,7 @@ input CourseUpdateManyMutationInput {
   coordinator_id: String
   name: String
   automated: Boolean
+  campus: String
 }
 
 input CourseWhereInput {
@@ -655,12 +662,25 @@ input CourseWhereInput {
   name_not_ends_with: String
   automated: Boolean
   automated_not: Boolean
+  campus: String
+  campus_not: String
+  campus_in: [String!]
+  campus_not_in: [String!]
+  campus_lt: String
+  campus_lte: String
+  campus_gt: String
+  campus_gte: String
+  campus_contains: String
+  campus_not_contains: String
+  campus_starts_with: String
+  campus_not_starts_with: String
+  campus_ends_with: String
+  campus_not_ends_with: String
   AND: [CourseWhereInput!]
 }
 
 input CourseWhereUniqueInput {
   id: ID
-  name: String
 }
 
 scalar DateTime

@@ -105,20 +105,22 @@ export default class DashboardTable extends React.Component {
   }
   add = (newData, table) => {
     return new Promise((resolve, reject) => {
-      this.props
-        .addOutside({
-          variables: {
-            name: newData.name,
-            branch: this.props.isCourse && newData.branch
-          }
-        })
-        .then(data => {
-          this.props.data.refetch()
-          resolve()
-        })
-        .catch(err => {
-          reject()
-        })
+      this.props.addOutside
+        ? this.props
+          .addOutside({
+            variables: {
+              name: newData.name,
+              branch: this.props.isCourse && newData.branch
+            }
+          })
+          .then(data => {
+            this.props.data.refetch()
+            resolve()
+          })
+          .catch(err => {
+            reject()
+          })
+        : reject()
       // newstate[table].data.push(newData)
       // this.setState(newstate)
     })
@@ -149,22 +151,24 @@ export default class DashboardTable extends React.Component {
   }
   delete = (oldData, table) => {
     return new Promise((resolve, reject) => {
-      this.props
-        .removeOutside({ variables: { name: oldData.name } })
-        .then(data => {
-          console.log(data)
-          this.props.data
-            .refetch()
-            .then(data => {
-              resolve()
-            })
-            .catch(err => {
-              reject(err)
-            })
-        })
-        .catch(err => {
-          reject(err)
-        })
+      this.props.removeOutside
+        ? this.props
+          .removeOutside({ variables: { name: oldData.name } })
+          .then(data => {
+            console.log(data)
+            this.props.data
+              .refetch()
+              .then(data => {
+                resolve()
+              })
+              .catch(err => {
+                reject(err)
+              })
+          })
+          .catch(err => {
+            reject(err)
+          })
+        : reject()
     })
   }
 

@@ -22,7 +22,15 @@ export default {
     }
     return null
   },
-  campuses: async () => {
+  campuses: async (_, _2, { user }) => {
+    if (user.level == 1) {
+      let campuses = await prisma.campuses({
+        where: {
+          admin_id: user.username
+        }
+      })
+      return campuses
+    }
     return await prisma.campuses()
   },
   branches: async () => {

@@ -2,7 +2,15 @@ import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import { Login, Register, Admin, Student, Coordinator, Faculty } from './views'
+import {
+  Login,
+  Register,
+  Admin,
+  Student,
+  Coordinator,
+  Faculty,
+  Campus
+} from './views'
 import { Loading } from './components'
 import { endpoints } from './util'
 
@@ -18,6 +26,8 @@ const RouterSwitch = ({ level }) => {
   switch (level) {
     case 0:
       return <Admin />
+    case 1:
+      return <Campus />
     case 2:
       return <Coordinator />
     case 3:
