@@ -66,6 +66,7 @@ export default gql`
     course: String!
     status: Boolean!
     studentName: String!
+    campus: String!
     studentReg: String!
   }
   type Link {
@@ -86,6 +87,7 @@ export default gql`
     name: String!
     coordinator_id: String!
     automated: Boolean
+    campus: String
   }
   type Question {
     id: String!
@@ -111,6 +113,9 @@ export default gql`
     branches: [Branch]
     name: String!
   }
+  type OperationResult {
+    count: Int!
+  }
   type Mutation {
     toggleStudentRegistration: ToggleResult
     toggleFacultyRegistration: ToggleResult
@@ -121,24 +126,25 @@ export default gql`
     adminAddDepartment(tag: TagInput, name: String!): Campus
     adminRemoveDepartment(id: String!, name: String!): Campus
     adminUpdateDepartment(id: String!, name: String!, tag: TagInput): Campus
-    addCampus(name: String!): Campus
-    removeCampus(name: String!): Campus
-    updateCampus(name: String!, newName: String!): Campus
+    addCampus(name: String!): Campus!
+    removeCampus(name: String!): Campus!
+    updateCampus(name: String!, newName: String!): Campus!
     updateOwnCampus(name: String!, newName: String!): Campus
     login(user: LoginInput): User
     register(user: RegisterInput): User
     addBranch(name: String!): Branch
     removeBranch(name: String!): Branch
     updateBranch(name: String!, newName: String!): Branch
-    addCourse(name: String!, branch: String!): Course
-    removeCourse(name: String!): Course
+    addCourse(name: String!, branch: String!): OperationResult!
+    removeCourse(name: String!, campus: String!): Course!
     acceptCourseInstance(id: String!): CourseInstance
     updateCourse(
       name: String!
       newName: String!
       branch: String!
-      newAuto: Boolean
-    ): Course
+      campus: String!
+      newBranch: String!
+    ): Course!
     adminAddCourse(name: String!, branch: String!): Course
     adminRemoveCourse(name: String!): Course
     adminUpdateCourse(

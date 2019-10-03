@@ -114,6 +114,7 @@ export default class DashboardTable extends React.Component {
             }
           })
           .then(data => {
+            console.log(data)
             this.props.data.refetch()
             resolve()
           })
@@ -134,7 +135,8 @@ export default class DashboardTable extends React.Component {
             name: oldData.name,
             newName: newData.name,
             branch: this.props.isCourse && oldData.branch,
-            newBranch: this.props.isCourse && newData.branch
+            newBranch: this.props.isCourse && newData.branch,
+            campus: oldData.campus
           }
         })
         .then(data => {
@@ -153,7 +155,9 @@ export default class DashboardTable extends React.Component {
     return new Promise((resolve, reject) => {
       this.props.removeOutside
         ? this.props
-          .removeOutside({ variables: { name: oldData.name } })
+          .removeOutside({
+            variables: { name: oldData.name, campus: oldData.campus }
+          })
           .then(data => {
             console.log(data)
             this.props.data
