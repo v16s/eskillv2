@@ -138,42 +138,46 @@ export default {
   // },
 
   addCourse: async (parent, { name, branch }, { user }) => {
-    if (user.level < 1) {
-      try {
-        let branches = await prisma.branches({ where: { name: branch } })
-        if (branches.length == 0) {
-          await prisma.createBranch({ name: branch })
+    return new Promise(async (resolve, reject) => {
+      if (user.level < 1) {
+        try {
+          let branches = await prisma.branches({ where: { name: branch } })
+          if (branches.length == 0) {
+            await prisma.createBranch({ name: branch })
+          }
+          let campuses = await prisma.campuses()
+          Promise.all(
+            campuses.map(async ({ admin_id, name: campus_name }) => {
+              let identity = `${name}-${branch}-${admin_id
+                .split('-')[0]
+                .toLowerCase()}`
+              let salt = await promisify(bcrypt.genSalt)(10)
+              let hash = await promisify(bcrypt.hash)('password', salt, null)
+              let { username } = await prisma.createUser({
+                username: `${identity.replace(/ /g, '_')}-coordinator`,
+                password: hash,
+                name: `${identity} Coordinator`,
+                email: '',
+                level: 2
+              })
+              await prisma.createCourse({
+                name,
+                coordinator_id: username,
+                branch,
+                automated: false,
+                campus: campus_name
+              })
+            })
+          ).then(data => {
+            resolve({ count: campuses.length })
+          })
+        } catch (e) {
+          reject(new ValidationError(e.toString()))
         }
-        let campuses = await prisma.campuses()
-        campuses.map(async ({ admin_id, name: campus_name }) => {
-          let identity = `${name}-${branch}-${admin_id
-            .split('-')[0]
-            .toLowerCase()}`
-          let salt = await promisify(bcrypt.genSalt)(10)
-          let hash = await promisify(bcrypt.hash)('password', salt, null)
-          let { username } = await prisma.createUser({
-            username: `${identity.replace(/ /g, '_')}-coordinator`,
-            password: hash,
-            name: `${identity} Coordinator`,
-            email: '',
-            level: 2
-          })
-          await prisma.createCourse({
-            name,
-            coordinator_id: username,
-            branch,
-            automated: false,
-            campus: campus_name
-          })
-        })
-        return { count: campuses.length }
-      } catch (e) {
-        console.log(e)
-        throw new ValidationError(e.toString())
+      } else {
+        reject(new AuthenticationError('Unauthorized'))
       }
-    } else {
-      throw new AuthenticationError('Unauthorized')
-    }
+    })
   },
 
   removeCourse: async (parent, { name, campus }, { user }) => {
@@ -300,24 +304,6 @@ export default {
             departments: {
               updateMany
             }
-          }
-        })
-      } catch (e) {
-        console.log(e)
-        throw new ValidationError(e.toString())
-      }
-    } else {
-      throw new AuthenticationError('Unauthorized')
-    }
-  },
-  toggleCourseAutomation: async (_p, { name }, { user: { level } }) => {
-    if (level < 1) {
-      try {
-        let { automated } = await prisma.course({ name })
-        return await prisma.updateCourse({
-          where: { name },
-          data: {
-            automated: !automated
           }
         })
       } catch (e) {

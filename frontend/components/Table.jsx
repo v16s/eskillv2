@@ -115,8 +115,10 @@ export default class DashboardTable extends React.Component {
           })
           .then(data => {
             console.log(data)
-            this.props.data.refetch()
-            resolve()
+            this.props.data.refetch().then(refetchData => {
+              console.log(refetchData)
+              resolve()
+            })
           })
           .catch(err => {
             reject()

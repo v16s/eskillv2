@@ -83,8 +83,8 @@ const ADD_COURSE = gql`
   }
 `
 const TOGGLE = gql`
-  mutation ToggleAutomate($name: String!) {
-    toggleCourseAutomation(name: $name) {
+  mutation ToggleAutomate($name: String!, $campus: String!) {
+    toggleCourseAutomation(name: $name, campus: $campus) {
       name
     }
   }
@@ -110,7 +110,7 @@ const UPDATE_COURSE = gql`
 `
 const REMOVE_COURSE = gql`
   mutation RemoveCourse($name: String!, $campus: String!) {
-    removeCourse(name: $name, campus: $campus) {
+    removeCourse(name: $name) {
       name
     }
   }
@@ -134,13 +134,19 @@ class Dashboard extends React.Component {
     campus: {
       label: 'All',
       value: 'All'
-    }
+    },
+    courses: this.props.courseQuery
   }
   onDropdownChange = (value, { name }) => {
     let newstate = this.state
     newstate[name] = value
     this.setState(newstate)
   }
+  shouldComponentUpdate (nextProps, nextState) {
+    nextState.courses = nextProps.courseQuery
+    return true
+  }
+
   render () {
     const campuses = this.props.campusQuery.campuses
       ? [
@@ -219,13 +225,13 @@ class Dashboard extends React.Component {
                   title: 'Automated',
                   render: rowdata => {
                     if (rowdata != undefined) {
-                      const { automated, refetch, name } = rowdata
+                      const { automated, refetch, name, campus } = rowdata
                       return (
                         <Switch
                           checked={automated}
                           onChange={() => {
                             this.props
-                              .mutate({ variables: { name } })
+                              .mutate({ variables: { name, campus } })
                               .then(data => {
                                 refetch()
                               })

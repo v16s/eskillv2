@@ -120,7 +120,7 @@ export default gql`
     toggleStudentRegistration: ToggleResult
     toggleFacultyRegistration: ToggleResult
     addDepartment(tag: TagInput, name: String!): Campus
-    toggleCourseAutomation(name: String!): Course
+    toggleCourseAutomation(name: String!, campus: String): Course
     removeDepartment(id: String!, name: String!): Campus
     updateDepartment(name: String!, update: UpdateTag!): Campus
     adminAddDepartment(tag: TagInput, name: String!): Campus
@@ -145,13 +145,13 @@ export default gql`
       campus: String!
       newBranch: String!
     ): Course!
-    adminAddCourse(name: String!, branch: String!): Course
-    adminRemoveCourse(name: String!): Course
-    adminUpdateCourse(
+    campusAddCourse(name: String!, branch: String!): Course
+    campusRemoveCourse(name: String!): Course
+    campusUpdateCourse(
       name: String!
       newName: String!
       branch: String!
-      newAuto: Boolean
+      newBranch: String!
     ): Course
     addQuestion(
       course: String!

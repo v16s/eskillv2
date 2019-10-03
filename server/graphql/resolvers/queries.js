@@ -36,7 +36,14 @@ export default {
   branches: async () => {
     return await prisma.branches()
   },
-  courses: async (_, { where }) => {
+  courses: async (_, { where }, { user }) => {
+    if (user.level == 1) {
+      return await prisma.courses({
+        where: {
+          campus: user.campus
+        }
+      })
+    }
     return await prisma.courses({ where })
   },
   questions: async (_, { where }, { user }) => {

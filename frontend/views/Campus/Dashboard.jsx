@@ -64,7 +64,7 @@ const UPDATE_CAMPUS = gql`
 
 const ADD_COURSE = gql`
   mutation AddCourse($name: String!, $branch: String!) {
-    addCourse(name: $name, branch: $branch) {
+    campusAddCourse(name: $name, branch: $branch) {
       name
     }
   }
@@ -83,7 +83,7 @@ const UPDATE_COURSE = gql`
     $branch: String!
     $newBranch: String!
   ) {
-    updateCourse(
+    campusUpdateCourse(
       name: $name
       newName: $newName
       branch: $branch
@@ -95,7 +95,7 @@ const UPDATE_COURSE = gql`
 `
 const REMOVE_COURSE = gql`
   mutation RemoveCourse($name: String!) {
-    removeCourse(name: $name) {
+    campusRemoveCourse(name: $name) {
       name
     }
   }
