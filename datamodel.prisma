@@ -82,3 +82,9 @@ type Options @embedded {
   c: String!
   d: String!
 }
+type Recovery {
+  id: ID! @id
+  token: String! @unique
+  username: String!
+  email: String!
+}

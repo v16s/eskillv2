@@ -47,6 +47,10 @@ var models = [
   {
     name: "Options",
     embedded: true
+  },
+  {
+    name: "Recovery",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({

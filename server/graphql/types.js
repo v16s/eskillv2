@@ -16,6 +16,7 @@ export default gql`
     progress: [CourseInstance]
     acceptReject: [CourseInstance]
     problems: [Problem]
+    tokenExistence(token: String!): Boolean
   }
   input CourseWhereInput {
     branch: String
@@ -116,7 +117,14 @@ export default gql`
   type OperationResult {
     count: Int!
   }
+  input RecoveryInput {
+    password: String!
+    confirm: String!
+    token: String!
+  }
   type Mutation {
+    recover(input: RecoveryInput!): User!
+    forgot(username: String!): Boolean!
     toggleStudentRegistration: ToggleResult
     toggleFacultyRegistration: ToggleResult
     addDepartment(tag: TagInput, name: String!): Campus

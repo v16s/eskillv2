@@ -1,5 +1,6 @@
 import { prisma } from 'prisma'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
+
 export default {
   toggleCourseAutomation: async (
     _p,

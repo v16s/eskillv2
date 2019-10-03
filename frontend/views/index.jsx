@@ -5,4 +5,17 @@ import Student from './Student'
 import Coordinator from './Coordinator'
 import Campus from './Campus'
 import Faculty from './Faculty'
-export { Login, Register, Admin, Student, Coordinator, Faculty, Campus }
+import Forgot from './Forgot'
+
+import Recovery from './Recovery'
+export {
+  Login,
+  Register,
+  Admin,
+  Student,
+  Coordinator,
+  Faculty,
+  Campus,
+  Forgot,
+  Recovery
+}

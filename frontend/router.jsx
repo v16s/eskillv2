@@ -9,7 +9,9 @@ import {
   Student,
   Coordinator,
   Faculty,
-  Campus
+  Forgot,
+  Campus,
+  Recovery
 } from './views'
 import { Loading } from './components'
 import { endpoints } from './util'
@@ -50,8 +52,10 @@ class Router extends React.Component {
       >
         {data.loggedIn == false && (
           <Switch>
-            <Route path='/register' component={() => <Register />} />
-            <Route path='/' component={() => <Login />} />
+            <Route path='/forgot/:token' component={Recovery} />
+            <Route path='/forgot' component={Forgot} />
+            <Route path='/register' component={Register} />
+            <Route path='/' component={Login} />
           </Switch>
         )}
         {data.loggedIn == true && <RouterSwitch level={data.details.level} />}

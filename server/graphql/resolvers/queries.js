@@ -10,8 +10,24 @@ query Questions($id: String!){
 }`
 
 export default {
+  tokenExistence: async (_p, { token }, { user }) => {
+    if (!user) {
+      try {
+        let recovery = await prisma.recovery({ token })
+        if (recovery) {
+          return true
+        }
+        return false
+      } catch (e) {
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('already logged in')
+    }
+  },
   global: async (parent, args, ctx, info) => {
-    return await prisma.global({ id: 'global' })
+    let global = await prisma.global({ id: 'global' })
+    return { ...global, recovery: undefined }
   },
   branches: async () => {
     return await prisma.branches()
