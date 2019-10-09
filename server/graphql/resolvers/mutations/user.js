@@ -40,7 +40,7 @@ export default {
           token = recovery[0].token
         }
         await prisma.createRecovery
-        const resetURL = 'http://care.srmist.edu.in/eskillnew/forgot/'
+        const resetURL = 'http://care.srmist.edu.in/eskill/forgot/'
         transporter.sendMail({
           from: 'noreplysrmeskill@gmail.com',
           to: email,
