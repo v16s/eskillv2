@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     position: 'absolute',
-    zIndex: 10,
+    zIndex: 20,
     marginTop: theme.spacing(1),
     left: 0,
     right: 0

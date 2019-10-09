@@ -11,11 +11,12 @@ export default gql`
     question(id: String!): Question
     faculties: [User]
     answer: String
-    instances: [CourseInstance]
+    instances(where: CourseInstanceWhereInput): [CourseInstance]
     instance(id: String!): CourseInstance
-    progress: [CourseInstance]
+    progress(where: CourseInstanceWhereInput): [CourseInstance]
     acceptReject: [CourseInstance]
     problems: [Problem]
+    tokenExistence(token: String!): Boolean
   }
   input CourseWhereInput {
     branch: String
@@ -66,6 +67,7 @@ export default gql`
     course: String!
     status: Boolean!
     studentName: String!
+    campus: String!
     studentReg: String!
   }
   type Link {
@@ -86,6 +88,7 @@ export default gql`
     name: String!
     coordinator_id: String!
     automated: Boolean
+    campus: String
   }
   type Question {
     id: String!
@@ -111,41 +114,52 @@ export default gql`
     branches: [Branch]
     name: String!
   }
+  type OperationResult {
+    count: Int!
+  }
+  input RecoveryInput {
+    password: String!
+    confirm: String!
+    token: String!
+  }
   type Mutation {
+    recover(input: RecoveryInput!): User!
+    forgot(username: String!): Boolean!
     toggleStudentRegistration: ToggleResult
     toggleFacultyRegistration: ToggleResult
     addDepartment(tag: TagInput, name: String!): Campus
-    toggleCourseAutomation(name: String!): Course
+    toggleCourseAutomation(name: String!, campus: String): Course
     removeDepartment(id: String!, name: String!): Campus
     updateDepartment(name: String!, update: UpdateTag!): Campus
     adminAddDepartment(tag: TagInput, name: String!): Campus
     adminRemoveDepartment(id: String!, name: String!): Campus
     adminUpdateDepartment(id: String!, name: String!, tag: TagInput): Campus
-    addCampus(name: String!): Campus
-    removeCampus(name: String!): Campus
-    updateCampus(name: String!, newName: String!): Campus
+    addCampus(name: String!): Campus!
+    removeCampus(name: String!): Campus!
+    updateCampus(name: String!, newName: String!): Campus!
     updateOwnCampus(name: String!, newName: String!): Campus
     login(user: LoginInput): User
     register(user: RegisterInput): User
     addBranch(name: String!): Branch
     removeBranch(name: String!): Branch
     updateBranch(name: String!, newName: String!): Branch
-    addCourse(name: String!, branch: String!): Course
-    removeCourse(name: String!): Course
+    addCourse(name: String!, branch: String!): OperationResult!
+    removeCourse(name: String!, campus: String!): Course!
     acceptCourseInstance(id: String!): CourseInstance
     updateCourse(
       name: String!
       newName: String!
       branch: String!
-      newAuto: Boolean
-    ): Course
-    adminAddCourse(name: String!, branch: String!): Course
-    adminRemoveCourse(name: String!): Course
-    adminUpdateCourse(
+      campus: String!
+      newBranch: String!
+    ): Course!
+    campusAddCourse(name: String!, branch: String!): Course
+    campusRemoveCourse(name: String!): Course
+    campusUpdateCourse(
       name: String!
       newName: String!
       branch: String!
-      newAuto: Boolean
+      newBranch: String!
     ): Course
     addQuestion(
       course: String!
@@ -185,6 +199,11 @@ export default gql`
     branch: String!
     name: String!
     update: String
+  }
+  input CourseInstanceWhereInput {
+    campus: String
+    facID: String
+    course: String
   }
   input LoginInput {
     username: String!

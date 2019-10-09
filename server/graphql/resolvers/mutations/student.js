@@ -17,10 +17,10 @@ export default {
         let studID = user.id
         let { campus, department } = user
         let courseinstances = await prisma.courseInstances({
-          where: { studID, facultyID, course }
+          where: { studID, facultyID, course, campus }
         })
         if (courseinstances.length == 0) {
-          let c = await prisma.courses({ where: { name: course } })
+          let c = await prisma.courses({ where: { name: course, campus } })
           const { automated } = c[0]
           let status = automated
           let obj, n, total, completed

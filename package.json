@@ -27,6 +27,7 @@
     "mongodb": "^3.2.7",
     "mongoose": "^5.4.5",
     "morgan": "^1.9.1",
+    "nodemailer": "^6.3.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "prisma-client-lib": "^1.30.4",
@@ -40,7 +41,8 @@
     "frontend": "parcel ./frontend/index.html --open",
     "fbuild": "parcel build ./frontend/index.html --public-url /eskillnew",
     "prisma": "docker-compose up -d prisma_dev",
-    "serve": "serve -l 6000 -s ./build"
+    "serve": "serve -l 6000 -s ./build",
+    "prisma_server": "prisma deploy --force"
   },
   "devDependencies": {
     "@material-ui/core": "^4.0.2",

@@ -216,10 +216,14 @@ class Questions extends React.Component {
         value: d.name
       }))
     }
-    const courses = this.state.courses.map(d => ({
-      label: d.name,
-      value: d.name
-    }))
+    const courses = [
+      ...new Set(
+        this.state.courses.map(d => ({
+          label: d.name,
+          value: d.name
+        }))
+      )
+    ]
     const { questions } = this.state
     return (
       <div>

@@ -1,7 +1,7 @@
 import React from 'react'
-import { Table, RegisterControl, Dropdown } from '../../components'
+import { Table, RegisterControl } from '../../components'
 import gql from 'graphql-tag'
-import { Switch, Paper } from '@material-ui/core'
+import { Switch } from '@material-ui/core'
 import { compose, graphql } from 'react-apollo'
 
 const CAMPUSES = gql`
@@ -23,17 +23,10 @@ const COURSES = gql`
       name
       coordinator_id
       automated
-      campus
     }
   }
 `
-const ADD_CAMPUS = gql`
-  mutation AddCampus($name: String!) {
-    addCampus(name: $name) {
-      name
-    }
-  }
-`
+
 const ADD_DEPARTMENT = gql`
   mutation AddDepartment($name: String!, $id: String!, $tname: String!) {
     addDepartment(name: $name, tag: { id: $id, name: $tname }) {
@@ -63,28 +56,22 @@ const REMOVE_DEPARTMENT = gql`
 `
 const UPDATE_CAMPUS = gql`
   mutation UpdateCampus($name: String!, $newName: String!) {
-    updateCampus(name: $name, newName: $newName) {
+    updateOwnCampus(name: $name, newName: $newName) {
       name
     }
   }
 `
-const REMOVE_CAMPUS = gql`
-  mutation RemoveCampus($name: String!) {
-    removeCampus(name: $name) {
-      name
-    }
-  }
-`
+
 const ADD_COURSE = gql`
   mutation AddCourse($name: String!, $branch: String!) {
-    addCourse(name: $name, branch: $branch) {
-      count
+    campusAddCourse(name: $name, branch: $branch) {
+      name
     }
   }
 `
 const TOGGLE = gql`
-  mutation ToggleAutomate($name: String!, $campus: String!) {
-    toggleCourseAutomation(name: $name, campus: $campus) {
+  mutation ToggleAutomate($name: String!) {
+    toggleCourseAutomation(name: $name) {
       name
     }
   }
@@ -95,70 +82,40 @@ const UPDATE_COURSE = gql`
     $newName: String!
     $branch: String!
     $newBranch: String!
-    $campus: String!
   ) {
-    updateCourse(
+    campusUpdateCourse(
       name: $name
       newName: $newName
       branch: $branch
       newBranch: $newBranch
-      campus: $campus
     ) {
       name
     }
   }
 `
 const REMOVE_COURSE = gql`
-  mutation RemoveCourse($name: String!, $campus: String!) {
-    removeCourse(name: $name) {
+  mutation RemoveCourse($name: String!) {
+    campusRemoveCourse(name: $name) {
       name
     }
   }
 `
 
 const CampusTable = compose(
-  graphql(ADD_CAMPUS, { name: 'addOutside' }),
-  graphql(REMOVE_CAMPUS, { name: 'removeOutside' }),
+  graphql(CAMPUSES),
   graphql(UPDATE_CAMPUS, { name: 'updateOutside' }),
   graphql(ADD_DEPARTMENT, { name: 'addInside' }),
   graphql(REMOVE_DEPARTMENT, { name: 'removeInside' }),
   graphql(UPDATE_DEPARTMENT, { name: 'updateInside' })
 )(Table)
 const CourseTable = compose(
+  graphql(COURSES),
   graphql(ADD_COURSE, { name: 'addOutside' }),
   graphql(REMOVE_COURSE, { name: 'removeOutside' }),
   graphql(UPDATE_COURSE, { name: 'updateOutside' })
 )(Table)
 class Dashboard extends React.Component {
-  state = {
-    campus: {
-      label: 'All',
-      value: 'All'
-    },
-    courses: this.props.courseQuery
-  }
-  onDropdownChange = (value, { name }) => {
-    let newstate = this.state
-    newstate[name] = value
-    this.setState(newstate)
-  }
-  shouldComponentUpdate (nextProps, nextState) {
-    nextState.courses = nextProps.courseQuery
-    return true
-  }
-
   render () {
-    const campuses = this.props.campusQuery.campuses
-      ? [
-        ...this.props.campusQuery.campuses.map(k => ({
-          label: k.name,
-          value: k.name
-        })),
-        { label: 'All', value: 'All' }
-      ]
-      : []
-
-    let { campus } = this.state
     return (
       <div>
         <RegisterControl />
@@ -173,7 +130,6 @@ class Dashboard extends React.Component {
                 { title: 'Name', field: 'name' },
                 { title: 'Admin ID', field: 'admin_id', editable: 'never' }
               ]}
-              data={this.props.campusQuery}
               inside='departments'
               title='Campus'
               name='campuses'
@@ -182,36 +138,7 @@ class Dashboard extends React.Component {
             />
           </div>
           <div style={{ width: '50%', padding: '20px' }}>
-            <Paper
-              style={{
-                marginBottom: 15,
-                padding: 15,
-                zIndex: 5
-              }}
-            >
-              <div>
-                <Dropdown
-                  options={campuses}
-                  onChange={this.onDropdownChange}
-                  value={campus}
-                  placeholder={'Select your campus'}
-                  label='College Campus'
-                  name='campus'
-                />
-              </div>
-            </Paper>
             <CourseTable
-              data={{
-                ...this.props.courseQuery,
-                courses: this.props.courseQuery.courses
-                  ? this.props.courseQuery.courses.filter(
-                    d =>
-                      this.state.campus.label == 'All' ||
-                        d.campus == this.state.campus.label
-                  )
-                  : []
-              }}
-              campus={this.state.campus.label}
               columns={[
                 { title: 'Name', field: 'name' },
                 {
@@ -220,18 +147,17 @@ class Dashboard extends React.Component {
                   editable: 'never'
                 },
                 { title: 'Branch', field: 'branch' },
-                { title: 'Campus', field: 'campus', editable: 'never' },
                 {
                   title: 'Automated',
                   render: rowdata => {
                     if (rowdata != undefined) {
-                      const { automated, refetch, name, campus } = rowdata
+                      const { automated, refetch, name } = rowdata
                       return (
                         <Switch
                           checked={automated}
                           onChange={() => {
                             this.props
-                              .mutate({ variables: { name, campus } })
+                              .mutate({ variables: { name } })
                               .then(data => {
                                 refetch()
                               })
@@ -258,8 +184,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default compose(
-  graphql(TOGGLE),
-  graphql(CAMPUSES, { name: 'campusQuery', fetchPolicy: 'network-only' }),
-  graphql(COURSES, { name: 'courseQuery', fetchPolicy: 'network-only' })
-)(Dashboard)
+export default graphql(TOGGLE)(Dashboard)

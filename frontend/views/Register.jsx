@@ -9,7 +9,6 @@ import {
   Tab,
   IconButton
 } from '@material-ui/core'
-import { withRouter } from 'react-router-dom'
 import { Dropdown } from '../components'
 import { compose, graphql } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -145,15 +144,14 @@ class Register extends React.Component {
   }
   onSubmit = e => {
     e.preventDefault()
-    console.log('submit')
+    let { history } = this.props
     let { success, error, details: data } = this.checkDetails()
     if (success) {
-      console.log('success')
       let type = this.state.tab == 1
       this.props
         .mutate({ variables: { ...data, type } })
         .then(data => {
-          console.log(data)
+          history.push('/')
         })
         .catch(err => {
           console.log(err)
@@ -221,7 +219,6 @@ class Register extends React.Component {
       regs = this.props.registerPermit.global.regs
       regf = this.props.registerPermit.global.regf
     }
-    console.log(this.props.registerPermit)
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
@@ -362,7 +359,7 @@ class Register extends React.Component {
     )
   }
 }
-Register = withStyles(styles)(withRouter(Register))
+Register = withStyles(styles)(Register)
 export default compose(
   graphql(GET_CAMPUSES),
   graphql(REGISTER),

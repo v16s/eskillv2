@@ -9,22 +9,11 @@ import {
 } from '@material-ui/core'
 import gql from 'graphql-tag'
 import { graphql, withApollo, compose } from 'react-apollo'
-import { withRouter } from 'react-router-dom'
 import { Tonality } from '@material-ui/icons'
 
-const LOGIN = gql`
-  mutation Login($username: String!, $password: String!) {
-    login(user: { username: $username, password: $password }) {
-      username
-      password
-      name
-      email
-      level
-      department
-      dob
-      jwt
-      campus
-    }
+const FORGOT = gql`
+  mutation Forgot($username: String!) {
+    forgot(username: $username)
   }
 `
 const GET_DARK = gql`
@@ -78,32 +67,32 @@ const styles = theme => ({
   }
 })
 
-class Login extends React.Component {
+class Forgot extends React.Component {
   state = {
-    username: '',
-    password: ''
+    username: ''
   }
   onInputChange = e => {
     let newstate = this.state
     newstate[e.target.id] = e.target.value
     this.setState(newstate)
   }
-  onLogin = e => {
+  onSubmit = e => {
     e.preventDefault()
-    let { client } = this.props
+    let { history } = this.props
     this.props
       .mutate({ variables: this.state })
-      .then(({ data: { login } }) => {
-        localStorage.setItem('jwtToken', login.jwt)
-        client.writeData({ data: { loggedIn: !!login.jwt, details: login } })
+      .then(({ data: { forgot } }) => {
+        if (forgot) {
+          history.push('/')
+        }
       })
       .catch(err => {
         console.log(err)
       })
   }
   render () {
-    const { classes, dark, client, registerPermit, history } = this.props
-    const { username, password } = this.state
+    const { classes, dark, registerPermit, history } = this.props
+    const { username } = this.state
     return (
       <div className={classes.paper}>
         <div className={classes.titleBar}>
@@ -119,7 +108,7 @@ class Login extends React.Component {
             <Tonality />
           </IconButton>
         </div>
-        <form onSubmit={this.onLogin}>
+        <form onSubmit={this.onSubmit}>
           <div className={classes.input}>
             <TextField
               className={classes.input}
@@ -127,18 +116,8 @@ class Login extends React.Component {
               id='username'
               type='text'
               onChange={this.onInputChange}
-              label='Register Number'
+              label='Register Number / User ID'
               value={username}
-            />
-
-            <TextField
-              className={classes.input}
-              id='password'
-              type='password'
-              variant='outlined'
-              onChange={this.onInputChange}
-              label='Password'
-              value={password}
             />
           </div>
           <Button
@@ -149,7 +128,7 @@ class Login extends React.Component {
             type='submit'
             style={{ color: '#fff' }}
           >
-            Login
+            Send Recovery Email
           </Button>
         </form>
         {registerPermit.global &&
@@ -170,20 +149,20 @@ class Login extends React.Component {
           size='medium'
           className={classes.button}
           onClick={e => {
-            history.push('/forgot')
+            history.push('/')
           }}
         >
-          Forgot Password
+          Back to Forgot
         </Button>
       </div>
     )
   }
 }
-Login = withStyles(styles)(Login)
+Forgot = withStyles(styles)(Forgot)
 export default compose(
   withApollo,
-  graphql(LOGIN),
+  graphql(FORGOT),
   graphql(GET_DARK, { name: 'dark' }),
   graphql(CHANGE_DARK, { name: 'changeDark' }),
   graphql(GET_REGISTER_PERMIT, { name: 'registerPermit' })
-)(Login)
+)(Forgot)

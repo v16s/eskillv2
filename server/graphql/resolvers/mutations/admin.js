@@ -2,7 +2,6 @@ import { prisma } from 'prisma'
 import bcrypt from 'bcrypt-nodejs'
 import { promisify } from 'util'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
-import { async } from 'q'
 export default {
   toggleStudentRegistration: async (p, a, { user }) => {
     if (user.level < 1) {
@@ -139,49 +138,69 @@ export default {
   // },
 
   addCourse: async (parent, { name, branch }, { user }) => {
-    if (user.level < 1) {
-      try {
-        let branches = await prisma.branches({ where: { name: branch } })
-        if (branches.length == 0) {
-          await prisma.createBranch({ name: branch })
+    return new Promise(async (resolve, reject) => {
+      if (user.level < 1) {
+        try {
+          let branches = await prisma.branches({ where: { name: branch } })
+          if (branches.length == 0) {
+            await prisma.createBranch({ name: branch })
+          }
+          let campuses = await prisma.campuses()
+          Promise.all(
+            campuses.map(async ({ admin_id, name: campus_name }) => {
+              let identity = `${name}-${branch}-${admin_id
+                .split('-')[0]
+                .toLowerCase()}`
+              let salt = await promisify(bcrypt.genSalt)(10)
+              let hash = await promisify(bcrypt.hash)('password', salt, null)
+              let { username } = await prisma.createUser({
+                username: `${identity.replace(/ /g, '_')}-coordinator`,
+                password: hash,
+                name: `${identity} Coordinator`,
+                email: '',
+                level: 2
+              })
+              await prisma.createCourse({
+                name,
+                coordinator_id: username,
+                branch,
+                automated: false,
+                campus: campus_name
+              })
+            })
+          ).then(data => {
+            resolve({ count: campuses.length })
+          })
+        } catch (e) {
+          reject(new ValidationError(e.toString()))
         }
-        let identity = `${name}-${branch}`
-        let salt = await promisify(bcrypt.genSalt)(10)
-        let hash = await promisify(bcrypt.hash)('password', salt, null)
-        let { username } = await prisma.createUser({
-          username: `${identity.replace(/ /g, '_')}-Coordinator`,
-          password: hash,
-          name: `${identity} Coordinator`,
-          email: '',
-          level: 2
-        })
-        return await prisma.createCourse({
-          name,
-          coordinator_id: username,
-          branch,
-          automated: false
-        })
-      } catch (e) {
-        console.log(e)
-        throw new ValidationError(e.toString())
+      } else {
+        reject(new AuthenticationError('Unauthorized'))
       }
-    } else {
-      throw new AuthenticationError('Unauthorized')
-    }
+    })
   },
 
-  removeCourse: async (parent, { name }, { user }) => {
+  removeCourse: async (parent, { name, campus }, { user }) => {
     if (user.level < 1) {
       try {
-        let { coordinator_id, branch } = await prisma.course({ name })
+        let courses_raw = await prisma.courses({
+          where: { name, campus }
+        })
+        let { coordinator_id, branch } = courses_raw[0]
         let courses = await prisma.courses({ where: { branch } })
         if (courses.length == 1) {
           await prisma.deleteBranch({ name: branch })
         }
+        console.log(
+          await prisma.deleteManyCourses({
+            name,
+            campus
+          })
+        )
         try {
-        let a = await prisma.deleteUser({ username: coordinator_id })
+          let a = await prisma.deleteUser({ username: coordinator_id })
         } catch (e) {}
-        return await prisma.deleteCourse({ name })
+        return courses_raw[0]
       } catch (e) {
         console.log(e)
         throw new ValidationError(e.toString())
@@ -193,14 +212,11 @@ export default {
 
   updateCourse: async (
     parent,
-    { name, newName, branch, newAuto },
+    { name, newName, branch, newBranch, campus },
     { user }
   ) => {
     if (user.level < 1) {
       try {
-        let identity = `${name}-${branch}`
-        let iden = `${newName}-${branch}`
-        console.log('asd', newName, newBranch)
         let courses = await prisma.courses({ where: { branch } })
         if (courses.length == 1) {
           await prisma.deleteBranch({ name: branch })
@@ -209,17 +225,27 @@ export default {
         if (branches.length == 0) {
           await prisma.createBranch({ name: newBranch })
         }
+        let course = await prisma.courses({
+          where: { campus, name, branch }
+        })
+        course = course[0]
+        let identity = course.coordinator_id
+        let iden_raw = identity.split('-').slice(0, -1)
+        iden_raw[0] = newName
+        iden_raw[1] = newBranch
+        let iden = iden_raw.join('-')
         await prisma.updateUser({
-          where: { username: `${identity.replace(/ /g, '_')}-Coordinator` },
+          where: { username: identity },
           data: {
-            username: `${iden.replace(/ /g, '_')}-Coordinator`,
+            username: course.coordinator_id,
             name: `${iden} Coordinator`
           }
         })
-        return await prisma.updateCourse({
-          where: { name },
-          data: { name: newName, branch: newBranch, automated: newAuto }
+        await prisma.updateManyCourses({
+          where: { name, campus },
+          data: { name: newName, branch: newBranch }
         })
+        return course
       } catch (e) {
         throw new ValidationError(e.toString())
       }
@@ -278,24 +304,6 @@ export default {
             departments: {
               updateMany
             }
-          }
-        })
-      } catch (e) {
-        console.log(e)
-        throw new ValidationError(e.toString())
-      }
-    } else {
-      throw new AuthenticationError('Unauthorized')
-    }
-  },
-  toggleCourseAutomation: async (_p, { name }, { user: { level } }) => {
-    if (level < 1) {
-      try {
-        let { automated } = await prisma.course({ name })
-        return await prisma.updateCourse({
-          where: { name },
-          data: {
-            automated: !automated
           }
         })
       } catch (e) {

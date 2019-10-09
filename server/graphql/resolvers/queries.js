@@ -10,8 +10,24 @@ query Questions($id: String!){
 }`
 
 export default {
+  tokenExistence: async (_p, { token }, { user }) => {
+    if (!user) {
+      try {
+        let recovery = await prisma.recovery({ token })
+        if (recovery) {
+          return true
+        }
+        return false
+      } catch (e) {
+        throw new ValidationError(e.toString())
+      }
+    } else {
+      throw new AuthenticationError('already logged in')
+    }
+  },
   global: async (parent, args, ctx, info) => {
-    return await prisma.global({ id: 'global' })
+    let global = await prisma.global({ id: 'global' })
+    return { ...global, recovery: undefined }
   },
   branches: async () => {
     return await prisma.branches()
@@ -22,13 +38,28 @@ export default {
     }
     return null
   },
-  campuses: async () => {
+  campuses: async (_, _2, { user }) => {
+    if (user.level == 1) {
+      let campuses = await prisma.campuses({
+        where: {
+          admin_id: user.username
+        }
+      })
+      return campuses
+    }
     return await prisma.campuses()
   },
   branches: async () => {
     return await prisma.branches()
   },
-  courses: async (_, { where }) => {
+  courses: async (_, { where }, { user }) => {
+    if (user.level == 1) {
+      return await prisma.courses({
+        where: {
+          campus: user.campus
+        }
+      })
+    }
     return await prisma.courses({ where })
   },
   questions: async (_, { where }, { user }) => {
@@ -73,26 +104,34 @@ export default {
       throw new ValidationError(e.toString())
     }
   },
-  instances: async (_, args, { user }) => {
+  instances: async (_, { where: course }, { user }) => {
     try {
       let where
-      if (user.level == 4) {
-        where = {
-          studID: user.id
-        }
-      } else if (user.level == 3) {
-        where = {
-          facultyID: user.id
-        }
-      } else if (user.level == 2) {
-        let course = user.username.replace(/_/, ' ').split('-')[0]
-        where = {
-          course
-        }
-      } else if (user.level < 2) {
-        where = {}
+      if (course) {
+        where = course
       } else {
-        throw new AuthenticationError()
+        if (user.level == 4) {
+          where = {
+            studID: user.id
+          }
+        } else if (user.level == 3) {
+          where = {
+            facultyID: user.id
+          }
+        } else if (user.level == 2) {
+          let course = user.username.replace(/_/, ' ').split('-')[0]
+          where = {
+            course
+          }
+        } else if (user.level < 2) {
+          where = {
+            campus: user.campus
+          }
+        } else if (user.level == 0) {
+          where = {}
+        } else {
+          throw new AuthenticationError()
+        }
       }
       return await prisma.courseInstances({
         where
@@ -104,11 +143,34 @@ export default {
   instance: async (_, { id }) => {
     return await prisma.courseInstance({ id })
   },
-  progress: async (_, _arg, { user }) => {
+  progress: async (_, {where: course}, { user }) => {
+    let where
+      if (course) {
+        where = course
+      } else {
+         if (user.level == 3) {
+          where = {
+            facultyID: user.id
+          }
+        } else if (user.level == 2) {
+          let course = user.username.replace(/_/, ' ').split('-')[0]
+          where = {
+            course
+          }
+        } else if (user.level < 2) {
+          where = {
+            campus: user.campus
+          }
+        } else if (user.level == 0) {
+          where = {}
+        } else {
+          throw new AuthenticationError()
+        }
+      }
     return await prisma.courseInstances({
       where: {
         status: true,
-        facultyID: user.id
+        ...where
       }
     })
   },
