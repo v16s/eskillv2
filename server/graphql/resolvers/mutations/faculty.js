@@ -16,8 +16,13 @@ export default {
     if (user.level == 3) {
       try {
         let instance = await prisma.courseInstance({ id })
-        let { course } = instance
+        let { course, status } = instance
         if (instance.facultyID != user.id) throw new AuthenticationError()
+        if (status) throw new ValidationError()
+        await prisma.updateCourseInstance({
+          where: { id },
+          data: { status: true }
+        })
         let { questions: ques } = await prisma.$graphql(question, {
           course
         })
@@ -28,7 +33,7 @@ export default {
         let completed = 0
         return await prisma.updateCourseInstance({
           where: { id },
-          data: { questions: { create: obj }, completed, total, status: true }
+          data: { questions: { create: obj }, completed, total }
         })
       } catch (e) {
         throw new ValidationError(e.toString())
