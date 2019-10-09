@@ -56,6 +56,7 @@ export default {
     if (user.level == 1) {
       return await prisma.courses({
         where: {
+          ...where,
           campus: user.campus
         }
       })
