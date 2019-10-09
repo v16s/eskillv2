@@ -40,12 +40,12 @@ export default {
           token = recovery[0].token
         }
         await prisma.createRecovery
-        const resetURL = 'http://care.srmist.ac.in/eskillnew/forgot/'
+        const resetURL = 'http://care.srmist.edu.in/eskillnew/forgot/'
         transporter.sendMail({
           from: 'noreplysrmeskill@gmail.com',
           to: email,
           subject: 'eSkill Password Reset',
-          html: `<p>In Order to reset the password, please click the link below: </p><p><a href="${resetURL}${token}">Reset Password</a></p>`
+          html: `<p>Dear ${username}</p><p>In Order to reset the password, please click the link below: </p><p><a href="${resetURL}${token}">Reset Password</a></p>`
         })
         return true
       } catch (e) {
