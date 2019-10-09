@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import Questions from './Questions'
+import Progress from './Progress'
 import Users from './Users'
 import { Tabs, Tab } from '@material-ui/core'
 import { AppBar } from '../../components'
@@ -55,10 +56,10 @@ export default withRouter(
           >
             <Tab label='Dashboard' />
             <Tab label='Questions' />
-            <Tab label='Problem Reports' />
+            <Tab label='Progress Reports' />
           </Tabs>
           <Switch>
-            <Route path='/reports' component={Users} />
+            <Route path='/reports' component={Progress} />
             <Route path='/questions' component={Questions} />
             <Route path='/' component={Dashboard} />
           </Switch>

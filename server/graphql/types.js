@@ -11,9 +11,9 @@ export default gql`
     question(id: String!): Question
     faculties: [User]
     answer: String
-    instances: [CourseInstance]
+    instances(where: CourseInstanceWhereInput): [CourseInstance]
     instance(id: String!): CourseInstance
-    progress: [CourseInstance]
+    progress(where: CourseInstanceWhereInput): [CourseInstance]
     acceptReject: [CourseInstance]
     problems: [Problem]
     tokenExistence(token: String!): Boolean
@@ -199,6 +199,11 @@ export default gql`
     branch: String!
     name: String!
     update: String
+  }
+  input CourseInstanceWhereInput {
+    campus: String
+    facID: String
+    course: String
   }
   input LoginInput {
     username: String!

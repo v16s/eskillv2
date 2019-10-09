@@ -104,26 +104,34 @@ export default {
       throw new ValidationError(e.toString())
     }
   },
-  instances: async (_, args, { user }) => {
+  instances: async (_, { where: course }, { user }) => {
     try {
       let where
-      if (user.level == 4) {
-        where = {
-          studID: user.id
-        }
-      } else if (user.level == 3) {
-        where = {
-          facultyID: user.id
-        }
-      } else if (user.level == 2) {
-        let course = user.username.replace(/_/, ' ').split('-')[0]
-        where = {
-          course
-        }
-      } else if (user.level < 2) {
-        where = {}
+      if (course) {
+        where = course
       } else {
-        throw new AuthenticationError()
+        if (user.level == 4) {
+          where = {
+            studID: user.id
+          }
+        } else if (user.level == 3) {
+          where = {
+            facultyID: user.id
+          }
+        } else if (user.level == 2) {
+          let course = user.username.replace(/_/, ' ').split('-')[0]
+          where = {
+            course
+          }
+        } else if (user.level < 2) {
+          where = {
+            campus: user.campus
+          }
+        } else if (user.level == 0) {
+          where = {}
+        } else {
+          throw new AuthenticationError()
+        }
       }
       return await prisma.courseInstances({
         where
@@ -135,11 +143,34 @@ export default {
   instance: async (_, { id }) => {
     return await prisma.courseInstance({ id })
   },
-  progress: async (_, _arg, { user }) => {
+  progress: async (_, {where: course}, { user }) => {
+    let where
+      if (course) {
+        where = course
+      } else {
+         if (user.level == 3) {
+          where = {
+            facultyID: user.id
+          }
+        } else if (user.level == 2) {
+          let course = user.username.replace(/_/, ' ').split('-')[0]
+          where = {
+            course
+          }
+        } else if (user.level < 2) {
+          where = {
+            campus: user.campus
+          }
+        } else if (user.level == 0) {
+          where = {}
+        } else {
+          throw new AuthenticationError()
+        }
+      }
     return await prisma.courseInstances({
       where: {
         status: true,
-        facultyID: user.id
+        ...where
       }
     })
   },

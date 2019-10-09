@@ -41,7 +41,8 @@
     "frontend": "parcel ./frontend/index.html --open",
     "fbuild": "parcel build ./frontend/index.html --public-url /eskillnew",
     "prisma": "docker-compose up -d prisma_dev",
-    "serve": "serve -l 6000 -s ./build"
+    "serve": "serve -l 6000 -s ./build",
+    "prisma_server": "prisma deploy --force"
   },
   "devDependencies": {
     "@material-ui/core": "^4.0.2",
