@@ -1,6 +1,6 @@
 import { prisma } from 'prisma'
 import bcrypt from 'bcrypt-nodejs'
-import { AuthenticationError } from 'apollo-server-express'
+import { AuthenticationError, ValidationError } from 'apollo-server-express'
 import { promisify } from 'util'
 import jwt from 'jsonwebtoken'
 import nodemailer from 'nodemailer'
