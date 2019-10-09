@@ -39,7 +39,7 @@
     "dev-server": "babel-node ./server",
     "production": "npm run build && node bin",
     "frontend": "parcel ./frontend/index.html --open",
-    "fbuild": "parcel build ./frontend/index.html --public-url /eskillnew",
+    "fbuild": "parcel build ./frontend/index.html --public-url /eskill",
     "prisma": "docker-compose up -d prisma_dev",
     "serve": "serve -l 6000 -s ./build",
     "prisma_server": "prisma deploy --force"
