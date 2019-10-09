@@ -110,7 +110,7 @@ const UPDATE_COURSE = gql`
 `
 const REMOVE_COURSE = gql`
   mutation RemoveCourse($name: String!, $campus: String!) {
-    removeCourse(name: $name) {
+    removeCourse(name: $name, campus: $campus) {
       name
     }
   }
