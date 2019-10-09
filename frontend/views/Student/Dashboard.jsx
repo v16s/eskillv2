@@ -3,14 +3,21 @@ import gql from 'graphql-tag'
 import { compose, graphql } from 'react-apollo'
 import { CourseCard, RequestCourse, ApprovalCard } from '../../components'
 import { withStyles } from '@material-ui/styles'
-import { Fab, Modal } from '@material-ui/core'
+import { Fab, Modal, TextField, Typography } from '@material-ui/core'
 import { Grid } from '@material-ui/core'
 import { Add } from '@material-ui/icons'
 const styles = theme => ({
   root: {
     display: 'flex',
     color: '#fff',
+    flexDirection: 'column',
+    alignItems: 'center',
     paddingTop: 20
+  },
+  search: {
+    width: '98%',
+    maxWidth: 400,
+    margin: 5
   },
   cardcontent: {
     display: 'flex',
@@ -33,6 +40,15 @@ const styles = theme => ({
     bottom: '20px',
     right: '20px',
     maxWidth: '200px'
+  },
+  none: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: theme.palette.text.primary,
+    flexGrow: 1,
+    height: 'calc(100vh - 64px)'
   }
 })
 
@@ -50,7 +66,11 @@ const COURSES = gql`
 
 class Dashboard extends React.Component {
   state = {
-    show: false
+    show: false,
+    search: ''
+  }
+  onSearchChange = e => {
+    this.setState({ search: e.target.value })
   }
   close = refresh => {
     if (refresh) {
@@ -61,24 +81,47 @@ class Dashboard extends React.Component {
   render () {
     const { classes, data } = this.props
     let instances = data.instances || []
-    console.log(instances)
+
     return (
       <div>
         <div className={classes.root}>
+          {instances.length > 0 && (
+            <div className={classes.search}>
+              <TextField
+                value={this.state.search}
+                onChange={this.onSearchChange}
+                placeholder='Search'
+                style={{ width: '100%' }}
+                variant='outlined'
+              />
+            </div>
+          )}
           <Grid container spacing={3} style={{ height: 'auto' }}>
-            {instances.map(({ course, completed, total, id, status }) => {
-              if (status) {
-                return (
-                  <CourseCard
-                    key={id}
-                    course={course}
-                    completed={completed}
-                    complete={parseInt((completed / total) * 100)}
-                    id={id}
-                  />
-                )
-              } else return <ApprovalCard key={id} course={course} id={id} />
-            })}
+            {instances.length > 0 ? (
+              instances.map(({ course, completed, total, id, status }) => {
+                if (new RegExp(this.state.search, 'gi').test(course)) {
+                  if (status) {
+                    return (
+                      <CourseCard
+                        key={id}
+                        course={course}
+                        completed={completed}
+                        complete={parseInt((completed / total) * 100)}
+                        id={id}
+                      />
+                    )
+                  } else {
+                    return <ApprovalCard key={id} course={course} id={id} />
+                  }
+                } else {
+                  return null
+                }
+              })
+            ) : (
+              <div className={classes.none}>
+                <Typography variant='h3'>No Courses</Typography>{' '}
+              </div>
+            )}
           </Grid>
           {!this.state.show && (
             <Fab
