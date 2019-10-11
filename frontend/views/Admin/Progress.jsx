@@ -34,11 +34,6 @@ const PROGRESS = gql`
 const CAMPUSES = gql`
   {
     campuses {
-      departments {
-        name
-        id
-      }
-      admin_id
       name
     }
   }
@@ -46,7 +41,10 @@ const CAMPUSES = gql`
 class Dashboard extends React.Component {
   state = {
     show: false,
-    where: {}
+    where: {
+      label: 'All',
+      value: 'All'
+    }
   }
   close = () => {
     this.setState({ show: !this.state.show })
@@ -71,19 +69,22 @@ class Dashboard extends React.Component {
     let { where, campus } = this.state
     return (
       <div className={classes.root}>
-        <Grid container spacing={3} style={{ height: 'auto' }}>
+        <Grid
+          container
+          spacing={3}
+          style={{ height: 'auto', justifyContent: 'center' }}
+        >
           <Query
             query={PROGRESS}
             variables={{
               where: {
-                campus:
-                  this.state.campus &&
-                  this.statxe.campus.value !== 'All' &&
-                  this.state.campus.value
+                campus: where.value != 'All' ? where.value : undefined
               }
             }}
+            fetchPolicy='no-cache'
           >
-            {({ data, loading }) => {
+            {({ data, loading, error }) => {
+              console.log(data, error)
               if (loading) {
                 return null
               } else {
@@ -128,7 +129,7 @@ class Dashboard extends React.Component {
                             )}`
                         }
                       ]}
-                      data={data.progress || []}
+                      data={(data && data.progress) || []}
                     />
                   </div>
                 )

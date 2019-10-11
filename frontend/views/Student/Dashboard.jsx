@@ -157,4 +157,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default compose(graphql(COURSES))(withStyles(styles)(Dashboard))
+export default compose(graphql(COURSES, {fetchPolicy: 'network-only'}))(withStyles(styles)(Dashboard))

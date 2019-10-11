@@ -64,14 +64,16 @@ class QuestionView extends Component {
   }
   onSubmit = () => {
     let { question, course } = this.props
-    this.props
-      .check({ variables: { question, name: course } })
-      .then(({ data }) => {
-        this.props.refetch()
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    if (this.state.answer != '') {
+      this.props
+        .check({ variables: { question, name: course } })
+        .then(({ data }) => {
+          this.props.refetch()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
   getClass = (status, classes) => {
     if (status == 0) {
