@@ -1,6 +1,6 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { Query, compose, graphql } from 'react-apollo'
+import { Query, compose, graphql, withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/styles'
 import { Grid, LinearProgress, Paper } from '@material-ui/core'
 import { StudentProgressTable, Dropdown } from '../../components'
@@ -20,6 +20,20 @@ const styles = theme => ({
     marginBottom: 20
   }
 })
+const BRANCHES = gql`
+  query Branches {
+    branches {
+      name
+    }
+  }
+`
+const COURSES = gql`
+  query Courses($name: String, $branch: String, $campus: String) {
+    courses(where: { name: $name, branch: $branch, campus: $campus }) {
+      name
+    }
+  }
+`
 const PROGRESS = gql`
   query Progress($where: CourseInstanceWhereInput!) {
     progress(where: $where) {
@@ -42,8 +56,13 @@ const CAMPUSES = gql`
 class Dashboard extends React.Component {
   state = {
     show: false,
+    courses: [],
     where: {
       campus: {
+        label: 'All',
+        value: 'All'
+      },
+      course: {
         label: 'All',
         value: 'All'
       }
@@ -57,6 +76,27 @@ class Dashboard extends React.Component {
     newstate.where[name] = value
     this.setState(newstate)
   }
+  onBranchChange = (value, e) => {
+    let newstate = this.state
+    newstate[e.name] = value
+    newstate.where[e.name] = value
+    let { client } = this.props
+    client
+      .query({
+        query: COURSES,
+        variables: {
+          branch: value.value,
+          campus:
+            this.state.where.campus.value != 'All'
+              ? this.state.where.campus.value
+              : undefined
+        }
+      })
+      .then(({ data }) => {
+        this.setState({ courses: data.courses })
+      })
+    this.setState(newstate)
+  }
   render () {
     const { classes } = this.props
     const campuses = this.props.campusQuery.campuses
@@ -68,7 +108,22 @@ class Dashboard extends React.Component {
         { label: 'All', value: 'All' }
       ]
       : []
-
+    let branches = []
+    if (this.props.branchQuery.branches) {
+      branches = [
+        ...this.props.branchQuery.branches.map(d => ({
+          label: d.name,
+          value: d.name
+        }))
+      ]
+    }
+    const courses = [
+      ...this.state.courses.map(d => ({
+        label: d.name,
+        value: d.name
+      })),
+      { label: 'All', value: 'All' }
+    ]
     let { where } = this.state
     return (
       <div className={classes.root}>
@@ -88,6 +143,23 @@ class Dashboard extends React.Component {
                 name='campus'
               />
             </Paper>
+            <Paper className={classes.paper}>
+              <Dropdown
+                options={branches}
+                onChange={this.onBranchChange}
+                label='Branch'
+                name='branch'
+              />
+            </Paper>
+            <Paper className={classes.paper}>
+              <Dropdown
+                options={courses}
+                onChange={this.onDropdownChange}
+                label='Course'
+                name='course'
+                value={this.state.where.course}
+              />
+            </Paper>
             <Query
               query={PROGRESS}
               variables={{
@@ -95,6 +167,10 @@ class Dashboard extends React.Component {
                   campus:
                     where.campus.value != 'All'
                       ? where.campus.value
+                      : undefined,
+                  course:
+                    where.course.value != 'All'
+                      ? where.course.value
                       : undefined
                 }
               }}
@@ -149,5 +225,7 @@ class Dashboard extends React.Component {
 }
 
 export default compose(
-  graphql(CAMPUSES, { name: 'campusQuery', fetchOptions: 'network-only' })
+  graphql(CAMPUSES, { name: 'campusQuery', fetchOptions: 'network-only' }),
+  withApollo,
+  graphql(BRANCHES, { name: 'branchQuery', fetchOptions: 'network-only' })
 )(withStyles(styles)(Dashboard))

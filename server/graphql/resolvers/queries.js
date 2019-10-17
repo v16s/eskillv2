@@ -57,8 +57,8 @@ export default {
       console.log(user.campus, where)
       return await prisma.courses({
         where: {
-          ...where,
-          campus: user.campus
+          campus: user.campus,
+          ...where
         }
       })
     }

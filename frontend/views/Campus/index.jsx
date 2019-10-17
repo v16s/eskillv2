@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Dashboard from './Dashboard'
-import Users from './Users'
+import Progress from './Progress'
 import { Tabs, Tab } from '@material-ui/core'
 import { AppBar } from '../../components'
 import { withRouter } from 'react-router-dom'
@@ -47,10 +47,10 @@ export default withRouter(
             onChange={this.handleChange}
           >
             <Tab label='Dashboard' />
-            <Tab label='Problem Reports' />
+            <Tab label='Reports' />
           </Tabs>
           <Switch>
-            <Route path='/reports' component={Users} />
+            <Route path='/reports' component={Progress} />
             <Route path='/' component={Dashboard} />
           </Switch>
         </div>
