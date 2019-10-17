@@ -1,11 +1,11 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { compose, graphql } from 'react-apollo'
+import { compose, graphql, Query } from 'react-apollo'
 import { CourseCard, RequestCourse, ApprovalCard } from '../../components'
 import { withStyles } from '@material-ui/styles'
-import { Fab, Modal, TextField, Typography } from '@material-ui/core'
-import { Grid } from '@material-ui/core'
+import { Fab, Modal, TextField, Typography, Grid } from '@material-ui/core'
 import { Add } from '@material-ui/icons'
+import { withRouter } from 'react-router-dom'
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -80,49 +80,69 @@ class Dashboard extends React.Component {
   }
   render () {
     const { classes, data } = this.props
-    let instances = data.instances || []
 
     return (
       <div>
         <div className={classes.root}>
-          {instances.length > 0 && (
-            <div className={classes.search}>
-              <TextField
-                value={this.state.search}
-                onChange={this.onSearchChange}
-                placeholder='Search'
-                style={{ width: '100%' }}
-                variant='outlined'
-              />
-            </div>
-          )}
-          <Grid container spacing={3} style={{ height: 'auto' }}>
-            {instances.length > 0 ? (
-              instances.map(({ course, completed, total, id, status }) => {
-                if (new RegExp(this.state.search, 'gi').test(course)) {
-                  if (status) {
-                    return (
-                      <CourseCard
-                        key={id}
-                        course={course}
-                        completed={completed}
-                        complete={parseInt((completed / total) * 100)}
-                        id={id}
+          <Query query={COURSES} fetchPolicy='no-cache'>
+            {({ data, loading }) => {
+              let instances = data.instances || []
+              return (
+                <>
+                  {instances.length > 0 && (
+                    <div className={classes.search}>
+                      <TextField
+                        value={this.state.search}
+                        onChange={this.onSearchChange}
+                        placeholder='Search'
+                        style={{ width: '100%' }}
+                        variant='outlined'
                       />
-                    )
-                  } else {
-                    return <ApprovalCard key={id} course={course} id={id} />
-                  }
-                } else {
-                  return null
-                }
-              })
-            ) : (
-              <div className={classes.none}>
-                <Typography variant='h3'>No Courses</Typography>{' '}
-              </div>
-            )}
-          </Grid>
+                    </div>
+                  )}
+                  <Grid container spacing={3} style={{ height: 'auto' }}>
+                    {instances.length > 0 ? (
+                      instances.map(
+                        ({ course, completed, total, id, status }) => {
+                          if (
+                            new RegExp(this.state.search, 'gi').test(course)
+                          ) {
+                            if (status) {
+                              return (
+                                <CourseCard
+                                  key={id}
+                                  course={course}
+                                  completed={completed}
+                                  complete={parseInt((completed / total) * 100)}
+                                  id={id}
+                                />
+                              )
+                            } else {
+                              return (
+                                <ApprovalCard
+                                  key={id}
+                                  course={course}
+                                  id={id}
+                                />
+                              )
+                            }
+                          } else {
+                            return null
+                          }
+                        }
+                      )
+                    ) : loading ? (
+                      <div className={classes.none} />
+                    ) : (
+                      <div className={classes.none}>
+                        <Typography variant='h3'>No Courses</Typography>{' '}
+                      </div>
+                    )}
+                  </Grid>
+                </>
+              )
+            }}
+          </Query>
           {!this.state.show && (
             <Fab
               className={classes.fab}
@@ -157,4 +177,4 @@ class Dashboard extends React.Component {
   }
 }
 
-export default compose(graphql(COURSES, {fetchPolicy: 'network-only'}))(withStyles(styles)(Dashboard))
+export default withStyles(styles)(withRouter(Dashboard))

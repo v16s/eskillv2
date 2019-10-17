@@ -21,6 +21,7 @@ export default gql`
   input CourseWhereInput {
     branch: String
     name: String
+    campus: String
   }
   input QuestionWhereInput {
     course: String
