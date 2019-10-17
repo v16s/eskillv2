@@ -145,7 +145,7 @@ export default {
   instance: async (_, { id }) => {
     return await prisma.courseInstance({ id })
   },
-  progress: async (_, { where: course }, { user }) => {
+  progress: async (_, { where: clientWhere }, { user }) => {
     let where
 
     if (user.level == 3) {
@@ -157,7 +157,7 @@ export default {
       where = {
         course
       }
-    } else if (user.level < 2) {
+    } else if (user.level == 1) {
       where = {
         campus: user.campus
       }
@@ -166,10 +166,12 @@ export default {
     } else {
       throw new AuthenticationError()
     }
+
     return await prisma.courseInstances({
       where: {
         status: true,
-        ...where
+        ...where,
+        ...clientWhere
       }
     })
   },

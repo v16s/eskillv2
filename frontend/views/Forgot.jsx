@@ -152,7 +152,7 @@ class Forgot extends React.Component {
             history.push('/')
           }}
         >
-          Back to Forgot
+          Back to Login
         </Button>
       </div>
     )
