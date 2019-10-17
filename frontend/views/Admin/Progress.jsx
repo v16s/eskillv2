@@ -12,7 +12,8 @@ const styles = theme => ({
   },
   outer: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    minWidth: '60%'
   },
   paper: {
     padding: 10,
@@ -42,8 +43,10 @@ class Dashboard extends React.Component {
   state = {
     show: false,
     where: {
-      label: 'All',
-      value: 'All'
+      campus: {
+        label: 'All',
+        value: 'All'
+      }
     }
   }
   close = () => {
@@ -66,7 +69,7 @@ class Dashboard extends React.Component {
       ]
       : []
 
-    let { where, campus } = this.state
+    let { where } = this.state
     return (
       <div className={classes.root}>
         <Grid
@@ -74,32 +77,35 @@ class Dashboard extends React.Component {
           spacing={3}
           style={{ height: 'auto', justifyContent: 'center' }}
         >
-          <Query
-            query={PROGRESS}
-            variables={{
-              where: {
-                campus: where.value != 'All' ? where.value : undefined
-              }
-            }}
-            fetchPolicy='no-cache'
-          >
-            {({ data, loading, error }) => {
-              console.log(data, error)
-              if (loading) {
-                return null
-              } else {
-                return (
-                  <div className={classes.outer}>
-                    <Paper className={classes.paper}>
-                      <Dropdown
-                        options={campuses}
-                        onChange={this.onDropdownChange}
-                        value={campus}
-                        placeholder={'Select your campus'}
-                        label='College Campus'
-                        name='campus'
-                      />
-                    </Paper>
+          <div className={classes.outer}>
+            <Paper className={classes.paper}>
+              <Dropdown
+                options={campuses}
+                onChange={this.onDropdownChange}
+                value={where.campus}
+                placeholder={'Select your campus'}
+                label='College Campus'
+                name='campus'
+              />
+            </Paper>
+            <Query
+              query={PROGRESS}
+              variables={{
+                where: {
+                  campus:
+                    where.campus.value != 'All'
+                      ? where.campus.value
+                      : undefined
+                }
+              }}
+              fetchPolicy='network-only'
+            >
+              {({ data, loading, error }) => {
+                console.log(data, error)
+                if (loading) {
+                  return null
+                } else {
+                  return (
                     <StudentProgressTable
                       columns={[
                         { title: 'Register Number', field: 'studentReg' },
@@ -131,11 +137,11 @@ class Dashboard extends React.Component {
                       ]}
                       data={(data && data.progress) || []}
                     />
-                  </div>
-                )
-              }
-            }}
-          </Query>
+                  )
+                }
+              }}
+            </Query>
+          </div>
         </Grid>
       </div>
     )
