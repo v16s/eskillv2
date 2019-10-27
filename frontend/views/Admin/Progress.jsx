@@ -2,8 +2,47 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { Query, compose, graphql, withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/styles'
-import { Grid, LinearProgress, Paper } from '@material-ui/core'
+import { Grid, LinearProgress, Paper, Button } from '@material-ui/core'
 import { StudentProgressTable, Dropdown } from '../../components'
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  PDFDownloadLink
+} from '@react-pdf/renderer'
+
+// Create styles
+const stylesPDF = StyleSheet.create({
+  page: {
+    flexDirection: 'row',
+    backgroundColor: '#E4E4E4'
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    flexGrow: 1
+  }
+})
+
+// Create Document Component
+const MyDoc = ({ people }) => (
+  <Document>
+    <Page size='A4' style={stylesPDF.page}>
+      {people.map(p => (
+        <>
+          <View style={stylesPDF.section}>
+            <Text>{p.percentage}</Text>
+          </View>
+          <View style={stylesPDF.section}>
+            <Text>{p.name}</Text>
+          </View>
+        </>
+      ))}
+    </Page>
+  </Document>
+)
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -182,37 +221,58 @@ class Dashboard extends React.Component {
                   return null
                 } else {
                   return (
-                    <StudentProgressTable
-                      columns={[
-                        { title: 'Register Number', field: 'studentReg' },
-                        { title: 'Name', field: 'studentName' },
-                        {
-                          title: 'Progress',
-                          render: args => {
-                            const { completed, total } = args
-                            console.log(completed / total)
-                            return (
-                              <LinearProgress
-                                variant='determinate'
-                                value={parseInt(
-                                  (parseFloat(completed) * 100.0) /
-                                    parseFloat(total)
-                                )}
-                              />
-                            )
-                          }
-                        },
-                        {
-                          title: '%',
-                          render: ({ completed, total }) =>
-                            `${parseInt(
-                              (parseFloat(completed) * 100.0) /
-                                parseFloat(total)
-                            )}`
+                    <>
+                      <PDFDownloadLink
+                        document={
+                          <MyDoc
+                            people={data.progress.map(d => ({
+                              name: d.studentName,
+                              percentage: parseInt(
+                                (parseFloat(d.completed) * 100.0) /
+                                  parseFloat(d.total)
+                              )
+                            }))}
+                          />
                         }
-                      ]}
-                      data={(data && data.progress) || []}
-                    />
+                        fileName='somename.pdf'
+                      >
+                        {({ blob, url, loading, error }) =>
+                          loading ? 'Loading document...' : 'Download now!'
+                        }
+                      </PDFDownloadLink>
+
+                      <StudentProgressTable
+                        columns={[
+                          { title: 'Register Number', field: 'studentReg' },
+                          { title: 'Name', field: 'studentName' },
+                          {
+                            title: 'Progress',
+                            render: args => {
+                              const { completed, total } = args
+                              console.log(completed / total)
+                              return (
+                                <LinearProgress
+                                  variant='determinate'
+                                  value={parseInt(
+                                    (parseFloat(completed) * 100.0) /
+                                      parseFloat(total)
+                                  )}
+                                />
+                              )
+                            }
+                          },
+                          {
+                            title: '%',
+                            render: ({ completed, total }) =>
+                              `${parseInt(
+                                (parseFloat(completed) * 100.0) /
+                                  parseFloat(total)
+                              )}`
+                          }
+                        ]}
+                        data={(data && data.progress) || []}
+                      />
+                    </>
                   )
                 }
               }}
