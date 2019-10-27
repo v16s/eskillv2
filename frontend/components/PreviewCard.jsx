@@ -30,7 +30,7 @@ const useStyles = makeStyles(({ palette }) => {
   }
 })
 
-export default function SimpleCard ({
+export function PreviewCard ({
   name,
   desc,
   options: { a, b, c, d },

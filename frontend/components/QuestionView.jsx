@@ -41,7 +41,7 @@ const FETCH_ANSWER = gql`
   }
 `
 
-class QuestionView extends Component {
+class QuestionViewBase extends Component {
   state = {
     answer: this.props.ans,
     correct: 'correct'
@@ -323,8 +323,8 @@ class QuestionView extends Component {
     )
   }
 }
-export default compose(
+export const QuestionView = compose(
   withApollo,
   graphql(VERIFY_QUESTION, { name: 'check' }),
   graphql(OPTION_UPDATE, { name: 'updateAnswer' })
-)(withRouter(QuestionView))
+)(withRouter(QuestionViewBase))

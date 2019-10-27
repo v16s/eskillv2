@@ -95,7 +95,7 @@ function Table ({
     />
   )
 }
-export default class DashboardTable extends React.Component {
+export class Table extends React.Component {
   constructor (props) {
     super(props)
     this.state = {

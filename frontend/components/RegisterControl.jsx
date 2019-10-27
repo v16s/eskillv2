@@ -26,7 +26,7 @@ const GET_STUDENT_FACULTY = gql`
   }
 `
 
-class RegisterControl extends React.Component {
+class RegisterControlBase extends React.Component {
   state = {
     student: true,
     faculty: false
@@ -94,8 +94,8 @@ class RegisterControl extends React.Component {
     )
   }
 }
-export default compose(
+export const RegisterControl = compose(
   graphql(TOGGLE_FACULTY, { name: 'toggleFacultyRegistration' }),
   graphql(TOGGLE_STUDENT, { name: 'toggleStudentRegistration' }),
   graphql(GET_STUDENT_FACULTY)
-)(RegisterControl)
+)(RegisterControlBase)

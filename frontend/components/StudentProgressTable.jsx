@@ -38,7 +38,7 @@ const tableIcons = {
   ThirdStateCheck: Remove,
   ViewColumn: ViewColumn
 }
-export default function MaterialTableDemo ({ data, columns }) {
+export function StudentProgressTable ({ data, columns }) {
   return (
     <MaterialTable
       icons={tableIcons}

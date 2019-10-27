@@ -220,7 +220,7 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
   )
 }
 
-export default compose(
+export const AppBar = compose(
   graphql(GET_DARK, { name: 'dark' }),
   graphql(CHANGE_DARK, { name: 'changeDark' })
 )(withRouter(PrimarySearchAppBar))

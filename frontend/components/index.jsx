@@ -1,36 +1,18 @@
-import Dropdown from './Dropdown'
-import AppBar from './AppBar'
-import Table from './Table'
-import List from './List'
-import RegisterControl from './RegisterControl'
-import Loading from './Loading'
-import NewQuestion from './NewQuestion'
-import EditQuestion from './EditQuestion'
-import PreviewCard from './PreviewCard'
-import CourseCard from './CourseCard'
-import RequestCourse from './RequestCourse'
-import QuestionCircle from './QuestionCircle'
-import StudentProgressTable from './StudentProgressTable'
-import ReportProblem from './ReportProblem'
-import QuestionView from './QuestionView'
-import ApprovalCard from './ApprovalCard'
-import AcceptRejectTable from './AcceptRejectTable'
-export {
-  Dropdown,
-  AppBar,
-  Table,
-  List,
-  RegisterControl,
-  Loading,
-  NewQuestion,
-  PreviewCard,
-  EditQuestion,
-  CourseCard,
-  RequestCourse,
-  QuestionCircle,
-  StudentProgressTable,
-  ReportProblem,
-  QuestionView,
-  ApprovalCard,
-  AcceptRejectTable
-}
+export * from './Dropdown'
+export * from './AppBar'
+export * from './Table'
+export * from './List'
+export * from './RegisterControl'
+export * from './Loading'
+export * from './NewQuestion'
+export * from './EditQuestion'
+export * from './PreviewCard'
+export * from './CourseCard'
+export * from './RequestCourse'
+export * from './QuestionCircle'
+export * from './StudentProgressTable'
+export * from './ReportProblem'
+export * from './QuestionView'
+export * from './ApprovalCard'
+export * from './AcceptRejectTable'
+export * from './Document'

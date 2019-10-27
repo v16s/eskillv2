@@ -49,7 +49,7 @@ const INSTANCE = gql`
     }
   }
 `
-class QuestionCircle extends Component {
+class QuestionCircleBase extends Component {
   constructor (props) {
     super(props)
     this.state = { width: 0, height: 0 }
@@ -95,7 +95,7 @@ class QuestionCircle extends Component {
             )
           }
           const { course, questions, status } = data.instance
-          if(!status) return "You aren't supposed to be here"
+          if (!status) return "You aren't supposed to be here"
           if (windowWidth < 768) {
             return (
               <Paper>
@@ -112,7 +112,7 @@ class QuestionCircle extends Component {
                         ? red[400]
                         : q.status == 2
                           ? green[400]
-                          : q.ans ===""
+                          : q.ans === ''
                             ? '#3281ff'
                             : yellow[400]
                     return (
@@ -171,7 +171,7 @@ class QuestionCircle extends Component {
                                     ? red[400]
                                     : arc.data.status == 2
                                       ? green[400]
-                                      : arc.data.ans === ""
+                                      : arc.data.ans === ''
                                         ? '#3281ff'
                                         : yellow[400]
                                 }
@@ -232,6 +232,6 @@ class QuestionCircle extends Component {
   }
 }
 
-export default withRouter(
-  withStyles(styles, { withTheme: true })(QuestionCircle)
+export const QuestionCircle = withRouter(
+  withStyles(styles, { withTheme: true })(QuestionCircleBase)
 )
