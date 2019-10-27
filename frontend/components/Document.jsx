@@ -57,25 +57,29 @@ const styles = StyleSheet.create({
 })
 
 // Create Document Component
-export const Document = ({ data }) => (
-  <Document>
-    <Page style={styles.body}>
-      <Text style={styles.title}>SRM CARE eSkill Report</Text>
-      <Text style={styles.author}>Faculty: </Text>
-      <Text style={styles.author}>Department: </Text>
-      <Text style={{ ...styles.author, marginBottom: 35 }}>Course: </Text>
-      <Table data={data}>
-        <TableHeader>
-          <TableCell>Register Number</TableCell>
-          <TableCell>Name</TableCell>
-          <TableCell>Percentage Completed</TableCell>
-        </TableHeader>
-        <TableBody>
-          <DataTableCell getContent={r => r.regNumber} />
-          <DataTableCell getContent={r => r.name} />
-          <DataTableCell getContent={r => r.completed} />
-        </TableBody>
-      </Table>
-    </Page>
-  </Document>
-)
+const DocumentBase = ({ data }) => {
+  console.log(data)
+  return (
+    <Document>
+      <Page style={styles.body}>
+        <Text style={styles.title}>SRM CARE eSkill Report</Text>
+        <Text style={styles.author}>Faculty: </Text>
+        <Text style={styles.author}>Department: </Text>
+        <Text style={{ ...styles.author, marginBottom: 35 }}>Course: </Text>
+        <Table data={data}>
+          <TableHeader>
+            <TableCell>Register Number</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Percentage Completed</TableCell>
+          </TableHeader>
+          <TableBody>
+            <DataTableCell getContent={r => r.regNumber} />
+            <DataTableCell getContent={r => r.name} />
+            <DataTableCell getContent={r => r.percentage} />
+          </TableBody>
+        </Table>
+      </Page>
+    </Document>
+  )
+}
+export { DocumentBase as Document }

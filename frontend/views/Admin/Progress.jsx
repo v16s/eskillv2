@@ -3,46 +3,10 @@ import gql from 'graphql-tag'
 import { Query, compose, graphql, withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/styles'
 import { Grid, LinearProgress, Paper, Button } from '@material-ui/core'
-import { StudentProgressTable, Dropdown } from '../../components'
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  PDFDownloadLink
-} from '@react-pdf/renderer'
+import { StudentProgressTable, Dropdown, Document } from '../../components'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { withRouter } from 'react-router-dom'
 
-// Create styles
-const stylesPDF = StyleSheet.create({
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4'
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1
-  }
-})
-
-// Create Document Component
-const MyDoc = ({ people }) => (
-  <Document>
-    <Page size='A4' style={stylesPDF.page}>
-      {people.map(p => (
-        <>
-          <View style={stylesPDF.section}>
-            <Text>{p.percentage}</Text>
-          </View>
-          <View style={stylesPDF.section}>
-            <Text>{p.name}</Text>
-          </View>
-        </>
-      ))}
-    </Page>
-  </Document>
-)
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -92,7 +56,7 @@ const CAMPUSES = gql`
     }
   }
 `
-class Dashboard extends React.Component {
+class Progress extends React.Component {
   state = {
     show: false,
     courses: [],
@@ -223,21 +187,43 @@ class Dashboard extends React.Component {
                   return (
                     <>
                       <PDFDownloadLink
+                        style={{ marginBottom: 10 }}
                         document={
-                          <MyDoc
-                            people={data.progress.map(d => ({
-                              name: d.studentName,
-                              percentage: parseInt(
-                                (parseFloat(d.completed) * 100.0) /
-                                  parseFloat(d.total)
-                              )
-                            }))}
+                          <Document
+                            data={
+                              data.progress
+                                ? data.progress.map(d => ({
+                                  regNumber: d.studentReg,
+                                  name: d.studentName,
+                                  percentage: parseInt(
+                                    (parseFloat(d.completed) * 100.0) /
+                                        parseFloat(d.total)
+                                  ).toString()
+                                }))
+                                : []
+                            }
                           />
                         }
-                        fileName='somename.pdf'
+                        fileName='report.pdf'
                       >
                         {({ blob, url, loading, error }) =>
-                          loading ? 'Loading document...' : 'Download now!'
+                          loading ? (
+                            'Loading document...'
+                          ) : (
+                            <Button
+                              color='primary'
+                              variant='contained'
+                              onClick={e => {
+                                window.location.href = url
+                              }}
+                              style={{
+                                width: '100%',
+                                flexGrow: 1
+                              }}
+                            >
+                              Print
+                            </Button>
+                          )
                         }
                       </PDFDownloadLink>
 
@@ -284,8 +270,10 @@ class Dashboard extends React.Component {
   }
 }
 
-export default compose(
-  graphql(CAMPUSES, { name: 'campusQuery', fetchOptions: 'network-only' }),
-  withApollo,
-  graphql(BRANCHES, { name: 'branchQuery', fetchOptions: 'network-only' })
-)(withStyles(styles)(Dashboard))
+export default withRouter(
+  compose(
+    graphql(CAMPUSES, { name: 'campusQuery', fetchOptions: 'network-only' }),
+    withApollo,
+    graphql(BRANCHES, { name: 'branchQuery', fetchOptions: 'network-only' })
+  )(withStyles(styles)(Progress))
+)

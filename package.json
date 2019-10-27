@@ -10,6 +10,7 @@
     "@babel/plugin-proposal-class-properties": "^7.3.0",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
+    "@david.kucsai/react-pdf-table": "^0.1.1",
     "@material-ui/icons": "^4.0.1",
     "@vx/vx": "^0.0.189",
     "apollo-server-express": "^2.4.8",
@@ -47,7 +48,7 @@
   "devDependencies": {
     "@material-ui/core": "^4.0.2",
     "@material-ui/styles": "^4.0.1",
-    "@react-pdf/renderer": "^1.6.7",
+    "@react-pdf/renderer": "^1.6.2",
     "apollo-boost": "^0.4.0",
     "apollo-cache-inmemory": "^1.6.0",
     "apollo-client": "^2.6.0",
