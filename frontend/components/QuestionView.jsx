@@ -48,7 +48,7 @@ class QuestionView extends Component {
   }
   handleRadioChange = (e, v) => {
     if (this.props.status == 0) {
-      let answer = e.target.value
+      let answer = e
       let { question, course } = this.props
       this.props
         .updateAnswer({
@@ -140,7 +140,7 @@ class QuestionView extends Component {
         <Paper className={classes.paper}>
           <Toolbar>
             <Typography className={classes.appBar} variant='h6' noWrap>
-              <Latex>{name}</Latex>
+              <Latex>Question</Latex>
             </Typography>
             <Button
               variant='contained'
@@ -173,8 +173,13 @@ class QuestionView extends Component {
                   color='primary'
                   inputProps={{ 'aria-label': 'Radio A' }}
                   checked={answer === 'a'}
-                  onChange={this.handleRadioChange}
+                  onClick={(e, v) => {
+                    this.handleRadioChange(
+                      e.currentTarget.querySelector('input').value
+                    )
+                  }}
                   value='a'
+                  name='a'
                 />
               </div>
               <Paper
@@ -192,9 +197,13 @@ class QuestionView extends Component {
                 <Radio
                   disabled={disabled}
                   color='primary'
-                  inputProps={{ 'aria-label': 'Radio A' }}
+                  inputProps={{ 'aria-label': 'Radio B' }}
                   checked={answer === 'b'}
-                  onChange={this.handleRadioChange}
+                  onClick={(e, v) => {
+                    this.handleRadioChange(
+                      e.currentTarget.querySelector('input').value
+                    )
+                  }}
                   value='b'
                 />
               </div>
@@ -213,9 +222,13 @@ class QuestionView extends Component {
                 <Radio
                   disabled={disabled}
                   color='primary'
-                  inputProps={{ 'aria-label': 'Radio A' }}
+                  inputProps={{ 'aria-label': 'Radio C' }}
                   checked={answer === 'c'}
-                  onChange={this.handleRadioChange}
+                  onClick={(e, v) => {
+                    this.handleRadioChange(
+                      e.currentTarget.querySelector('input').value
+                    )
+                  }}
                   value='c'
                 />
               </div>
@@ -234,9 +247,13 @@ class QuestionView extends Component {
                 <Radio
                   disabled={disabled}
                   color='primary'
-                  inputProps={{ 'aria-label': 'Radio A' }}
+                  inputProps={{ 'aria-label': 'Radio D' }}
                   checked={answer === 'd'}
-                  onChange={this.handleRadioChange}
+                  onClick={(e, v) => {
+                    this.handleRadioChange(
+                      e.currentTarget.querySelector('input').value
+                    )
+                  }}
                   value='d'
                 />
               </div>
