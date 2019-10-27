@@ -9,7 +9,7 @@ export default gql`
     courses(where: CourseWhereInput): [Course]
     questions(where: QuestionWhereInput): [Question]
     question(id: String!): Question
-    faculties: [User]
+    faculties(where: FacultyWhereInput): [User]
     answer: String
     instances(where: CourseInstanceWhereInput): [CourseInstance]
     instance(id: String!): CourseInstance
@@ -17,6 +17,10 @@ export default gql`
     acceptReject: [CourseInstance]
     problems: [Problem]
     tokenExistence(token: String!): Boolean
+  }
+  input FacultyWhereInput {
+    campus: String!
+    course: String
   }
   input CourseWhereInput {
     branch: String
@@ -203,7 +207,7 @@ export default gql`
   }
   input CourseInstanceWhereInput {
     campus: String
-    facID: String
+    facultyID: String
     course: String
   }
   input LoginInput {

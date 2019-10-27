@@ -79,7 +79,7 @@ class RequestCourseBase extends React.Component {
       })
       .then(({ data }) => {
         console.log(data)
-        this.props.close(true)
+        this.props.close(true, this.props.refetch)
       })
   }
   render () {

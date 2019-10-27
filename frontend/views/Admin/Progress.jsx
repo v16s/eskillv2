@@ -56,16 +56,30 @@ const CAMPUSES = gql`
     }
   }
 `
+const FACULTIES = gql`
+  query Faculties($where: FacultyWhereInput) {
+    faculties(where: $where) {
+      name
+      id
+      username
+    }
+  }
+`
 class Progress extends React.Component {
   state = {
     show: false,
     courses: [],
+    faculties: [],
     where: {
       campus: {
         label: 'All',
         value: 'All'
       },
       course: {
+        label: 'All',
+        value: 'All'
+      },
+      faculty: {
         label: 'All',
         value: 'All'
       }
@@ -76,8 +90,22 @@ class Progress extends React.Component {
   }
   onDropdownChange = (value, { name }) => {
     let newstate = this.state
+    let { client } = this.props
     newstate.where[name] = value
-    this.setState(newstate)
+    let where = {}
+    newstate.where.course.value == 'All'
+      ? null
+      : (where['course'] = newstate.where.course.value)
+
+    newstate.where.campus.value == 'All'
+      ? null
+      : (where['campus'] = newstate.where.campus.value)
+    client
+      .query({ query: FACULTIES, variables: { where } })
+      .then(({ data }) => {
+        newstate.faculties = data.faculties
+        this.setState(newstate)
+      })
   }
   onBranchChange = (value, e) => {
     let newstate = this.state
@@ -100,6 +128,7 @@ class Progress extends React.Component {
       })
     this.setState(newstate)
   }
+
   render () {
     const { classes } = this.props
     const campuses = this.props.campusQuery.campuses
@@ -124,6 +153,13 @@ class Progress extends React.Component {
       ...this.state.courses.map(d => ({
         label: d.name,
         value: d.name
+      })),
+      { label: 'All', value: 'All' }
+    ]
+    const faculties = [
+      ...this.state.faculties.map(d => ({
+        label: `${d.username} - ${d.name}`,
+        value: d.id
       })),
       { label: 'All', value: 'All' }
     ]
@@ -163,6 +199,15 @@ class Progress extends React.Component {
                 value={this.state.where.course}
               />
             </Paper>
+            <Paper className={classes.paper}>
+              <Dropdown
+                options={faculties}
+                onChange={this.onDropdownChange}
+                label='Faculty'
+                name='faculty'
+                value={this.state.where.faculty}
+              />
+            </Paper>
             <Query
               query={PROGRESS}
               variables={{
@@ -174,6 +219,10 @@ class Progress extends React.Component {
                   course:
                     where.course.value != 'All'
                       ? where.course.value
+                      : undefined,
+                  facultyID:
+                    where.faculty.value != 'All'
+                      ? where.faculty.value
                       : undefined
                 }
               }}

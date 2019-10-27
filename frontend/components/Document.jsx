@@ -57,15 +57,19 @@ const styles = StyleSheet.create({
 })
 
 // Create Document Component
-const DocumentBase = ({ data }) => {
+const DocumentBase = ({ data, faculty, department, course }) => {
   console.log(data)
   return (
     <Document>
       <Page style={styles.body}>
         <Text style={styles.title}>SRM CARE eSkill Report</Text>
-        <Text style={styles.author}>Faculty: </Text>
-        <Text style={styles.author}>Department: </Text>
-        <Text style={{ ...styles.author, marginBottom: 35 }}>Course: </Text>
+        {faculty && <Text style={styles.author}>Faculty: {faculty}</Text>}
+        {department && (
+          <Text style={styles.author}>Department: {department}</Text>
+        )}
+        <Text style={{ ...styles.author, marginBottom: 35 }}>
+          Course: {course}
+        </Text>
         <Table data={data}>
           <TableHeader>
             <TableCell>Register Number</TableCell>

@@ -1,5 +1,6 @@
 import { prisma } from 'prisma'
-import { async } from 'q'
+
+import { find } from 'lodash'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
 
 let question = `
@@ -85,16 +86,35 @@ export default {
         })
     })
   },
-  faculties: async (_, _args, { user }) => {
+  faculties: async (_, { campus, course }, { user }) => {
     try {
-      console.log(user.campus, user.department)
-      return await prisma.users({
-        where: {
-          campus: user.campus,
-          department: user.department,
-          level: 3
+      if (user.level == 0) {
+        let faculties = await prisma.users({
+          where: {
+            level: 3,
+            campus
+          }
+        })
+        if (course) {
+          let instances = await prisma.courseInstances({ where: { course } })
+          faculties = faculties.filter(d => {
+            if (find(instances, { facultyID: d.id })) {
+              return true
+            }
+            return false
+          })
         }
-      })
+        return faculties
+      }
+      if (user.level == 4) {
+        return await prisma.users({
+          where: {
+            campus: user.campus,
+            department: user.department,
+            level: 3
+          }
+        })
+      }
     } catch (e) {
       throw new ValidationError(e.toString())
     }
@@ -121,9 +141,9 @@ export default {
             facultyID: user.id
           }
         } else if (user.level == 2) {
-          let course = user.username.replace(/_/, ' ').split('-')[0]
+          let courseUser = user.username.replace(/_/, ' ').split('-')[0]
           where = {
-            course
+            course: courseUser
           }
         } else if (user.level < 2) {
           where = {

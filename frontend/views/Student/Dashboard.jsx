@@ -72,20 +72,20 @@ class Dashboard extends React.Component {
   onSearchChange = e => {
     this.setState({ search: e.target.value })
   }
-  close = refresh => {
+  close = (refresh, refetch) => {
     if (refresh) {
-      this.props.data.refetch()
+      refetch()
     }
     this.setState({ show: !this.state.show })
   }
   render () {
-    const { classes, data } = this.props
+    const { classes } = this.props
 
     return (
       <div>
         <div className={classes.root}>
           <Query query={COURSES} fetchPolicy='no-cache'>
-            {({ data, loading }) => {
+            {({ data, loading, refetch }) => {
               let instances = data.instances || []
               return (
                 <>
@@ -139,38 +139,38 @@ class Dashboard extends React.Component {
                       </div>
                     )}
                   </Grid>
+                  {!this.state.show && (
+                    <Fab
+                      className={classes.fab}
+                      variant='extended'
+                      color='secondary'
+                      aria-label='Add'
+                      onClick={e => this.close(e, refetch)}
+                    >
+                      <Add />
+                      Request
+                    </Fab>
+                  )}
+                  <Modal
+                    aria-labelledby='request-course-modal'
+                    aria-describedby='request-course-here'
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      width: '100vw',
+                      alignItems: 'center',
+                      padding: 20,
+                      boxSizing: 'border-box'
+                    }}
+                    open={this.state.show}
+                    onClose={e => this.close(e, refetch)}
+                  >
+                    <RequestCourse close={this.close} refetch={refetch} />
+                  </Modal>
                 </>
               )
             }}
           </Query>
-          {!this.state.show && (
-            <Fab
-              className={classes.fab}
-              variant='extended'
-              color='secondary'
-              aria-label='Add'
-              onClick={this.close}
-            >
-              <Add />
-              Request
-            </Fab>
-          )}
-          <Modal
-            aria-labelledby='request-course-modal'
-            aria-describedby='request-course-here'
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100vw',
-              alignItems: 'center',
-              padding: 20,
-              boxSizing: 'border-box'
-            }}
-            open={this.state.show}
-            onClose={this.close}
-          >
-            <RequestCourse close={this.close} />
-          </Modal>
         </div>
       </div>
     )
