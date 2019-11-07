@@ -45,6 +45,7 @@ const PROGRESS = gql`
       studentName
       completed
       total
+      course
     }
   }
 `
@@ -150,9 +151,9 @@ class Progress extends React.Component {
       ]
     }
     const courses = [
-      ...this.state.courses.map(d => ({
-        label: d.name,
-        value: d.name
+      ...Array.from(new Set(this.state.courses.map(d => d.name))).map(d => ({
+        label: d,
+        value: d
       })),
       { label: 'All', value: 'All' }
     ]
@@ -235,46 +236,48 @@ class Progress extends React.Component {
                 } else {
                   return (
                     <>
-                      <PDFDownloadLink
-                        style={{ marginBottom: 10 }}
-                        document={
-                          <Document
-                            data={
-                              data.progress
-                                ? data.progress.map(d => ({
-                                  regNumber: d.studentReg,
-                                  name: d.studentName,
-                                  percentage: parseInt(
-                                    (parseFloat(d.completed) * 100.0) /
-                                        parseFloat(d.total)
-                                  ).toString()
-                                }))
-                                : []
-                            }
-                          />
-                        }
-                        fileName='report.pdf'
-                      >
-                        {({ blob, url, loading, error }) =>
-                          loading ? (
-                            'Loading document...'
-                          ) : (
-                            <Button
-                              color='primary'
-                              variant='contained'
-                              onClick={e => {
-                                window.location.href = url
-                              }}
-                              style={{
-                                width: '100%',
-                                flexGrow: 1
-                              }}
-                            >
-                              Print
-                            </Button>
-                          )
-                        }
-                      </PDFDownloadLink>
+                      {where.course.value != 'All' && (
+                        <PDFDownloadLink
+                          style={{ marginBottom: 10 }}
+                          document={
+                            <Document
+                              data={
+                                data.progress
+                                  ? data.progress.map(d => ({
+                                    regNumber: d.studentReg,
+                                    name: d.studentName,
+                                    percentage: parseInt(
+                                      (parseFloat(d.completed) * 100.0) /
+                                          parseFloat(d.total)
+                                    ).toString()
+                                  }))
+                                  : []
+                              }
+                            />
+                          }
+                          fileName='report.pdf'
+                        >
+                          {({ blob, url, loading, error }) =>
+                            loading ? (
+                              'Loading document...'
+                            ) : (
+                              <Button
+                                color='primary'
+                                variant='contained'
+                                onClick={e => {
+                                  window.location.href = url
+                                }}
+                                style={{
+                                  width: '100%',
+                                  flexGrow: 1
+                                }}
+                              >
+                                Print
+                              </Button>
+                            )
+                          }
+                        </PDFDownloadLink>
+                      )}
 
                       <StudentProgressTable
                         columns={[
@@ -284,7 +287,6 @@ class Progress extends React.Component {
                             title: 'Progress',
                             render: args => {
                               const { completed, total } = args
-                              console.log(completed / total)
                               return (
                                 <LinearProgress
                                   variant='determinate'
@@ -295,6 +297,10 @@ class Progress extends React.Component {
                                 />
                               )
                             }
+                          },
+                          {
+                            title: 'Course',
+                            field: 'course'
                           },
                           {
                             title: '%',

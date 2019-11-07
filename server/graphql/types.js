@@ -19,7 +19,7 @@ export default gql`
     tokenExistence(token: String!): Boolean
   }
   input FacultyWhereInput {
-    campus: String!
+    campus: String
     course: String
   }
   input CourseWhereInput {
