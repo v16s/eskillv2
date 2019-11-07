@@ -99,7 +99,7 @@ const makeDefaults = () => ({
   answer: ''
 })
 
-class EditQuestion extends Component {
+class EditQuestionBase extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -452,7 +452,7 @@ class EditQuestion extends Component {
   }
 }
 
-export default compose(
+export const EditQuestion = compose(
   withApollo,
   graphql(UPDATE_QUESTION)
-)(EditQuestion)
+)(EditQuestionBase)

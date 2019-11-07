@@ -88,7 +88,7 @@ const makeDefaults = () => ({
   },
   answer: ''
 })
-class NewQuestion extends Component {
+class NewQuestionBase extends Component {
   state = { ...makeDefaults(), courses: [], picture: null, exp: '' }
   onChange = ({ target }) => {
     this.setState({
@@ -405,7 +405,7 @@ class NewQuestion extends Component {
   }
 }
 
-export default compose(
+export const NewQuestion = compose(
   withApollo,
   graphql(ADD_QUESTION)
-)(NewQuestion)
+)(NewQuestionBase)

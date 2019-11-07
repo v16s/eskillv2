@@ -65,9 +65,11 @@ class TableList extends React.Component {
     this.setState({ addValue: e.target.value })
   }
   finish = oldValue => {
-    this.props.handleUpdate(this.props.current, oldValue, this.state.value).then(() => {
-      this.setState({ edit: false })
-    })
+    this.props
+      .handleUpdate(this.props.current, oldValue, this.state.value)
+      .then(() => {
+        this.setState({ edit: false })
+      })
   }
   cancel = () => {
     this.setState({ edit: false })
@@ -128,7 +130,7 @@ class TableList extends React.Component {
                 )
               }
               return (
-                <ListItem  key={d}>
+                <ListItem key={d}>
                   <IconButton
                     edge='start'
                     aria-label='Edit'
@@ -190,4 +192,5 @@ class TableList extends React.Component {
     )
   }
 }
-export default withStyles(styles)(TableList)
+const TableListMod = withStyles(styles)(TableList)
+export { TableListMod as List }

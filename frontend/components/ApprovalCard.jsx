@@ -66,4 +66,6 @@ class CourseCard extends Component {
   }
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(CourseCard))
+export const ApprovalCard = withRouter(
+  withStyles(styles, { withTheme: true })(CourseCard)
+)

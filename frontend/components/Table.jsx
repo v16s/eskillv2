@@ -95,7 +95,7 @@ function Table ({
     />
   )
 }
-export default class DashboardTable extends React.Component {
+export class TableBase extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -284,3 +284,4 @@ export default class DashboardTable extends React.Component {
     )
   }
 }
+export { TableBase as Table }

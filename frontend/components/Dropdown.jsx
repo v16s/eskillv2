@@ -176,7 +176,7 @@ const components = {
   SingleValue,
   ValueContainer
 }
-export default props => {
+export const Dropdown = props => {
   const classes = useStyles()
   const theme = useTheme()
 

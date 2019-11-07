@@ -39,7 +39,7 @@ const styles = theme => ({
     alignItems: 'center'
   }
 })
-class CourseCard extends Component {
+class CourseCardBase extends Component {
   render () {
     const {
       classes,
@@ -94,4 +94,6 @@ class CourseCard extends Component {
   }
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(CourseCard))
+export const CourseCard = withRouter(
+  withStyles(styles, { withTheme: true })(CourseCardBase)
+)

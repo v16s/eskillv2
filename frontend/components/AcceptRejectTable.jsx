@@ -38,7 +38,7 @@ const tableIcons = {
   ThirdStateCheck: Remove,
   ViewColumn: ViewColumn
 }
-export default function AcceptRejectTable ({ data, columns }) {
+export function AcceptRejectTable ({ data, columns }) {
   return (
     <MaterialTable
       icons={tableIcons}

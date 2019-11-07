@@ -35,7 +35,7 @@ const REQUEST_COURSE = gql`
   }
 `
 
-class RequestCourse extends React.Component {
+class RequestCourseBase extends React.Component {
   state = {
     branch: {},
     courses: [],
@@ -79,7 +79,7 @@ class RequestCourse extends React.Component {
       })
       .then(({ data }) => {
         console.log(data)
-        this.props.close(true)
+        this.props.close(true, this.props.refetch)
       })
   }
   render () {
@@ -165,7 +165,7 @@ class RequestCourse extends React.Component {
     )
   }
 }
-export default compose(
+export const RequestCourse = compose(
   withApollo,
   graphql(REQUEST_COURSE, { name: 'requestCourse' }),
   graphql(BRANCHES, {
@@ -173,4 +173,4 @@ export default compose(
     options: { fetchPolicy: 'network-only' }
   }),
   graphql(FACULTIES, { name: 'faculties' })
-)(RequestCourse)
+)(RequestCourseBase)

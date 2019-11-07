@@ -34,7 +34,7 @@ const styles = theme => ({
   }
 })
 
-class ReportProblem extends Component {
+class ReportProblemBase extends Component {
   state = {
     option: {},
     problem: ''
@@ -121,5 +121,5 @@ class ReportProblem extends Component {
     )
   }
 }
-ReportProblem = withStyles(styles)(ReportProblem)
-export default graphql(CREATE_PROBLEM)(ReportProblem)
+ReportProblemBase = withStyles(styles)(ReportProblemBase)
+export const ReportProblem = graphql(CREATE_PROBLEM)(ReportProblemBase)
