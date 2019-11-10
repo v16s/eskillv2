@@ -3,9 +3,10 @@ import gql from 'graphql-tag'
 import { Query, compose, graphql, withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/styles'
 import { Grid, LinearProgress, Paper, Button } from '@material-ui/core'
-import { StudentProgressTable, Dropdown, Document } from '../../components'
+import { StudentProgressTable, Dropdown, Document, DocumentAll } from '../../components'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { withRouter } from 'react-router-dom'
+import {groupBy} from 'lodash'
 
 const styles = theme => ({
   root: {
@@ -236,7 +237,7 @@ class Progress extends React.Component {
                 } else {
                   return (
                     <>
-                      {where.course.value != 'All' && (
+                      {where.course.value != 'All' ? (
                         <PDFDownloadLink
                           style={{ marginBottom: 10 }}
                           document={
@@ -273,6 +274,48 @@ class Progress extends React.Component {
                                 }}
                               >
                                 Print
+                              </Button>
+                            )
+                          }
+                        </PDFDownloadLink>
+                      ): (
+                        <PDFDownloadLink
+                          style={{ marginBottom: 10 }}
+                          document={
+                            <DocumentAll
+                              data={
+                                data.progress
+                                  ? groupBy(data.progress.map(d => ({
+                                    regNumber: d.studentReg,
+                                    name: d.studentName,
+                                    percentage: parseInt(
+                                      (parseFloat(d.completed) * 100.0) /
+                                          parseFloat(d.total)
+                                    ).toString(),
+                                    course: d.course
+                                  })), d => d.course)
+                                  : []
+                              }
+                            />
+                          }
+                          fileName='report.pdf'
+                        >
+                          {({ blob, url, loading, error }) =>
+                            loading ? (
+                              'Loading document...'
+                            ) : (
+                              <Button
+                                color='primary'
+                                variant='contained'
+                                onClick={e => {
+                                  window.location.href = url
+                                }}
+                                style={{
+                                  width: '100%',
+                                  flexGrow: 1
+                                }}
+                              >
+                                Print All
                               </Button>
                             )
                           }
