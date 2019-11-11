@@ -254,6 +254,7 @@ class Progress extends React.Component {
                                   }))
                                   : []
                               }
+                              course={where.course.value}
                             />
                           }
                           fileName='report.pdf'

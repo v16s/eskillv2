@@ -106,6 +106,24 @@ export default {
         }
         return faculties
       }
+      if (user.level == 1) {
+        let faculties = await prisma.users({
+          where: {
+            level: 3,
+            campus: user.campus
+          }
+        })
+        if (course) {
+          let instances = await prisma.courseInstances({ where: { course } })
+          faculties = faculties.filter(d => {
+            if (find(instances, { facultyID: d.id })) {
+              return true
+            }
+            return false
+          })
+        }
+        return faculties
+      }
       if (user.level == 4) {
         return await prisma.users({
           where: {
