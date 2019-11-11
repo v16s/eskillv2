@@ -67,7 +67,7 @@ const styles = theme => ({
   root: {
     overflow: 'hidden',
     padding: theme.spacing(0, 3),
-    width: '100vw',
+    // width: '100vw',
     minHeight: '100vh',
     display: 'flex',
     justifyContent: 'center',
@@ -77,7 +77,7 @@ const styles = theme => ({
   }
 })
 class Root extends React.Component {
-  render() {
+  render () {
     return (
       <ApolloProvider client={client}>
         <ThemeWrapper />
