@@ -175,7 +175,6 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
             className={classes.sectionMobile}
             edge='start'
             onClick={toggleDrawer(true)}
-            color='inherit'
           >
             <MenuIcon />
           </IconButton>
@@ -204,7 +203,6 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
 
             <IconButton
               edge='end'
-              color='inherit'
               onClick={e => {
                 localStorage.removeItem('jwtToken')
                 window.location.reload()

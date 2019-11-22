@@ -158,7 +158,8 @@ export default {
                 password: hash,
                 name: `${identity} Coordinator`,
                 email: '',
-                level: 2
+                level: 2,
+                campus: campus_name
               })
               await prisma.createCourse({
                 name,
