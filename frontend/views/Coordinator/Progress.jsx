@@ -84,18 +84,13 @@ class Progress extends React.Component {
   close = () => {
     this.setState({ show: !this.state.show })
   }
-  onDropdownChange = (value, { name }) => {
-    let newstate = this.state
+  componentDidMount () {
     let { client } = this.props
-    newstate.where[name] = value
-    let where = {}
-
-    client
-      .query({ query: FACULTIES, variables: { where } })
-      .then(({ data }) => {
-        newstate.faculties = data.faculties
-        this.setState(newstate)
-      })
+    let newstate = this.state
+    client.query({ query: FACULTIES }).then(({ data }) => {
+      newstate.faculties = data.faculties
+      this.setState(newstate)
+    })
   }
 
   render () {

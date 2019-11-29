@@ -124,17 +124,23 @@ export default {
         }
         return faculties
       }
-      if (user.level == 3) {
+      if (user.level == 2) {
+        let campuses = await prisma.campuses()
+        let campus_to_find = user.username.split('-')[2].replace(/_/, ' ')
+        let campus = campuses.filter(
+          d => d.name.toLowerCase() == campus_to_find
+        )[0].name
         let faculties = await prisma.users({
           where: {
             level: 3,
-            campus: user.campus
+            campus: campus
           }
         })
 
         let instances = await prisma.courseInstances({
           where: { course: user.username.replace(/_/, ' ').split('-')[0] }
         })
+        console.log(faculties, instances)
         faculties = faculties.filter(d => {
           if (find(instances, { facultyID: d.id })) {
             return true
@@ -211,9 +217,15 @@ export default {
       }
     } else if (user.level == 2) {
       let course = user.username.replace(/_/, ' ').split('-')[0]
-      where = {
+      let campuses = await prisma.campuses()
+      let campus_to_find = user.username.split('-')[2].replace(/_/, ' ')
+      let campus = campuses.filter(
+        d => d.name.toLowerCase() == campus_to_find
+      )[0].name
+
+      campuses.where = {
         course,
-        campus: user.campus
+        campus
       }
     } else if (user.level == 1) {
       where = {
