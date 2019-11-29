@@ -3,7 +3,9 @@ import { Switch, Route } from 'react-router-dom'
 import Questions from './Questions'
 import { Tabs, Tab } from '@material-ui/core'
 import { AppBar } from '../../components'
+import Problems from '../Problems'
 import { withRouter } from 'react-router-dom'
+import Progress from './Progress'
 export default withRouter(
   class Coordinator extends React.Component {
     constructor (props) {
@@ -26,6 +28,9 @@ export default withRouter(
         case 1:
           this.props.history.push('/reports')
           break
+        case 2:
+          this.props.history.push('/progress')
+          break
       }
       this.setState({ value })
     }
@@ -47,13 +52,15 @@ export default withRouter(
           >
             <Tab label='Questions' />
             <Tab label='Problem Reports' />
+            <Tab label='Student Progress' />
           </Tabs>
           <Switch>
+            <Route path='/reports' component={Problems} />
+            <Route path='/progress' component={Progress} />
             <Route path='/' component={Questions} />
           </Switch>
         </div>
       )
     }
   }
-  
 )
