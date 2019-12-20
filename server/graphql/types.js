@@ -17,6 +17,7 @@ export default gql`
     acceptReject: [CourseInstance]
     problems: [Problem]
     tokenExistence(token: String!): Boolean
+    student(id: String!): User
   }
   input FacultyWhereInput {
     campus: String

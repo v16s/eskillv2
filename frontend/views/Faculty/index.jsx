@@ -46,7 +46,7 @@ const Faculty = ({ location, history }) => {
         history.push('/reports')
         break
     }
-    valueChange({ value })
+    valueChange(value)
   }
   const classes = useStyles()
   return (
