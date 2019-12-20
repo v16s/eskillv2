@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { graphql } from 'react-apollo'
+import { graphql } from '@apollo/react-hoc'
 import gql from 'graphql-tag'
 import { withStyles } from '@material-ui/styles'
 import { ProblemDisplay } from '../components'

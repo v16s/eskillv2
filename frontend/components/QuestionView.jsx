@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { compose, graphql, withApollo } from 'react-apollo'
+import { graphql, withApollo } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 import gql from 'graphql-tag'
 import {
   Paper,

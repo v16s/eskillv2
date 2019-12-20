@@ -11,6 +11,18 @@ import {
   Chip
 } from '@material-ui/core'
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
+import { useLazyQuery } from '@apollo/react-hooks'
+
+import gql from 'graphql-tag'
+
+const STUDENT = gql`
+  query Student($id: String!) {
+    student(id: $id) {
+      name
+      department
+    }
+  }
+`
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -49,14 +61,22 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export const ProblemDisplay = ({ description, status, idx }) => {
+export const ProblemDisplay = ({ description, status, idx, studID }) => {
   const classes = useStyles()
+  const [loadStudent, { called, loading, data }] = useLazyQuery(STUDENT, {
+    variables: { id: studID }
+  })
+
   const [expanded, setExpanded] = React.useState(null)
   const handleChange = idx => {
     if (expanded == idx) {
       setExpanded(null)
     } else {
       setExpanded(idx)
+      if (!called) {
+        loadStudent()
+        console.log(data)
+      }
     }
   }
   status = parseInt(status)
@@ -67,7 +87,7 @@ export const ProblemDisplay = ({ description, status, idx }) => {
       status > 0 ? classes.approved : status == 0 ? classes.pending : undefined,
     color: status < 0 ? 'secondary' : undefined
   }
-  console.log(statusValue.label, status)
+
   return (
     <ExpansionPanel
       className={classes.expansionPanel}

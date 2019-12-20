@@ -1,12 +1,19 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { Query, compose, graphql, withApollo } from 'react-apollo'
+import { graphql, withApollo } from '@apollo/react-hoc'
+import { compose } from 'recompose'
+import { Query } from '@apollo/react-components'
 import { withStyles } from '@material-ui/styles'
 import { Grid, LinearProgress, Paper, Button } from '@material-ui/core'
-import { StudentProgressTable, Dropdown, Document, DocumentAll } from '../../components'
+import {
+  StudentProgressTable,
+  Dropdown,
+  Document,
+  DocumentAll
+} from '../../components'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { withRouter } from 'react-router-dom'
-import {groupBy} from 'lodash'
+import { groupBy } from 'lodash'
 
 const styles = theme => ({
   root: {
@@ -135,12 +142,12 @@ class Progress extends React.Component {
     const { classes } = this.props
     const campuses = this.props.campusQuery.campuses
       ? [
-        ...this.props.campusQuery.campuses.map(k => ({
-          label: k.name,
-          value: k.name
-        })),
-        { label: 'All', value: 'All' }
-      ]
+          ...this.props.campusQuery.campuses.map(k => ({
+            label: k.name,
+            value: k.name
+          })),
+          { label: 'All', value: 'All' }
+        ]
       : []
     let branches = []
     if (this.props.branchQuery.branches) {
@@ -245,13 +252,13 @@ class Progress extends React.Component {
                               data={
                                 data.progress
                                   ? data.progress.map(d => ({
-                                    regNumber: d.studentReg,
-                                    name: d.studentName,
-                                    percentage: parseInt(
-                                      (parseFloat(d.completed) * 100.0) /
+                                      regNumber: d.studentReg,
+                                      name: d.studentName,
+                                      percentage: parseInt(
+                                        (parseFloat(d.completed) * 100.0) /
                                           parseFloat(d.total)
-                                    ).toString()
-                                  }))
+                                      ).toString()
+                                    }))
                                   : []
                               }
                               course={where.course.value}
@@ -279,22 +286,25 @@ class Progress extends React.Component {
                             )
                           }
                         </PDFDownloadLink>
-                      ): (
+                      ) : (
                         <PDFDownloadLink
                           style={{ marginBottom: 10 }}
                           document={
                             <DocumentAll
                               data={
                                 data.progress
-                                  ? groupBy(data.progress.map(d => ({
-                                    regNumber: d.studentReg,
-                                    name: d.studentName,
-                                    percentage: parseInt(
-                                      (parseFloat(d.completed) * 100.0) /
-                                          parseFloat(d.total)
-                                    ).toString(),
-                                    course: d.course
-                                  })), d => d.course)
+                                  ? groupBy(
+                                      data.progress.map(d => ({
+                                        regNumber: d.studentReg,
+                                        name: d.studentName,
+                                        percentage: parseInt(
+                                          (parseFloat(d.completed) * 100.0) /
+                                            parseFloat(d.total)
+                                        ).toString(),
+                                        course: d.course
+                                      })),
+                                      d => d.course
+                                    )
                                   : []
                               }
                             />

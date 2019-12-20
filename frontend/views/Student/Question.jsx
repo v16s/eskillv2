@@ -3,7 +3,7 @@ import { Modal } from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
 import { red, green } from '@material-ui/core/colors'
 import gql from 'graphql-tag'
-import { Query } from 'react-apollo'
+import { Query } from '@apollo/react-components'
 import { ReportProblem, Loading, QuestionView } from '../../components'
 import { withRouter } from 'react-router-dom'
 

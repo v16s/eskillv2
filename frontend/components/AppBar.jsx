@@ -1,6 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { compose, graphql } from 'react-apollo'
+import { graphql } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 import {
   AppBar,
   Toolbar,

@@ -8,7 +8,9 @@ import {
   IconButton
 } from '@material-ui/core'
 import gql from 'graphql-tag'
-import { graphql, withApollo, compose, Query } from 'react-apollo'
+import { graphql, withApollo } from '@apollo/react-hoc'
+import { compose } from 'recompose'
+import { Query } from '@apollo/react-components'
 import { withRouter } from 'react-router-dom'
 import { Tonality } from '@material-ui/icons'
 
@@ -64,9 +66,7 @@ const styles = theme => ({
     marginTop: '10px'
   },
   login: {
-    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${
-      theme.palette.primary.dark
-    } 100%)`
+    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${theme.palette.primary.dark} 100%)`
   },
   titleBar: {
     display: 'flex',

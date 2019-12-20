@@ -1,8 +1,8 @@
 import { Paper, Switch, FormGroup, FormControlLabel } from '@material-ui/core'
 import React from 'react'
 import gql from 'graphql-tag'
-import { compose, graphql } from 'react-apollo'
-
+import { graphql } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 const TOGGLE_STUDENT = gql`
   mutation {
     toggleStudentRegistration {

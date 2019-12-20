@@ -2,7 +2,8 @@ import React from 'react'
 import { Table, RegisterControl } from '../../components'
 import gql from 'graphql-tag'
 import { Switch } from '@material-ui/core'
-import { compose, graphql } from 'react-apollo'
+import { graphql } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 
 const CAMPUSES = gql`
   {

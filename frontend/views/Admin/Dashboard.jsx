@@ -2,8 +2,8 @@ import React from 'react'
 import { Table, RegisterControl, Dropdown } from '../../components'
 import gql from 'graphql-tag'
 import { Switch, Paper } from '@material-ui/core'
-import { compose, graphql } from 'react-apollo'
-
+import { graphql } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 const CAMPUSES = gql`
   {
     campuses {
@@ -150,12 +150,12 @@ class Dashboard extends React.Component {
   render () {
     const campuses = this.props.campusQuery.campuses
       ? [
-        ...this.props.campusQuery.campuses.map(k => ({
-          label: k.name,
-          value: k.name
-        })),
-        { label: 'All', value: 'All' }
-      ]
+          ...this.props.campusQuery.campuses.map(k => ({
+            label: k.name,
+            value: k.name
+          })),
+          { label: 'All', value: 'All' }
+        ]
       : []
 
     let { campus } = this.state
@@ -205,10 +205,10 @@ class Dashboard extends React.Component {
                 ...this.props.courseQuery,
                 courses: this.props.courseQuery.courses
                   ? this.props.courseQuery.courses.filter(
-                    d =>
-                      this.state.campus.label == 'All' ||
+                      d =>
+                        this.state.campus.label == 'All' ||
                         d.campus == this.state.campus.label
-                  )
+                    )
                   : []
               }}
               campus={this.state.campus.label}

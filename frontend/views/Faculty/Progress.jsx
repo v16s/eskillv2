@@ -1,6 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { compose, graphql, withApollo } from 'react-apollo'
+import { graphql, withApollo } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 import { withStyles } from '@material-ui/styles'
 import {
   Grid,
@@ -131,14 +132,14 @@ class Dashboard extends React.Component {
     ]
     data.progress = data.progress
       ? data.progress.filter(d =>
-        d.course
-          .toLowerCase()
-          .includes(
-            this.state.where.course.label != 'All'
-              ? this.state.where.course.label.toLowerCase()
-              : ''
-          )
-      )
+          d.course
+            .toLowerCase()
+            .includes(
+              this.state.where.course.label != 'All'
+                ? this.state.where.course.label.toLowerCase()
+                : ''
+            )
+        )
       : []
     return (
       <div className={classes.root}>
@@ -173,13 +174,13 @@ class Dashboard extends React.Component {
                 data={
                   data.progress
                     ? data.progress.map(d => ({
-                      regNumber: d.studentReg,
-                      name: d.studentName,
-                      percentage: parseInt(
-                        (parseFloat(d.completed) * 100.0) /
+                        regNumber: d.studentReg,
+                        name: d.studentName,
+                        percentage: parseInt(
+                          (parseFloat(d.completed) * 100.0) /
                             parseFloat(d.total)
-                      ).toString()
-                    }))
+                        ).toString()
+                      }))
                     : []
                 }
                 // course={where.course.value}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { compose, graphql } from 'react-apollo'
+import { graphql } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 import gql from 'graphql-tag'
 import {
   Login,

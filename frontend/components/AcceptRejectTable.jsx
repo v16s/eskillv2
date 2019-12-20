@@ -17,7 +17,6 @@ import {
   Search,
   ViewColumn
 } from '@material-ui/icons'
-import { List } from './index'
 
 const tableIcons = {
   Add: AddBox,
