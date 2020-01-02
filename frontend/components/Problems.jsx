@@ -7,6 +7,7 @@ const PROBLEMS = gql`
   {
     problems {
       description
+      id
       studID
       status
       queID
@@ -36,29 +37,29 @@ const styles = theme => ({
 })
 
 class Problems extends Component {
-  state = {
-    expanded: null
-  }
-  handleChange = expanded => {
-    if (this.state.expanded == expanded) {
-      expanded = null
-    }
-    this.setState({ expanded })
-  }
   render () {
     const { classes, data } = this.props
-    const { expanded } = this.state
-    const { loading, problems } = data
+    const { loading, problems, refetch } = data
     console.log(loading, problems)
     return (
       <div className={classes.root}>
         {!loading &&
-          problems.map((d, idx) => (
-            <ProblemDisplay key={idx} idx={idx} {...d}></ProblemDisplay>
-          ))}
+          problems.map((d, idx) => {
+            console.log(d)
+            return (
+              <ProblemDisplay
+                mutations={this.props.mutations}
+                key={idx}
+                idx={idx}
+                refetch={refetch}
+                {...d}
+              ></ProblemDisplay>
+            )
+          })}
       </div>
     )
   }
 }
 Problems = graphql(PROBLEMS)(Problems)
-export default withStyles(styles)(Problems)
+Problems = withStyles(styles)(Problems)
+export { Problems }

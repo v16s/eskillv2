@@ -52,5 +52,19 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
+  },
+  facultyRejectProblem: async (_p, { id }, { user }) => {
+    if (user.level != 3) throw new AuthenticationError('Unauthorized')
+    try {
+      let problem = await prisma.problem({ id: id })
+      if (problem.facultyID != user.id) throw new ValidationError('Cant reject')
+      problem = await prisma.updateProblem({
+        where: { id },
+        data: { status: -1 }
+      })
+      return problem
+    } catch (e) {
+      throw new ValidationError(e.toString())
+    }
   }
 }

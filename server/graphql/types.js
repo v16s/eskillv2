@@ -200,6 +200,7 @@ export default gql`
       answer: String!
     ): CourseInstance
     verifyQuestion(question: String!, cid: String!): CourseInstance
+    facultyRejectProblem(id: String!): Problem!
   }
   input CourseInput {
     branch: String!

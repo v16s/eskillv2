@@ -52,7 +52,7 @@ class RegisterControlBase extends React.Component {
       this.setState({ student: glob.regs, faculty: glob.regf })
     }
   }
-  componentWillUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.data.global) {
       nextState.student = nextProps.data.global.regs
       nextState.faculty = nextProps.data.global.regf

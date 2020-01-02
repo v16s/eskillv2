@@ -11,7 +11,7 @@ import {
   Chip
 } from '@material-ui/core'
 import { ExpandMore as ExpandMoreIcon } from '@material-ui/icons'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 
 import gql from 'graphql-tag'
 
@@ -61,12 +61,20 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-export const ProblemDisplay = ({ description, status, idx, studID }) => {
+export const ProblemDisplay = ({
+  description,
+  status,
+  idx,
+  studID,
+  mutations,
+  id,
+  refetch
+}) => {
   const classes = useStyles()
   const [loadStudent, { called, loading, data }] = useLazyQuery(STUDENT, {
     variables: { id: studID }
   })
-
+  const [reject, { data: mutationResult }] = useMutation(mutations.REJECT)
   const [expanded, setExpanded] = React.useState(null)
   const handleChange = idx => {
     if (expanded == idx) {
@@ -118,9 +126,29 @@ export const ProblemDisplay = ({ description, status, idx, studID }) => {
           <Typography>{description}</Typography>
         </ExpansionPanelDetails>
       )}
+
       <Divider />
+      {data && (
+        <>
+          <ExpansionPanelDetails>
+            <Typography>{data.student.name}</Typography>
+            <br />
+            <Typography>{data.student.department}</Typography>
+          </ExpansionPanelDetails>
+          <Divider></Divider>
+        </>
+      )}
       <ExpansionPanelActions>
-        <Button size='small' color='secondary' variant='contained'>
+        <Button
+          size='small'
+          color='secondary'
+          variant='contained'
+          onClick={e => {
+            reject({ variables: { id } }).then(() => {
+              refetch()
+            })
+          }}
+        >
           Reject
         </Button>
         <Button size='small' className={classes.approved} variant='contained'>

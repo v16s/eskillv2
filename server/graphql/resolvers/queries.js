@@ -171,7 +171,7 @@ export default {
   },
   student: async (_, { id }, { user }) => {
     if (user.level < 4) {
-      return await prisma.findUser({ id: id })
+      return await prisma.user({ id })
     } else {
       throw new AuthenticationError()
     }
