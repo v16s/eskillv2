@@ -36,6 +36,7 @@ export default gql`
   type Global {
     regs: Boolean!
     regf: Boolean!
+    defaultCourses: [DefaultCourse]
     departments: [Tag]
     campuses: [Tag]
   }
@@ -96,6 +97,11 @@ export default gql`
     automated: Boolean
     campus: String
   }
+  type DefaultCourse {
+    branch: String!
+    name: String!
+    automated: Boolean!
+  }
   type Question {
     id: String!
     course: String!
@@ -129,6 +135,12 @@ export default gql`
     token: String!
   }
   type Mutation {
+    addDefaultCourse(course: DefaultCourse): [DefaultCourse]
+    removeDefaultCourse(course: DefaultCourse): [DefaultCourse]
+    updateDefaultCourse(
+      course: DefaultCourse
+      newcourse: DefaultCourse
+    ): [DefaultCourse]
     recover(input: RecoveryInput!): User!
     forgot(username: String!): Boolean!
     toggleStudentRegistration: ToggleResult

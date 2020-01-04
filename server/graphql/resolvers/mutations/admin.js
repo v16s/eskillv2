@@ -314,5 +314,38 @@ export default {
     } else {
       throw new AuthenticationError('Unauthorized')
     }
+  },
+  addDefaultCourse: async (_parent, { course }, { user }) => {
+    if (!user || user.level > 0) throw new AuthenticationError('Unauthorized')
+    return await prisma.updateGlobal({
+      where: { id: 'global' },
+      data: {
+        defaultCourses: {
+          create: [course]
+        }
+      }
+    })
+  },
+  removeDefaultCourse: async (_parent, { course }, { user }) => {
+    if (!user || user.level > 0) throw new AuthenticationError('Unauthorized')
+    return await prisma.updateGlobal({
+      where: { id: 'global' },
+      data: {
+        defaultCourses: {
+          deleteMany: course
+        }
+      }
+    })
+  },
+  updateDefaultCourse: async (_parent, { course, newcourse }, { user }) => {
+    if (!user || user.level > 0) throw new AuthenticationError('Unauthorized')
+    return await prisma.updateGlobal({
+      where: { id: 'global' },
+      data: {
+        defaultCourses: {
+          updateMany: { where: course, data: newcourse }
+        }
+      }
+    })
   }
 }
