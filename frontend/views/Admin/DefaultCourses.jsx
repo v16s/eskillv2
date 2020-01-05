@@ -22,7 +22,6 @@ const UPDATE_DEFAULT_COURSE = gql`
     $newName: String!
     $branch: String!
     $newBranch: String!
-    $campus: String!
   ) {
     updateDefaultCourse(
       name: $name
@@ -37,7 +36,7 @@ const UPDATE_DEFAULT_COURSE = gql`
   }
 `
 const REMOVE_DEFAULT_COURSE = gql`
-  mutation RemoveDefaultCourse($name: String!, $campus: String!) {
+  mutation RemoveDefaultCourse($name: String!) {
     removeDefaultCourse(name: $name) {
       name
       branch
@@ -88,9 +87,9 @@ export default () => {
       <DefaultCourseTable
         data={{
           loading,
-          defaultCourses: data && data.global.defaultCourses
+          defaultCourses: data && data.global.defaultCourses,
+          refetch
         }}
-        refetch={refetch}
         columns={[
           { title: 'Name', field: 'name' },
           { title: 'Branch', field: 'branch' },

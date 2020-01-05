@@ -334,7 +334,7 @@ export default {
       where: { id: 'global' },
       data: {
         defaultCourses: {
-          deleteMany: course
+          deleteMany: { name }
         }
       }
     })
