@@ -315,20 +315,22 @@ export default {
       throw new AuthenticationError('Unauthorized')
     }
   },
-  addDefaultCourse: async (_parent, { course }, { user }) => {
+  addDefaultCourse: async (_parent, { name, branch }, { user }) => {
     if (!user || user.level > 0) throw new AuthenticationError('Unauthorized')
-    return await prisma.updateGlobal({
+    const global = await prisma.updateGlobal({
       where: { id: 'global' },
       data: {
         defaultCourses: {
-          create: [course]
+          create: [{ name, branch }]
         }
       }
     })
+    console.log(global)
+    return global.defaultCourses
   },
-  removeDefaultCourse: async (_parent, { course }, { user }) => {
+  removeDefaultCourse: async (_parent, { name }, { user }) => {
     if (!user || user.level > 0) throw new AuthenticationError('Unauthorized')
-    return await prisma.updateGlobal({
+    const global = await prisma.updateGlobal({
       where: { id: 'global' },
       data: {
         defaultCourses: {
@@ -336,16 +338,40 @@ export default {
         }
       }
     })
+    return global.defaultCourses
   },
-  updateDefaultCourse: async (_parent, { course, newcourse }, { user }) => {
+  updateDefaultCourse: async (
+    _parent,
+    { name, newName, branch, newBranch },
+    { user }
+  ) => {
     if (!user || user.level > 0) throw new AuthenticationError('Unauthorized')
-    return await prisma.updateGlobal({
+    const global = await prisma.updateGlobal({
       where: { id: 'global' },
       data: {
         defaultCourses: {
-          updateMany: { where: course, data: newcourse }
+          updateMany: {
+            where: { name, branch },
+            data: { name: newName, branch: newBranch }
+          }
         }
       }
     })
+    return global.defaultCourses
+  },
+  toggleDefaultCourse: async (_p, { name, action }, { user }) => {
+    if (!user || user.level > 0) throw new AuthenticationError('Unauthorized')
+    const global = await prisma.updateGlobal({
+      where: { id: 'global' },
+      data: {
+        defaultCourses: {
+          updateMany: {
+            where: { name },
+            data: { automated: !action }
+          }
+        }
+      }
+    })
+    return global.defaultCourses
   }
 }

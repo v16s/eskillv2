@@ -135,12 +135,15 @@ export default gql`
     token: String!
   }
   type Mutation {
-    addDefaultCourse(course: DefaultCourse): [DefaultCourse]
-    removeDefaultCourse(course: DefaultCourse): [DefaultCourse]
+    addDefaultCourse(name: String!, branch: String!): [DefaultCourse]
+    removeDefaultCourse(name: String!): [DefaultCourse]
     updateDefaultCourse(
-      course: DefaultCourse
-      newcourse: DefaultCourse
+      name: String!
+      newName: String!
+      branch: String!
+      newBranch: String!
     ): [DefaultCourse]
+    toggleDefaultCourse(name: String!, action: Boolean!): [DefaultCourse]
     recover(input: RecoveryInput!): User!
     forgot(username: String!): Boolean!
     toggleStudentRegistration: ToggleResult

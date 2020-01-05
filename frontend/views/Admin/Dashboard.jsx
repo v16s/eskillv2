@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, RegisterControl, Dropdown } from '../../components'
 import gql from 'graphql-tag'
-import { Switch, Paper } from '@material-ui/core'
+import { Switch, Paper, Button } from '@material-ui/core'
 import { graphql } from '@apollo/react-hoc'
 import { compose } from 'recompose'
 const CAMPUSES = gql`
@@ -82,6 +82,7 @@ const ADD_COURSE = gql`
     }
   }
 `
+
 const TOGGLE = gql`
   mutation ToggleAutomate($name: String!, $campus: String!) {
     toggleCourseAutomation(name: $name, campus: $campus) {
@@ -129,6 +130,7 @@ const CourseTable = compose(
   graphql(REMOVE_COURSE, { name: 'removeOutside' }),
   graphql(UPDATE_COURSE, { name: 'updateOutside' })
 )(Table)
+
 class Dashboard extends React.Component {
   state = {
     campus: {
@@ -182,6 +184,13 @@ class Dashboard extends React.Component {
             />
           </div>
           <div style={{ width: '50%', padding: '20px' }}>
+            <Button
+              style={{ margin: '0 auto', marginBottom: 15, width: '100%' }}
+              color='primary'
+              variant='contained'
+            >
+              Set Default Courses
+            </Button>
             <Paper
               style={{
                 marginBottom: 15,
@@ -200,6 +209,7 @@ class Dashboard extends React.Component {
                 />
               </div>
             </Paper>
+
             <CourseTable
               data={{
                 ...this.props.courseQuery,

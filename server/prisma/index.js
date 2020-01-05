@@ -25,6 +25,10 @@ var models = [
     embedded: false
   },
   {
+    name: "DefaultCourse",
+    embedded: true
+  },
+  {
     name: "Tag",
     embedded: true
   },

@@ -1,9 +1,10 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Dashboard from './Dashboard'
+import DefaultCourses from './DefaultCourses'
 import Questions from './Questions'
 import Progress from './Progress'
-import Users from './Users'
+
 import { Tabs, Tab } from '@material-ui/core'
 import { AppBar } from '../../components'
 import { withRouter } from 'react-router-dom'
@@ -18,6 +19,9 @@ export default withRouter(
           break
         case '/reports':
           location = 2
+          break
+        case '/defaults':
+          location = 3
           break
       }
       this.state = {
@@ -34,6 +38,9 @@ export default withRouter(
           break
         case 2:
           this.props.history.push('/reports')
+          break
+        case 3:
+          this.props.history.push('/defaults')
           break
       }
       this.setState({ value })
@@ -57,8 +64,10 @@ export default withRouter(
             <Tab label='Dashboard' />
             <Tab label='Questions' />
             <Tab label='Progress Reports' />
+            <Tab label='Default Courses' />
           </Tabs>
           <Switch>
+            <Route path='/defaults' component={DefaultCourses} />
             <Route path='/reports' component={Progress} />
             <Route path='/questions' component={Questions} />
             <Route path='/' component={Dashboard} />
