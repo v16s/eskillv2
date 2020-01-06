@@ -3,7 +3,8 @@ import { TextField, Paper, Button, Grid, Radio } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
 import { Dropdown, PreviewCard } from './index'
 import { withStyles } from '@material-ui/core/styles'
-import { compose, graphql, withApollo } from 'react-apollo'
+import { graphql, withApollo } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 import gql from 'graphql-tag'
 
 const COURSES = gql`

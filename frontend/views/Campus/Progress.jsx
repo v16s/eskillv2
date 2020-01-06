@@ -1,6 +1,8 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { Query, compose, graphql, withApollo } from 'react-apollo'
+import { graphql, withApollo } from '@apollo/react-hoc'
+import { compose } from 'recompose'
+import { Query } from '@apollo/react-components'
 import { withStyles } from '@material-ui/styles'
 import { Grid, LinearProgress, Paper, Button } from '@material-ui/core'
 import {
@@ -210,13 +212,13 @@ class Progress extends React.Component {
                               data={
                                 data.progress
                                   ? data.progress.map(d => ({
-                                    regNumber: d.studentReg,
-                                    name: d.studentName,
-                                    percentage: parseInt(
-                                      (parseFloat(d.completed) * 100.0) /
+                                      regNumber: d.studentReg,
+                                      name: d.studentName,
+                                      percentage: parseInt(
+                                        (parseFloat(d.completed) * 100.0) /
                                           parseFloat(d.total)
-                                    ).toString()
-                                  }))
+                                      ).toString()
+                                    }))
                                   : []
                               }
                               course={where.course.value}
@@ -252,17 +254,17 @@ class Progress extends React.Component {
                               data={
                                 data.progress
                                   ? groupBy(
-                                    data.progress.map(d => ({
-                                      regNumber: d.studentReg,
-                                      name: d.studentName,
-                                      percentage: parseInt(
-                                        (parseFloat(d.completed) * 100.0) /
+                                      data.progress.map(d => ({
+                                        regNumber: d.studentReg,
+                                        name: d.studentName,
+                                        percentage: parseInt(
+                                          (parseFloat(d.completed) * 100.0) /
                                             parseFloat(d.total)
-                                      ).toString(),
-                                      course: d.course
-                                    })),
-                                    d => d.course
-                                  )
+                                        ).toString(),
+                                        course: d.course
+                                      })),
+                                      d => d.course
+                                    )
                                   : []
                               }
                             />

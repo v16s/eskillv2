@@ -2,7 +2,8 @@ import React from 'react'
 import { Modal, Paper, Grid, Button, Fab, Icon } from '@material-ui/core'
 import { Dropdown } from './index'
 import { Send } from '@material-ui/icons'
-import { compose, graphql, withApollo } from 'react-apollo'
+import { graphql, withApollo } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 import gql from 'graphql-tag'
 const BRANCHES = gql`
   query Branches {

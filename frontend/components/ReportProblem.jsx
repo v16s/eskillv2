@@ -3,7 +3,7 @@ import { Paper, TextField, Grid, Button } from '@material-ui/core'
 import { withStyles } from '@material-ui/styles'
 import { Dropdown } from './index'
 import gql from 'graphql-tag'
-import { graphql } from 'react-apollo'
+import { graphql } from '@apollo/react-hoc'
 
 const CREATE_PROBLEM = gql`
   mutation CreateProblem(

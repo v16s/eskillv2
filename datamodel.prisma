@@ -42,9 +42,17 @@ type Link @embedded {
 type Global {
   regs: Boolean @default(value: true)
   regf: Boolean @default(value: true)
+  defaultCourses: [DefaultCourse]!
   id: String! @default(value: "global") @unique
   _id: ID! @id
 }
+
+type DefaultCourse @embedded {
+  name: String!
+  branch: String!
+  automated: Boolean @default(value: false)
+}
+
 type Tag @embedded {
   name: String!
   id: String!

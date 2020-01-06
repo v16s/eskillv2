@@ -1,8 +1,8 @@
 import { Paper, Switch, FormGroup, FormControlLabel } from '@material-ui/core'
 import React from 'react'
 import gql from 'graphql-tag'
-import { compose, graphql } from 'react-apollo'
-
+import { graphql } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 const TOGGLE_STUDENT = gql`
   mutation {
     toggleStudentRegistration {
@@ -52,7 +52,7 @@ class RegisterControlBase extends React.Component {
       this.setState({ student: glob.regs, faculty: glob.regf })
     }
   }
-  componentWillUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.data.global) {
       nextState.student = nextProps.data.global.regs
       nextState.faculty = nextProps.data.global.regf

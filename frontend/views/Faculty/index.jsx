@@ -1,12 +1,12 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { AppBar } from '../../components'
+import { AppBar, Problems } from '../../components'
 import { Tabs, Tab, Paper } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import { withRouter } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
+import { FACULTY_REJECT } from './Mutations'
 import Dashboard from './Dashboard'
 import Progress from './Progress'
-import Problems from '../Problems'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -30,7 +30,9 @@ const getCurrentLocation = pathname => {
   }
 }
 
-const Faculty = ({ location, history }) => {
+export default () => {
+  const location = useLocation()
+  const history = useHistory()
   const [value, valueChange] = React.useState(
     getCurrentLocation(location.pathname)
   )
@@ -46,7 +48,7 @@ const Faculty = ({ location, history }) => {
         history.push('/reports')
         break
     }
-    valueChange({ value })
+    valueChange(value)
   }
   const classes = useStyles()
   return (
@@ -76,7 +78,13 @@ const Faculty = ({ location, history }) => {
         </Tabs>
 
         <Switch>
-          <Route path='/reports' component={Problems} />
+          <Route path='/reports'>
+            <Problems
+              mutations={{
+                REJECT: FACULTY_REJECT
+              }}
+            ></Problems>
+          </Route>
           <Route path='/progress' component={Progress} />
           <Route path='/' component={Dashboard} />
         </Switch>
@@ -84,5 +92,3 @@ const Faculty = ({ location, history }) => {
     </div>
   )
 }
-const FacultyRouter = withRouter(Faculty)
-export default FacultyRouter

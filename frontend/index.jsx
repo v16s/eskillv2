@@ -1,20 +1,24 @@
 import React from 'react'
 import { render } from 'react-dom'
+// Apollo
 import { ApolloClient } from 'apollo-client'
-import gql from 'graphql-tag'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloProvider, graphql } from 'react-apollo'
-import { endpoints } from './util'
+import { ApolloProvider } from '@apollo/react-common'
+import { graphql } from '@apollo/react-hoc'
 import { createUploadLink } from 'apollo-upload-client'
-import Router from './router'
+import gql from 'graphql-tag'
 import { typeDefs, resolvers } from './types'
+// Material UI
 import { ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme, withStyles } from '@material-ui/core/styles'
+// Components
+import { endpoints } from './util'
+import Router from './router'
+// Setting ENV
 let production = process.env.NODE_ENV == 'production'
-
+// Initializing Apollo Cache and httpLink based on ENV
 const cache = new InMemoryCache()
-
 const httpLink = createUploadLink({
   uri: production ? endpoints.production : endpoints.dev
 })
@@ -23,10 +27,9 @@ const GET_DARK = gql`
     dark @client
   }
 `
+// Setting bearer token from localstorage
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
   const token = localStorage.getItem('jwtToken')
-  // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
@@ -34,13 +37,14 @@ const authLink = setContext((_, { headers }) => {
     }
   }
 }).concat(httpLink)
-
+// Initializing ApolloClient
 const client = new ApolloClient({
   link: authLink,
   cache,
   typeDefs,
   resolvers
 })
+// Queries
 const GET_USER = gql`
   {
     validate {
@@ -55,6 +59,7 @@ const GET_USER = gql`
     }
   }
 `
+// Initializing Cache
 client.writeData({
   data: { loggedIn: null, dark: localStorage.getItem('dark') == 'true' }
 })
@@ -63,6 +68,7 @@ client.query({ query: GET_USER }).then(({ data: { validate } }) => {
     data: { loggedIn: validate != null, details: validate }
   })
 })
+// JSS
 const styles = theme => ({
   root: {
     overflow: 'hidden',
@@ -76,6 +82,7 @@ const styles = theme => ({
     background: theme.palette.background.default
   }
 })
+// Component with ApolloProvider (Apollo Root)
 class Root extends React.Component {
   render () {
     return (
@@ -85,6 +92,7 @@ class Root extends React.Component {
     )
   }
 }
+// Declaring Index (Soft Root)
 let Index = ({ classes }) => (
   <div className={classes.root}>
     <Router />

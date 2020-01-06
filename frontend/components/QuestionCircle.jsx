@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Pie } from '@vx/shape'
 import { Group } from '@vx/group'
-import { Query } from 'react-apollo'
+import { Query } from '@apollo/react-components'
 import { withStyles } from '@material-ui/styles'
 import {
   Paper,
@@ -111,10 +111,10 @@ class QuestionCircleBase extends Component {
                       q.status == 1
                         ? red[400]
                         : q.status == 2
-                          ? green[400]
-                          : q.ans === ''
-                            ? '#3281ff'
-                            : yellow[400]
+                        ? green[400]
+                        : q.ans === ''
+                        ? '#3281ff'
+                        : yellow[400]
                     return (
                       <div>
                         {' '}
@@ -170,10 +170,10 @@ class QuestionCircleBase extends Component {
                                   arc.data.status == 1
                                     ? red[400]
                                     : arc.data.status == 2
-                                      ? green[400]
-                                      : arc.data.ans === ''
-                                        ? '#3281ff'
-                                        : yellow[400]
+                                    ? green[400]
+                                    : arc.data.ans === ''
+                                    ? '#3281ff'
+                                    : yellow[400]
                                 }
                                 className={classes.path}
                                 stroke={theme.palette.background.paper}

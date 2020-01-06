@@ -10,7 +10,8 @@ import {
   IconButton
 } from '@material-ui/core'
 import { Dropdown } from '../components'
-import { compose, graphql } from 'react-apollo'
+import { graphql } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 import gql from 'graphql-tag'
 import { find } from 'lodash'
 import { Tonality } from '@material-ui/icons'
@@ -102,9 +103,7 @@ const styles = theme => ({
     marginTop: '10px'
   },
   login: {
-    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${
-      theme.palette.primary.dark
-    } 100%)`
+    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${theme.palette.primary.dark} 100%)`
   },
   textButton: {
     width: '80%',

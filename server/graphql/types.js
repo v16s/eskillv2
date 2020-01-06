@@ -17,6 +17,7 @@ export default gql`
     acceptReject: [CourseInstance]
     problems: [Problem]
     tokenExistence(token: String!): Boolean
+    student(id: String!): User
   }
   input FacultyWhereInput {
     campus: String
@@ -35,6 +36,7 @@ export default gql`
   type Global {
     regs: Boolean!
     regf: Boolean!
+    defaultCourses: [DefaultCourse]
     departments: [Tag]
     campuses: [Tag]
   }
@@ -95,6 +97,11 @@ export default gql`
     automated: Boolean
     campus: String
   }
+  type DefaultCourse {
+    branch: String!
+    name: String!
+    automated: Boolean!
+  }
   type Question {
     id: String!
     course: String!
@@ -128,6 +135,15 @@ export default gql`
     token: String!
   }
   type Mutation {
+    addDefaultCourse(name: String!, branch: String!): [DefaultCourse]
+    removeDefaultCourse(name: String!): [DefaultCourse]
+    updateDefaultCourse(
+      name: String!
+      newName: String!
+      branch: String!
+      newBranch: String!
+    ): [DefaultCourse]
+    toggleDefaultCourse(name: String!, action: Boolean!): [DefaultCourse]
     recover(input: RecoveryInput!): User!
     forgot(username: String!): Boolean!
     toggleStudentRegistration: ToggleResult
@@ -199,6 +215,7 @@ export default gql`
       answer: String!
     ): CourseInstance
     verifyQuestion(question: String!, cid: String!): CourseInstance
+    facultyRejectProblem(id: String!): Problem!
   }
   input CourseInput {
     branch: String!

@@ -169,6 +169,13 @@ export default {
       throw new ValidationError(e.toString())
     }
   },
+  student: async (_, { id }, { user }) => {
+    if (user.level < 4) {
+      return await prisma.user({ id })
+    } else {
+      throw new AuthenticationError()
+    }
+  },
   instances: async (_, { where: course }, { user }) => {
     try {
       let where

@@ -1,6 +1,6 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { compose, graphql, Query } from 'react-apollo'
+import { Query } from '@apollo/react-components'
 import { CourseCard, RequestCourse, ApprovalCard } from '../../components'
 import { withStyles } from '@material-ui/styles'
 import { Fab, Modal, TextField, Typography, Grid } from '@material-ui/core'

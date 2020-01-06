@@ -54,7 +54,7 @@ class TableList extends React.Component {
   edit = (d, i) => {
     this.setState({ edit: true, editing: i, value: d })
   }
-  componentWillUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     nextState.data = nextProps.data
     return true
   }

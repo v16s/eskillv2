@@ -1,6 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { compose, graphql } from 'react-apollo'
+import { graphql } from '@apollo/react-hoc'
+import { compose } from 'recompose'
 import { withStyles } from '@material-ui/styles'
 import { Grid, LinearProgress, IconButton, Button } from '@material-ui/core'
 import { DeleteForever } from '@material-ui/icons'

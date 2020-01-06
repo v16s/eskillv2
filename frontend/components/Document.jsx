@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
 
 // Create Document Component
 const DocumentBase = ({ data, faculty, department, course }) => {
-  console.log(data)
   return (
     <Document>
       <Page style={styles.body}>
