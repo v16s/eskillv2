@@ -20,7 +20,8 @@ let production = process.env.NODE_ENV == 'production'
 // Initializing Apollo Cache and httpLink based on ENV
 const cache = new InMemoryCache()
 const httpLink = createUploadLink({
-  uri: production ? endpoints.production : endpoints.dev
+  // uri: production ? endpoints.production : endpoints.dev
+  uri: endpoints.production
 })
 const GET_DARK = gql`
   {
