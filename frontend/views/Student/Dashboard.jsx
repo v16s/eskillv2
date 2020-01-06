@@ -86,7 +86,7 @@ class Dashboard extends React.Component {
         <div className={classes.root}>
           <Query query={COURSES} fetchPolicy='no-cache'>
             {({ data, loading, refetch }) => {
-              let instances = data.instances || []
+              let instances = !loading ? data.instances || [] : []
               return (
                 <>
                   {instances.length > 0 && (
