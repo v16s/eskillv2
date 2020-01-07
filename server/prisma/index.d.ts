@@ -471,7 +471,9 @@ export type CourseInstanceOrderByInput =
   | "studentName_ASC"
   | "studentName_DESC"
   | "studentReg_ASC"
-  | "studentReg_DESC";
+  | "studentReg_DESC"
+  | "correct_ASC"
+  | "correct_DESC";
 
 export type GlobalOrderByInput =
   | "regs_ASC"
@@ -922,6 +924,14 @@ export interface CourseInstanceWhereInput {
   studentReg_not_starts_with?: Maybe<String>;
   studentReg_ends_with?: Maybe<String>;
   studentReg_not_ends_with?: Maybe<String>;
+  correct?: Maybe<Int>;
+  correct_not?: Maybe<Int>;
+  correct_in?: Maybe<Int[] | Int>;
+  correct_not_in?: Maybe<Int[] | Int>;
+  correct_lt?: Maybe<Int>;
+  correct_lte?: Maybe<Int>;
+  correct_gt?: Maybe<Int>;
+  correct_gte?: Maybe<Int>;
   AND?: Maybe<CourseInstanceWhereInput[] | CourseInstanceWhereInput>;
 }
 
@@ -1718,6 +1728,7 @@ export interface CourseInstanceCreateInput {
   status: Boolean;
   studentName: String;
   studentReg: String;
+  correct?: Maybe<Int>;
 }
 
 export interface LinkCreateManyInput {
@@ -1742,6 +1753,7 @@ export interface CourseInstanceUpdateInput {
   status?: Maybe<Boolean>;
   studentName?: Maybe<String>;
   studentReg?: Maybe<String>;
+  correct?: Maybe<Int>;
 }
 
 export interface LinkUpdateManyInput {
@@ -1816,6 +1828,7 @@ export interface CourseInstanceUpdateManyMutationInput {
   status?: Maybe<Boolean>;
   studentName?: Maybe<String>;
   studentReg?: Maybe<String>;
+  correct?: Maybe<Int>;
 }
 
 export interface GlobalCreateInput {
@@ -2458,6 +2471,7 @@ export interface CourseInstance {
   status: Boolean;
   studentName: String;
   studentReg: String;
+  correct: Int;
 }
 
 export interface CourseInstancePromise
@@ -2475,6 +2489,7 @@ export interface CourseInstancePromise
   status: () => Promise<Boolean>;
   studentName: () => Promise<String>;
   studentReg: () => Promise<String>;
+  correct: () => Promise<Int>;
 }
 
 export interface CourseInstanceSubscription
@@ -2492,6 +2507,7 @@ export interface CourseInstanceSubscription
   status: () => Promise<AsyncIterator<Boolean>>;
   studentName: () => Promise<AsyncIterator<String>>;
   studentReg: () => Promise<AsyncIterator<String>>;
+  correct: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface CourseInstanceNullablePromise
@@ -2509,6 +2525,7 @@ export interface CourseInstanceNullablePromise
   status: () => Promise<Boolean>;
   studentName: () => Promise<String>;
   studentReg: () => Promise<String>;
+  correct: () => Promise<Int>;
 }
 
 export interface Link {
@@ -3349,6 +3366,7 @@ export interface CourseInstancePreviousValues {
   status: Boolean;
   studentName: String;
   studentReg: String;
+  correct: Int;
 }
 
 export interface CourseInstancePreviousValuesPromise
@@ -3365,6 +3383,7 @@ export interface CourseInstancePreviousValuesPromise
   status: () => Promise<Boolean>;
   studentName: () => Promise<String>;
   studentReg: () => Promise<String>;
+  correct: () => Promise<Int>;
 }
 
 export interface CourseInstancePreviousValuesSubscription
@@ -3381,6 +3400,7 @@ export interface CourseInstancePreviousValuesSubscription
   status: () => Promise<AsyncIterator<Boolean>>;
   studentName: () => Promise<AsyncIterator<String>>;
   studentReg: () => Promise<AsyncIterator<String>>;
+  correct: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface GlobalSubscriptionPayload {

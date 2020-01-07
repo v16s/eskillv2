@@ -147,7 +147,7 @@ class Dashboard extends React.Component {
               variant='contained'
               onClick={this.handleClick}
             >
-              Delete All Courses
+              Delete All Course Instances
             </Button>
             <Modal
               aria-labelledby='simple-modal-title'
