@@ -175,7 +175,13 @@ class Dashboard extends React.Component {
                 { title: 'Name', field: 'name' },
                 { title: 'Admin ID', field: 'admin_id', editable: 'never' }
               ]}
-              data={this.props.campusQuery}
+              data={{
+                ...this.props.campusQuery,
+                refetch: async () => {
+                  if (this.props.courseQuery) this.props.courseQuery.refetch()
+                  await this.props.campusQuery.refetch()
+                }
+              }}
               inside='departments'
               title='Campus'
               name='campuses'
