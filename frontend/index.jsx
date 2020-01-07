@@ -5,15 +5,14 @@ import { ApolloClient } from 'apollo-client'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloProvider } from '@apollo/react-common'
-import { graphql } from '@apollo/react-hoc'
 import { createUploadLink } from 'apollo-upload-client'
 import gql from 'graphql-tag'
 import { typeDefs, resolvers } from './types'
 // Material UI
-import { ThemeProvider } from '@material-ui/styles'
-import { createMuiTheme, withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 // Components
 import { endpoints } from './util'
+import { ThemeWrapper } from './components'
 import Router from './router'
 // Setting ENV
 let production = process.env.NODE_ENV == 'production'
@@ -22,11 +21,7 @@ const cache = new InMemoryCache()
 const httpLink = createUploadLink({
   uri: production ? endpoints.production : endpoints.dev
 })
-const GET_DARK = gql`
-  {
-    dark @client
-  }
-`
+
 // Setting bearer token from localstorage
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('jwtToken')
@@ -61,7 +56,10 @@ const GET_USER = gql`
 `
 // Initializing Cache
 client.writeData({
-  data: { loggedIn: null, dark: localStorage.getItem('dark') == 'true' }
+  data: {
+    loggedIn: null,
+    dark: localStorage.getItem('dark') == 'true'
+  }
 })
 client.query({ query: GET_USER }).then(({ data: { validate } }) => {
   client.writeData({
@@ -87,7 +85,9 @@ class Root extends React.Component {
   render () {
     return (
       <ApolloProvider client={client}>
-        <ThemeWrapper />
+        <ThemeWrapper>
+          <Index></Index>
+        </ThemeWrapper>
       </ApolloProvider>
     )
   }
@@ -99,20 +99,5 @@ let Index = ({ classes }) => (
   </div>
 )
 Index = withStyles(styles)(Index)
-let ThemeWrapper = ({ data }) => {
-  let theme = createMuiTheme({
-    palette: {
-      type: data.dark ? 'dark' : 'light',
-      primary: {
-        main: '#3281ff'
-      }
-    }
-  })
-  return (
-    <ThemeProvider theme={theme}>
-      <Index />
-    </ThemeProvider>
-  )
-}
-ThemeWrapper = graphql(GET_DARK)(ThemeWrapper)
+
 render(<Root />, document.getElementById('root'))
