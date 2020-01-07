@@ -57,6 +57,7 @@ class RegisterControlBase extends React.Component {
       nextState.student = nextProps.data.global.regs
       nextState.faculty = nextProps.data.global.regf
     }
+    return true
   }
   render () {
     return (
