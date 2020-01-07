@@ -33,6 +33,7 @@ type CourseInstance {
   status: Boolean!
   studentName: String!
   studentReg: String!
+  correct: Int! @default(value: 0)
 }
 type Link @embedded {
   id: String!
