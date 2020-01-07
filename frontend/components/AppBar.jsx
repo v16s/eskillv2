@@ -1,15 +1,12 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { graphql } from '@apollo/react-hoc'
-import { compose } from 'recompose'
+import { useQuery, useMutation } from '@apollo/react-hooks'
+
 import {
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Badge,
-  MenuItem,
-  Menu,
   Button,
   SwipeableDrawer,
   List,
@@ -19,13 +16,13 @@ import {
   Divider
 } from '@material-ui/core'
 import {
-  Notifications as NotificationsIcon,
-  ExitToAppRounded as LogoutIcon,
+  HomeRounded as Home,
+  ExitToApp as LogoutIcon,
   Tonality,
   Menu as MenuIcon
 } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
-import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 const GET_DARK = gql`
   {
     dark @client
@@ -77,30 +74,21 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.main
   }
 }))
-function PrimarySearchAppBar ({ dark, changeDark, history }) {
+function PrimarySearchAppBar () {
   const classes = useStyles()
+  const history = useHistory()
+  const [changeDark, _d] = useMutation(CHANGE_DARK)
+  const { data: dark } = useQuery(GET_DARK)
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [menuv, setMenu] = React.useState(false)
 
   const isMenuOpen = Boolean(anchorEl)
   const isMobileMenuOpen = menuv
 
-  function handleProfileMenuOpen (event) {
-    setAnchorEl(event.currentTarget)
-  }
-
   function handleMobileMenuClose () {
     setMobileMoreAnchorEl(null)
   }
 
-  function handleMenuClose () {
-    setAnchorEl(null)
-    handleMobileMenuClose()
-  }
-
-  function handleMobileMenuOpen (event) {
-    setMobileMoreAnchorEl(event.currentTarget)
-  }
   const toggleDrawer = open => event => {
     if (
       event &&
@@ -113,7 +101,7 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
     setMenu(open)
   }
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const sideList = side => (
+  const sideList = () => (
     <div
       role='presentation'
       onClick={toggleDrawer(false)}
@@ -123,6 +111,19 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
       <List>
         <ListItem
           button
+          color='primary'
+          onClick={e => {
+            history.push('/')
+          }}
+        >
+          <ListItemIcon>
+            <Home />
+          </ListItemIcon>
+          <ListItemText primary={'Home'} />
+        </ListItem>
+        <Divider />
+        <ListItem
+          color='primary'
           onClick={e => {
             changeDark({ variables: { dark: !dark.dark } })
           }}
@@ -133,15 +134,7 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
           <ListItemText primary={'Mode'} />
         </ListItem>
         <Divider />
-        <ListItem>
-          <ListItemIcon>
-            <Badge badgeContent={11} color='secondary'>
-              <NotificationsIcon />
-            </Badge>
-          </ListItemIcon>
-          <ListItemText primary={'Notifications'} />
-        </ListItem>
-        <Divider />
+
         <ListItem
           button
           onClick={e => {
@@ -149,10 +142,10 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
             window.location.reload()
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon color='primary'>
             <LogoutIcon />
           </ListItemIcon>
-          <ListItemText primary={'Logout'} />
+          <ListItemText color='primary' primary={'Logout'} />
         </ListItem>
       </List>
     </div>
@@ -175,6 +168,7 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
           <IconButton
             className={classes.sectionMobile}
             edge='start'
+            color='primary'
             onClick={toggleDrawer(true)}
           >
             <MenuIcon />
@@ -196,6 +190,14 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
             <IconButton
               color='primary'
               onClick={e => {
+                history.push('/')
+              }}
+            >
+              <Home />
+            </IconButton>
+            <IconButton
+              color='primary'
+              onClick={e => {
                 changeDark({ variables: { dark: !dark.dark } })
               }}
             >
@@ -204,6 +206,7 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
 
             <IconButton
               edge='end'
+              color='primary'
               onClick={e => {
                 localStorage.removeItem('jwtToken')
                 window.location.reload()
@@ -219,8 +222,4 @@ function PrimarySearchAppBar ({ dark, changeDark, history }) {
   )
 }
 
-const AppBarBase = compose(
-  graphql(GET_DARK, { name: 'dark' }),
-  graphql(CHANGE_DARK, { name: 'changeDark' })
-)(withRouter(PrimarySearchAppBar))
-export { AppBarBase as AppBar }
+export { PrimarySearchAppBar as AppBar }

@@ -5,7 +5,7 @@ export const typeDefs = gql`
     details: User!
   }
   extend type Mutation {
-    changeDark(dark: Boolean!): Boolean
+    resize(width: Float!, height: Float!): Dimensions
   }
 `
 export const resolvers = {
