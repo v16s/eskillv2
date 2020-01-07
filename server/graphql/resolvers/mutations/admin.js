@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt-nodejs'
 import { promisify } from 'util'
 import { AuthenticationError, ValidationError } from 'apollo-server-express'
 export default {
-  adminDeleteAllCourseInstances__DANGEROUS: async () => {
+  adminDeleteAllCourseInstances__DANGEROUS: async (_p, _a, { user }) => {
     if (user.level > 1) throw new AuthenticationError('Unauthorized')
     return await prisma.deleteManyCourseInstances()
   },
