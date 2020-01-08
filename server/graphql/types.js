@@ -136,6 +136,7 @@ export default gql`
   }
   type Mutation {
     addDefaultCourse(name: String!, branch: String!): [DefaultCourse]
+    adminDeleteAllCourseInstances__DANGEROUS: Int!
     removeDefaultCourse(name: String!): [DefaultCourse]
     updateDefaultCourse(
       name: String!
