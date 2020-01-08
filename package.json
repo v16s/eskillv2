@@ -63,6 +63,7 @@
     "apollo-link-context": "^1.0.17",
     "apollo-link-state": "^0.4.2",
     "apollo-upload-client": "^10.0.1",
+    "async": "^3.1.0",
     "clsx": "^1.0.4",
     "csvtojson": "^2.0.10",
     "node-sass": "^4.12.0",
