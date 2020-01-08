@@ -76,6 +76,7 @@ export default gql`
     studentName: String!
     campus: String!
     studentReg: String!
+    correct: Int!
   }
   type Link {
     id: String!
