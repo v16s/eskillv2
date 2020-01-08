@@ -56,6 +56,10 @@ export default {
         const { defaultCourses } = await prisma.global({ id: 'global' })
         Promise.all(
           defaultCourses.map(async d => {
+            let branches = await prisma.branches({ where: { name: d.branch } })
+            if (branches.length == 0) {
+              await prisma.createBranch({ name: d.branch }).catch(e => {})
+            }
             let identity = `${d.name}-${d.branch}-${username
               .split('-')[0]
               .toLowerCase()}`
