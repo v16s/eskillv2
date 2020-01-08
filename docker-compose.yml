@@ -28,6 +28,7 @@ services:
   prisma_dev:
     image: prismagraphql/prisma:1.34
     restart: always
+    network_mode: "host"
     ports:
       - "5566:5566"
     environment:
