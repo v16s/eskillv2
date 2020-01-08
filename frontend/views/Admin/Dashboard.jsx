@@ -71,9 +71,20 @@ class Dashboard extends React.Component {
           </div>
           <div style={{ width: '50%', padding: '20px' }}>
             <Button
-              style={{ margin: '0 auto', marginBottom: 15, width: '100%' }}
+              style={{ margin: '0 auto', marginBottom: 15, width: '50%' }}
               color='primary'
-              variant='contained'
+              onClick={e => {
+                this.props.verify()
+              }}
+            >
+              Verify Correct Answers (Temporary)
+            </Button>
+            <Button
+              style={{ margin: '0 auto', marginBottom: 15, width: '50%' }}
+              color='primary'
+              onClick={e => {
+                this.props.history.push('/defaults')
+              }}
             >
               Set Default Courses
             </Button>
@@ -313,6 +324,11 @@ const UPDATE_COURSE = gql`
     }
   }
 `
+const VERIFY = gql`
+  mutation {
+    reverify
+  }
+`
 const REMOVE_COURSE = gql`
   mutation RemoveCourse($name: String!, $campus: String!) {
     removeCourse(name: $name, campus: $campus) {
@@ -336,6 +352,7 @@ const CourseTable = compose(
 )(Table)
 
 export default compose(
+  graphql(VERIFY, { name: 'verify' }),
   graphql(TOGGLE),
   graphql(CAMPUSES, { name: 'campusQuery', fetchPolicy: 'network-only' }),
   graphql(COURSES, { name: 'courseQuery', fetchPolicy: 'network-only' }),
