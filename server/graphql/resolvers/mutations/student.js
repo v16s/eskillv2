@@ -100,13 +100,14 @@ export default {
     if (user.level == 4) {
       let instance = await prisma.courseInstance({ id: cid })
 
-      let { completed } = instance
+      let { completed, correct } = instance
       try {
         if (!instance) throw new ValidationError('no course')
         let { ans: verify } = await prisma.question({ id: question })
         let status = (() => {
           let { ans } = instance.questions.find(d => d.id == question)
           if (ans == verify) {
+            correct++
             return 2
           } else {
             return 1
@@ -115,6 +116,7 @@ export default {
         instance = await prisma.updateCourseInstance({
           where: { id: cid },
           data: {
+            correct,
             completed: completed + 1,
             questions: {
               updateMany: {
