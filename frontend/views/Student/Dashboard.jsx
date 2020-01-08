@@ -59,6 +59,7 @@ const COURSES = gql`
       course
       completed
       id
+      correct
       status
     }
   }
@@ -103,7 +104,7 @@ class Dashboard extends React.Component {
                   <Grid container spacing={3} style={{ height: 'auto' }}>
                     {instances.length > 0 ? (
                       instances.map(
-                        ({ course, completed, total, id, status }) => {
+                        ({ course, completed, total, id, status, correct }) => {
                           if (
                             new RegExp(this.state.search, 'gi').test(course)
                           ) {
@@ -114,6 +115,7 @@ class Dashboard extends React.Component {
                                   course={course}
                                   completed={completed}
                                   complete={parseInt((completed / total) * 100)}
+                                  correct={correct}
                                   id={id}
                                 />
                               )

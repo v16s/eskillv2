@@ -47,6 +47,7 @@ class CourseCardBase extends Component {
       complete,
       completed,
       theme,
+      correct,
       history: { push }
     } = this.props
 
@@ -80,7 +81,10 @@ class CourseCardBase extends Component {
               </div>
               <div className={classes.column}>
                 <Typography variant='caption'>
-                  {completed} Questions Completed
+                  {completed} questions completed
+                </Typography>
+                <Typography variant='caption'>
+                  {correct} questions correctly answered
                 </Typography>
                 {/* <Typography variant='caption'>
                   {correct} Answered Correctly
