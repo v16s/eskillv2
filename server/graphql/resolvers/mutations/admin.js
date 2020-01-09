@@ -56,6 +56,10 @@ export default {
         const { defaultCourses } = await prisma.global({ id: 'global' })
         Promise.all(
           defaultCourses.map(async d => {
+            let branches = await prisma.branches({ where: { name: d.branch } })
+            if (branches.length == 0) {
+              await prisma.createBranch({ name: d.branch }).catch(e => {})
+            }
             let identity = `${d.name}-${d.branch}-${username
               .split('-')[0]
               .toLowerCase()}`
@@ -358,5 +362,28 @@ export default {
       }
     })
     return global.defaultCourses
+  },
+  reverify: async (_p, _a, { user }) => {
+    return new Promise(async (resolve, reject) => {
+      if (user.length > 1) reject('Unauthorized')
+      let instances = await prisma.courseInstances()
+      Promise.all(
+        instances.map(async instance => {
+          const { questions, id } = instance
+          const correctArray = questions.filter(d => d.status == 2)
+          const correct = correctArray.length
+          return await prisma.updateCourseInstance({
+            where: { id },
+            data: { correct }
+          })
+        })
+      )
+        .then(e => {
+          resolve(instances.length)
+        })
+        .catch(e => {
+          reject(e.toString())
+        })
+    })
   }
 }

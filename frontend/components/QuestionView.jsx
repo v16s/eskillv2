@@ -77,7 +77,7 @@ export const QuestionView = ({
     if (status == 0) {
       let _answer = e
       updateAnswer({
-        variables: { question, name: course, answer }
+        variables: { question, name: course, answer: _answer }
       })
         .then(({ data }) => {
           setAnswer(_answer)

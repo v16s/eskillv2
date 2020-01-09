@@ -52,6 +52,7 @@ const PROGRESS = gql`
       studentReg
       studentName
       completed
+      correct
       total
       course
     }
@@ -215,7 +216,7 @@ class Progress extends React.Component {
                                       regNumber: d.studentReg,
                                       name: d.studentName,
                                       percentage: parseInt(
-                                        (parseFloat(d.completed) * 100.0) /
+                                        (parseFloat(d.correct) * 100.0) /
                                           parseFloat(d.total)
                                       ).toString()
                                     }))
@@ -258,7 +259,7 @@ class Progress extends React.Component {
                                         regNumber: d.studentReg,
                                         name: d.studentName,
                                         percentage: parseInt(
-                                          (parseFloat(d.completed) * 100.0) /
+                                          (parseFloat(d.correct) * 100.0) /
                                             parseFloat(d.total)
                                         ).toString(),
                                         course: d.course
@@ -318,9 +319,9 @@ class Progress extends React.Component {
                           },
                           {
                             title: '%',
-                            render: ({ completed, total }) =>
+                            render: ({ correct, total }) =>
                               `${parseInt(
-                                (parseFloat(completed) * 100.0) /
+                                (parseFloat(correct) * 100.0) /
                                   parseFloat(total)
                               )}`
                           }
