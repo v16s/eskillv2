@@ -20,6 +20,7 @@ let production = process.env.NODE_ENV == 'production'
 const cache = new InMemoryCache()
 const httpLink = createUploadLink({
   uri: production ? endpoints.production : endpoints.dev
+  // uri: endpoints.production
 })
 
 // Setting bearer token from localstorage
