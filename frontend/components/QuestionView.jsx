@@ -66,7 +66,7 @@ export const QuestionView = ({
   const disabled = status != 0
   const size = useWindowSize()
   useEffect(() => {
-    if (called && !loading) {
+    if (data && !loading) {
       setCorrect(data.question.ans)
     }
     if (correct == 'correct' && status == 1) {
@@ -90,8 +90,9 @@ export const QuestionView = ({
   const onSubmit = () => {
     if (answer != '') {
       check({ variables: { question, name: course } })
-        .then(({ data }) => {
-          refetch()
+        .then(async ({ data }) => {
+          await refetch()
+          updateWithAnswer()
         })
         .catch(err => {
           console.log(err)
