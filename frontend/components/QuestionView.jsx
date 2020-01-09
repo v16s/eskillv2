@@ -10,6 +10,7 @@ import {
   Toolbar,
   Typography
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
@@ -252,21 +253,29 @@ export const QuestionView = ({
           </Grid>
         )}
         <Grid item xs={12}>
-          <Button
-            variant='contained'
-            color='primary'
-            style={{
-              width: '100%',
-              boxShadow: 'none',
-              borderTopLeftRadius: 0,
-              borderTopRightRadius: 0
-            }}
-            onClick={onSubmit}
-            size='large'
-            disabled={disabled}
-          >
-            Submit
-          </Button>
+          {!disabled ? (
+            <Button
+              variant='contained'
+              color='primary'
+              style={{
+                width: '100%',
+                boxShadow: 'none',
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0
+              }}
+              onClick={onSubmit}
+              size='large'
+              disabled={disabled}
+            >
+              Submit
+            </Button>
+          ) : (
+            <div>
+              <Alert severity={status == 1 ? 'error' : 'success'}>
+                {status == 1 ? 'Wrong Answer' : 'Right Answer'}
+              </Alert>
+            </div>
+          )}
         </Grid>
       </Paper>
       <Paper className={classes.paper}>

@@ -16,6 +16,7 @@
     "@babel/preset-react": "^7.0.0",
     "@david.kucsai/react-pdf-table": "^0.1.1",
     "@material-ui/icons": "^4.0.1",
+    "@material-ui/lab": "^4.0.0-alpha.39",
     "@types/react": "^16.8.0",
     "@vx/vx": "^0.0.189",
     "apollo-server-express": "^2.4.8",
