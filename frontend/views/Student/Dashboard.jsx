@@ -3,7 +3,13 @@ import gql from 'graphql-tag'
 import { Query } from '@apollo/react-components'
 import { CourseCard, RequestCourse, ApprovalCard } from '../../components'
 import { withStyles } from '@material-ui/styles'
-import { Fab, Modal, TextField, Typography, Grid } from '@material-ui/core'
+import {
+  Fab,
+  Modal,
+  InputBase as TextField,
+  Typography,
+  Grid
+} from '@material-ui/core'
 import { Add } from '@material-ui/icons'
 import { withRouter } from 'react-router-dom'
 const styles = theme => ({
@@ -11,13 +17,17 @@ const styles = theme => ({
     display: 'flex',
     color: '#fff',
     flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop: 20
+    alignItems: 'center'
   },
   search: {
     width: '98%',
     maxWidth: 400,
-    margin: 5
+    margin: 15,
+    '& input': {
+      backgroundColor: theme.palette.background.paper,
+      ...theme.shape,
+      padding: theme.spacing(1, 1, 1, 1)
+    }
   },
   cardcontent: {
     display: 'flex',
@@ -96,8 +106,10 @@ class Dashboard extends React.Component {
                         value={this.state.search}
                         onChange={this.onSearchChange}
                         placeholder='Search'
-                        style={{ width: '100%' }}
-                        variant='outlined'
+                        style={{
+                          width: '100%'
+                        }}
+                        variant='filled'
                       />
                     </div>
                   )}
