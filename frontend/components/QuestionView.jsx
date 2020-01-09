@@ -108,7 +108,7 @@ export const QuestionView = ({
     }
   }
   const isCorrect = value => {
-    if (value == correct) return classes.green
+    if (data && value == data.question.ans) return classes.green
     else return classes.grey
   }
   const updateWithAnswer = () => {
