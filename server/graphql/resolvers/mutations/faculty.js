@@ -66,5 +66,55 @@ export default {
     } catch (e) {
       throw new ValidationError(e.toString())
     }
+  },
+  facultyResolveProblem: async (
+    _p,
+    { id, course, name, desc, exp, Obj, ans, picture },
+    { user, bucket }
+  ) => {
+    if (user.level !== 3) throw new AuthenticationError('Unauthorized')
+    try {
+      let problem = await prisma.problem({ queID: id })
+      if (problem.facultyID != user.id)
+        throw new ValidationError('Cant resolve')
+      let question = await prisma.updateQuestion({
+        where: { id },
+        data: {
+          name,
+          desc,
+          exp,
+          ans,
+          opt: {
+            create: Obj
+          },
+          course
+        }
+      })
+      if (picture && question) {
+        const { createReadStream } = await picture
+        if (picture) {
+          try {
+            let image = bucket.find({ filename: `${id}.jpg` })
+            let { _id } = await image.next()
+            bucket.delete(_id)
+          } catch (e) {}
+        }
+        let img = `${question.id}.jpg`
+        createReadStream()
+          .pipe(bucket.openUploadStream(img))
+          .on('finish', () => {
+            resolve(question)
+          })
+      } else {
+        resolve(question)
+      }
+      problem = await prisma.updateProblem({
+        where: { queID: id },
+        data: { status: 2 }
+      })
+      return problem
+    } catch (e) {
+      throw new ValidationError(e.toString())
+    }
   }
 }
