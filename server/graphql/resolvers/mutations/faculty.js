@@ -74,7 +74,7 @@ export default {
   ) => {
     if (user.level !== 3) throw new AuthenticationError('Unauthorized')
     try {
-      let problems = await prisma.problems({ where: {queID: id} })
+      let problems = await prisma.problems({ where: { queID: id } })
       let problem = problems[0]
       if (problem.facultyID != user.id)
         throw new ValidationError('Cant resolve')
@@ -91,7 +91,7 @@ export default {
           course
         }
       })
-      await new Promise((resolve, reject) => {
+      await new Promise(async (resolve, reject) => {
         if (picture && question) {
           const { createReadStream } = await picture
           if (picture) {
@@ -111,7 +111,7 @@ export default {
           resolve(question)
         }
       })
-      
+
       problem = await prisma.updateProblem({
         where: { queID: id },
         data: { status: 2 }
