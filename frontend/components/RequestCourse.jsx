@@ -17,6 +17,7 @@ const FACULTIES = gql`
     faculties {
       id
       name
+      username
     }
   }
 `
@@ -64,7 +65,7 @@ class RequestCourseBase extends React.Component {
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.faculties.faculties) {
       nextState.faculties = nextProps.faculties.faculties.map(d => ({
-        label: `${d.name} - ${d.id}`,
+        label: `${d.name} - ${d.username}`,
         value: d.id
       }))
     }
