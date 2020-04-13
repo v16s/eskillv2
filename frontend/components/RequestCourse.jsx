@@ -64,7 +64,7 @@ class RequestCourseBase extends React.Component {
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.faculties.faculties) {
       nextState.faculties = nextProps.faculties.faculties.map(d => ({
-        label: d.name,
+        label: `${d.name} - ${d.id}`,
         value: d.id
       }))
     }
