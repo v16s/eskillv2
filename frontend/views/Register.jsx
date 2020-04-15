@@ -148,7 +148,9 @@ class Register extends React.Component {
     let { history } = this.props;
     let { success, error, details: data } = this.checkDetails();
     if (success) {
-      let type = this.state.tab == 1;
+      let type =
+        this.props.registerPermit.global &&
+        this.props.registerPermit.global.regf;
       this.props
         .mutate({ variables: { ...data, type } })
         .then((data) => {
