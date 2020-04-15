@@ -1,5 +1,5 @@
-import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import React from "react";
+import { withStyles } from "@material-ui/core/styles";
 import {
   TextField,
   Typography,
@@ -7,14 +7,14 @@ import {
   Button,
   Tabs,
   Tab,
-  IconButton
-} from '@material-ui/core'
-import { Dropdown } from '../components'
-import { graphql } from '@apollo/react-hoc'
-import { compose } from 'recompose'
-import gql from 'graphql-tag'
-import { find } from 'lodash'
-import { Tonality } from '@material-ui/icons'
+  IconButton,
+} from "@material-ui/core";
+import { Dropdown } from "../components";
+import { graphql } from "@apollo/react-hoc";
+import { compose } from "recompose";
+import gql from "graphql-tag";
+import { find } from "lodash";
+import { Tonality } from "@material-ui/icons";
 
 const GET_CAMPUSES = gql`
   query Campus {
@@ -26,7 +26,7 @@ const GET_CAMPUSES = gql`
       }
     }
   }
-`
+`;
 const GET_REGISTER_PERMIT = gql`
   {
     global {
@@ -34,17 +34,17 @@ const GET_REGISTER_PERMIT = gql`
       regf
     }
   }
-`
+`;
 const GET_DARK = gql`
   {
     dark @client
   }
-`
+`;
 const CHANGE_DARK = gql`
   mutation ChangeDark($dark: Boolean!) {
     changeDark(dark: $dark) @client
   }
-`
+`;
 const REGISTER = gql`
   mutation Register(
     $username: String!
@@ -69,98 +69,100 @@ const REGISTER = gql`
       name
     }
   }
-`
+`;
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    overflow: 'hidden',
+    overflow: "hidden",
     padding: theme.spacing(0, 3),
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-    flexDirection: 'column'
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    boxSizing: "border-box",
+    flexDirection: "column",
   },
   paper: {
-    width: '80%',
+    width: "80%",
     maxWidth: 400,
     margin: `${theme.spacing(1)}px auto`,
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   input: {
-    marginTop: '15px',
-    width: '100%'
+    marginTop: "15px",
+    width: "100%",
   },
   heading: {
-    textAlign: 'center',
-    fontFamily: 'monospace',
-    fontWeight: '500'
+    textAlign: "center",
+    fontFamily: "monospace",
+    fontWeight: "500",
   },
   button: {
-    width: '100%',
-    marginTop: '10px'
+    width: "100%",
+    marginTop: "10px",
   },
   login: {
-    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${theme.palette.primary.dark} 100%)`
+    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${
+      theme.palette.primary.dark
+    } 100%)`,
   },
   textButton: {
-    width: '80%',
-    maxWidth: 400
+    width: "80%",
+    maxWidth: 400,
   },
   titleBar: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-})
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+});
 
 class Register extends React.Component {
   state = {
-    campus: { value: '' },
+    campus: { value: "" },
     tab: 0,
     department: null,
-    username: '',
-    email: '',
-    password: '',
-    confirm: '',
-    name: ''
-  }
+    username: "",
+    email: "",
+    password: "",
+    confirm: "",
+    name: "",
+  };
   onDropdownChange = (value, { name }) => {
-    let newstate = this.state
-    newstate[name] = value
-    this.setState(newstate)
-  }
+    let newstate = this.state;
+    newstate[name] = value;
+    this.setState(newstate);
+  };
   handleTabChange = (event, tab) => {
-    this.setState({ tab })
-  }
-  onInputChange = e => {
-    let newstate = this.state
-    newstate[e.target.id] = e.target.value
-    this.setState(newstate)
-  }
-  onSubmit = e => {
-    e.preventDefault()
-    let { history } = this.props
-    let { success, error, details: data } = this.checkDetails()
+    this.setState({ tab });
+  };
+  onInputChange = (e) => {
+    let newstate = this.state;
+    newstate[e.target.id] = e.target.value;
+    this.setState(newstate);
+  };
+  onSubmit = (e) => {
+    e.preventDefault();
+    let { history } = this.props;
+    let { success, error, details: data } = this.checkDetails();
     if (success) {
-      let type = this.state.tab == 1
+      let type = this.state.tab == 1;
       this.props
         .mutate({ variables: { ...data, type } })
-        .then(data => {
-          history.push('/')
+        .then((data) => {
+          history.push("/");
         })
-        .catch(err => {
-          console.log(err)
-        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   checkDetails = () => {
-    let result = { success: true, error: '' }
+    let result = { success: true, error: "" };
     let {
       username,
       email,
@@ -168,30 +170,30 @@ class Register extends React.Component {
       confirm,
       campus,
       department,
-      name
-    } = this.state
-    campus = campus.value
-    department = department.value
-    let arr = [username, email, password, confirm, campus, department, name]
-    arr.map(k => {
-      if (!k || k == '') {
-        result.success = false
-        result.error = 'Null Field'
+      name,
+    } = this.state;
+    campus = campus.value;
+    department = department.value;
+    let arr = [username, email, password, confirm, campus, department, name];
+    arr.map((k) => {
+      if (!k || k == "") {
+        result.success = false;
+        result.error = "Null Field";
       }
-    })
+    });
     if (result.success) {
       if (password != confirm) {
-        result.success = false
-        result.error = 'Passwords not equal'
+        result.success = false;
+        result.error = "Passwords not equal";
       }
     }
     return {
       ...result,
-      details: { username, email, password, campus, department, name }
-    }
-  }
-  render () {
-    const { classes, dark, history } = this.props
+      details: { username, email, password, campus, department, name },
+    };
+  };
+  render() {
+    const { classes, dark, history } = this.props;
     const {
       campus,
       tab,
@@ -200,39 +202,39 @@ class Register extends React.Component {
       email,
       password,
       confirm,
-      name
-    } = this.state
-    let { data } = this.props
+      name,
+    } = this.state;
+    let { data } = this.props;
     let campuses = data.campuses
-      ? data.campuses.map(k => ({ label: k.name, value: k.name }))
-      : []
-    let current = find(data.campuses, { name: campus.value })
-    let departments = current && current.departments
+      ? data.campuses.map((k) => ({ label: k.name, value: k.name }))
+      : [];
+    let current = find(data.campuses, { name: campus.value });
+    let departments = current && current.departments;
     departments = departments
-      ? departments.map(k => ({ label: k.name, value: k.id }))
-      : []
-    let regs = false
+      ? departments.map((k) => ({ label: k.name, value: k.id }))
+      : [];
+    let regs = false;
 
-    let regf = false
+    let regf = false;
     if (this.props.registerPermit.global) {
-      regs = this.props.registerPermit.global.regs
-      regf = this.props.registerPermit.global.regf
+      regs = this.props.registerPermit.global.regs;
+      regf = this.props.registerPermit.global.regf;
     }
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
           <div className={classes.titleBar}>
             <Typography
-              color='primary'
-              variant='h5'
+              color="primary"
+              variant="h5"
               className={classes.heading}
             >
               Register
             </Typography>
             <IconButton
-              color='primary'
-              onClick={e => {
-                this.props.changeDark({ variables: { dark: !dark.dark } })
+              color="primary"
+              onClick={(e) => {
+                this.props.changeDark({ variables: { dark: !dark.dark } });
               }}
             >
               <Tonality />
@@ -241,12 +243,12 @@ class Register extends React.Component {
           {(regs == true || regf == true) && (
             <Tabs
               value={tab}
-              indicatorColor='primary'
-              textColor='primary'
+              indicatorColor="primary"
+              textColor="primary"
               onChange={this.handleTabChange}
             >
-              {regs == true && <Tab value={0} label='Student' />}
-              {regf == true && <Tab value={1} label='Faculty' />}
+              {regs === true && <Tab value={0} label="Student" />}
+              {regf === true && <Tab value={regs ? 1 : 0} label="Faculty" />}
             </Tabs>
           )}
           {regs == true || regf == true ? (
@@ -254,10 +256,10 @@ class Register extends React.Component {
               <div className={classes.input}>
                 <TextField
                   className={classes.input}
-                  variant='outlined'
-                  id='username'
-                  type='text'
-                  label={tab == 0 ? 'Register Number' : 'Faculty ID'}
+                  variant="outlined"
+                  id="username"
+                  type="text"
+                  label={tab == 0 ? "Register Number" : "Faculty ID"}
                   onChange={this.onInputChange}
                   value={username}
                 />
@@ -267,77 +269,77 @@ class Register extends React.Component {
                   options={campuses}
                   onChange={this.onDropdownChange}
                   value={campus}
-                  placeholder={'Select your campus'}
-                  label='College Campus'
-                  name='campus'
+                  placeholder={"Select your campus"}
+                  label="College Campus"
+                  name="campus"
                 />
                 <Dropdown
                   className={classes.input}
                   options={departments}
                   onChange={this.onDropdownChange}
                   value={department}
-                  placeholder={'Select your department'}
-                  label='College Department'
-                  name='department'
+                  placeholder={"Select your department"}
+                  label="College Department"
+                  name="department"
                 />
                 <TextField
                   className={classes.input}
-                  variant='outlined'
-                  id='name'
-                  type='text'
-                  label='Name'
+                  variant="outlined"
+                  id="name"
+                  type="text"
+                  label="Name"
                   onChange={this.onInputChange}
                   value={name}
                 />
                 <TextField
                   className={classes.input}
-                  variant='outlined'
-                  id='email'
-                  type='text'
-                  label='Email'
+                  variant="outlined"
+                  id="email"
+                  type="text"
+                  label="Email"
                   onChange={this.onInputChange}
                   value={email}
                 />
                 <TextField
                   className={classes.input}
-                  id='password'
-                  type='password'
-                  variant='outlined'
-                  label='Password'
+                  id="password"
+                  type="password"
+                  variant="outlined"
+                  label="Password"
                   onChange={this.onInputChange}
                   value={password}
                 />
                 <TextField
                   className={classes.input}
-                  id='confirm'
-                  type='password'
-                  variant='outlined'
-                  label='Confirm Password'
+                  id="confirm"
+                  type="password"
+                  variant="outlined"
+                  label="Confirm Password"
                   onChange={this.onInputChange}
                   value={confirm}
                 />
               </div>
               <Button
-                variant='contained'
-                color='primary'
-                size='medium'
+                variant="contained"
+                color="primary"
+                size="medium"
                 className={`${classes.button} ${classes.login}`}
-                type='submit'
-                style={{ color: '#fff' }}
+                type="submit"
+                style={{ color: "#fff" }}
               >
                 Register
               </Button>
             </form>
           ) : (
             <Typography
-              color='primary'
-              variant='p'
+              color="primary"
+              variant="p"
               className={classes.heading}
               style={{
-                padding: '20px 0',
-                justifyContent: 'center',
-                width: '100%',
-                display: 'flex'
+                padding: "20px 0",
+                justifyContent: "center",
+                width: "100%",
+                display: "flex",
               }}
             >
               Registrations are currently closed
@@ -345,24 +347,24 @@ class Register extends React.Component {
           )}
         </Paper>
         <Button
-          size='medium'
-          color='primary'
+          size="medium"
+          color="primary"
           className={`${classes.textButton}`}
-          onClick={e => {
-            history.push('/')
+          onClick={(e) => {
+            history.push("/");
           }}
         >
           Already have an account? Login
         </Button>
       </div>
-    )
+    );
   }
 }
-Register = withStyles(styles)(Register)
+Register = withStyles(styles)(Register);
 export default compose(
   graphql(GET_CAMPUSES),
   graphql(REGISTER),
-  graphql(GET_DARK, { name: 'dark' }),
-  graphql(CHANGE_DARK, { name: 'changeDark' }),
-  graphql(GET_REGISTER_PERMIT, { name: 'registerPermit' })
-)(Register)
+  graphql(GET_DARK, { name: "dark" }),
+  graphql(CHANGE_DARK, { name: "changeDark" }),
+  graphql(GET_REGISTER_PERMIT, { name: "registerPermit" })
+)(Register);
