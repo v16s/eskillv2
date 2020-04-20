@@ -44,7 +44,34 @@ const STUDENT = gql`
     }
   }
 `;
-
+const RESOLVE = gql`
+  mutation resolveProblem(
+    $picture: Upload
+    $a: String!
+    $b: String!
+    $c: String!
+    $d: String!
+    $ans: String!
+    $desc: String!
+    $name: String!
+    $course: String!
+    $exp: String!
+    $id: String!
+  ) {
+    facultyResolveProblem(
+      name: $name
+      desc: $desc
+      exp: $exp
+      ans: $ans
+      picture: $picture
+      Obj: { a: $a, b: $b, c: $c, d: $d }
+      course: $course
+      id: $id
+    ) {
+      id
+    }
+  }
+`;
 export const REJECT = gql`
   mutation FacultyReject($id: String!) {
     facultyRejectProblem(id: $id) {
@@ -114,6 +141,7 @@ export const ProblemDisplay = ({
     variables: { id: studID },
   });
   const [reject, { data: mutationResult }] = useMutation(REJECT);
+  const [resolve, { data: mutationResolveResult }] = useMutation(RESOLVE);
   const [expanded, setExpanded] = React.useState(null);
   const handleChange = (idx) => {
     if (expanded == idx) {
@@ -182,28 +210,30 @@ export const ProblemDisplay = ({
           <Divider />
         </>
       )}
-      <ExpansionPanelActions>
-        <Button
-          size="small"
-          color="secondary"
-          variant="contained"
-          onClick={(e) => {
-            reject({ variables: { id } }).then(() => {
-              refetch();
-            });
-          }}
-        >
-          Reject
-        </Button>
-        <Button
-          size="small"
-          onClick={(e) => handleModalOpen(queID)}
-          className={classes.approved}
-          variant="contained"
-        >
-          Resolve
-        </Button>
-      </ExpansionPanelActions>
+      {status === 0 && (
+        <ExpansionPanelActions>
+          <Button
+            size="small"
+            color="secondary"
+            variant="contained"
+            onClick={(e) => {
+              reject({ variables: { id } }).then(() => {
+                refetch();
+              });
+            }}
+          >
+            Reject
+          </Button>
+          <Button
+            size="small"
+            onClick={(e) => handleModalOpen(queID)}
+            className={classes.approved}
+            variant="contained"
+          >
+            Resolve
+          </Button>
+        </ExpansionPanelActions>
+      )}
       <Modal className={classes.modal} open={modal} onClose={handleModalClose}>
         <div>
           {" "}
@@ -213,6 +243,8 @@ export const ProblemDisplay = ({
               coordinator
               course={questionData.question.course}
               question={questionData.question}
+              resolve
+              resolveProblem={resolve}
             />
           )}
         </div>
