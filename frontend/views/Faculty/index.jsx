@@ -4,7 +4,6 @@ import { AppBar, Problems } from "../../components";
 import { Tabs, Tab, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useLocation, useHistory } from "react-router-dom";
-import { FACULTY_REJECT } from "./Mutations";
 import Dashboard from "./Dashboard";
 import Progress from "./Progress";
 import Reset from "../Reset";
@@ -86,11 +85,7 @@ export default () => {
 
         <Switch>
           <Route path="/reports">
-            <Problems
-              mutations={{
-                REJECT: FACULTY_REJECT,
-              }}
-            />
+            <Problems />
           </Route>
           <Route path="/reset" component={() => <Reset noshadow />} />
           <Route path="/progress" component={Progress} />
