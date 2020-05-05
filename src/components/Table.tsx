@@ -1,48 +1,13 @@
 import React from 'react';
-import MaterialTable from 'material-table';
-import {
-  AddBox,
-  ArrowUpward,
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Clear,
-  DeleteOutline,
-  Edit,
-  FilterList,
-  FirstPage,
-  LastPage,
-  Remove,
-  SaveAlt,
-  Search,
-  ViewColumn,
-} from '@material-ui/icons';
-import { List } from './index';
 
-const tableIcons = {
-  Add: AddBox,
-  Check: Check,
-  Clear: Clear,
-  Delete: DeleteOutline,
-  DetailPanel: ChevronRight,
-  Edit: Edit,
-  Export: SaveAlt,
-  Filter: FilterList,
-  FirstPage: FirstPage,
-  LastPage: LastPage,
-  NextPage: ChevronRight,
-  PreviousPage: ChevronLeft,
-  ResetSearch: Clear,
-  Search: Search,
-  SortArrow: ArrowUpward,
-  ThirdStateCheck: Remove,
-  ViewColumn: ViewColumn,
-};
+import { VariableMapper } from '../typings/misc';
+import MaterialTable from './MaterialTable';
+import { useMutation } from '@apollo/react-hooks';
+
 function Table({
   title,
   columns,
   data,
-  table,
   detailPanel,
   onRowAdd,
   onRowDelete,
@@ -56,26 +21,25 @@ function Table({
     <MaterialTable
       title={title}
       columns={columns}
-      icons={tableIcons}
       data={data}
       style={style}
       editable={
         editable && {
           onRowAdd: (newData) =>
             new Promise((resolve) => {
-              onRowAdd(newData, table).then(() => {
+              onRowAdd(newData).then(() => {
                 resolve();
               });
             }),
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve) => {
-              onRowUpdate(newData, oldData, table).then(() => {
+              onRowUpdate(newData, oldData).then(() => {
                 resolve();
               });
             }),
           onRowDelete: (oldData) =>
             new Promise((resolve) => {
-              onRowDelete(oldData, table)
+              onRowDelete(oldData)
                 .then(() => {
                   resolve();
                 })
@@ -95,193 +59,81 @@ function Table({
     />
   );
 }
-export class TableBase extends React.Component<any> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      columns: props.columns,
-      data: [],
-    };
-  }
-  add = (newData, table) => {
-    return new Promise((resolve, reject) => {
-      this.props.addOutside
-        ? this.props
-            .addOutside({
-              variables: {
-                name: newData.name,
-                branch: this.props.isCourse && newData.branch,
-              },
-            })
-            .then((data) => {
-              console.log(data);
-              this.props.data.refetch().then((refetchData) => {
-                console.log(refetchData);
-                resolve();
-              });
-            })
-            .catch((err) => {
-              reject();
-            })
-        : reject();
-      // newstate[table].data.push(newData)
-      // this.setState(newstate)
-    });
-  };
-  update = (newData, oldData, table) => {
-    return new Promise((resolve, reject) => {
-      console.log(this.props.isCourse, oldData.branch, newData.branch);
-      this.props
-        .updateOutside({
-          variables: {
-            name: oldData.name,
-            newName: newData.name,
-            branch: this.props.isCourse && oldData.branch,
-            newBranch: this.props.isCourse && newData.branch,
-            campus: oldData.campus,
-          },
-        })
-        .then((data) => {
-          this.props.data
-            .refetch()
-            .then(() => {
-              resolve();
-            })
-            .catch((err) => {
-              reject();
-            });
-        });
-    });
-  };
-  delete = (oldData, table) => {
-    return new Promise((resolve, reject) => {
-      this.props.removeOutside
-        ? this.props
-            .removeOutside({
-              variables: { name: oldData.name, campus: oldData.campus },
-            })
-            .then((data) => {
-              console.log(data);
-              this.props.data
-                .refetch()
-                .then((data) => {
-                  resolve();
-                })
-                .catch((err) => {
-                  reject(err);
-                });
-            })
-            .catch((err) => {
-              reject(err);
-            })
-        : reject();
-    });
-  };
 
-  componentDidMount() {
-    let nextState = this.state;
-    if (this.props.data.loading == false) {
-      nextState.data = this.props.data[this.props.name].map((d) => ({
-        ...d,
-        refetch: this.props.data.refetch,
-      }));
-    }
-    this.setState(nextState);
+const TableBase: React.FC<{
+  columns: any;
+  title: string;
+  onRowClick?: any;
+  style?: React.CSSProperties;
+  addMutation: any;
+  editMutation: any;
+  deleteMutation: any;
+  variableMapper: VariableMapper;
+  uneditable?: boolean;
+  filter?: any;
+  inner?: any;
+  data: any[];
+  refetch?: any;
+  loading?: boolean;
+}> = ({
+  columns,
+  title,
+  inner,
+  onRowClick,
+  style,
+  variableMapper,
+  addMutation,
+  editMutation,
+  deleteMutation,
+  uneditable,
+  filter,
+  data,
+  refetch,
+  loading,
+}) => {
+  // Hooks
+  const [addCaller, { data: addData, error: addError }] = useMutation(
+    addMutation
+  );
+  const [editCaller, { data: editData, error: editError }] = useMutation(
+    editMutation
+  );
+  const [deleteCaller, { data: deleteData, error: deleteError }] = useMutation(
+    deleteMutation
+  );
+  React.useEffect(() => {
+    refetch();
+  }, [addData, addError, editData, editError, deleteData, deleteError]);
+
+  // Functions
+  function add(data: any): void {
+    if (uneditable) return;
+    addCaller(variableMapper.add(data));
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.data.loading == false) {
-      nextState.data = nextProps.data[nextProps.name].map((d) => ({
-        ...d,
-        refetch: nextProps.data.refetch,
-      }));
-    }
-    return true;
+  function edit(oldData: any, newData: any): void {
+    if (uneditable) return;
+    editCaller(variableMapper.edit(oldData, newData));
   }
-  addInside = (name, newName) => {
-    return new Promise((resolve) => {
-      this.props
-        .addInside({
-          variables: {
-            name,
-            id: newName,
-            tname: newName,
-          },
-        })
-        .then((data) => {
-          this.props.data.refetch().then(() => {
-            resolve();
-          });
-        });
-    });
-  };
-  removeInside = (name, insidename) => {
-    return new Promise((resolve) => {
-      this.props
-        .removeInside({
-          variables: {
-            name,
-            deptname: insidename,
-          },
-        })
-        .then((data) => {
-          this.props.data.refetch().then(() => {
-            resolve();
-          });
-        });
-    });
-  };
-  updateInside = (name, oldValue, newValue) => {
-    return new Promise((resolve) => {
-      this.props
-        .updateInside({
-          variables: {
-            name,
-            prev: oldValue,
-            next: newValue,
-          },
-        })
-        .then((data) => {
-          this.props.data.refetch().then(() => {
-            resolve();
-          });
-        });
-    });
-  };
-  render() {
-    return (
-      <Table
-        onRowAdd={this.add}
-        onRowDelete={this.delete}
-        onRowUpdate={this.update}
-        data={
-          this.props.uneditable === true ? this.props.data : this.state.data
-        }
-        columns={this.state.columns}
-        title={this.props.title}
-        onRowClick={this.props.onRowClick}
-        style={this.props.style}
-        editable={this.props.uneditable === false}
-        body={{ editRow: { deleteText: `Remove the ${this.props.title}?` } }}
-        detailPanel={
-          this.props.inside &&
-          ((k) => {
-            return (
-              <div style={{ display: 'flex', boxSizing: 'border-box' }}>
-                <List
-                  current={k.name}
-                  title={this.props.insideTitle}
-                  data={k[this.props.inside].map((d) => d.name)}
-                  handleAdd={this.addInside}
-                  handleRemove={this.removeInside}
-                  key={k.name}
-                  handleUpdate={this.updateInside}
-                />
-              </div>
-            );
-          })
-        }
-      />
-    );
+  function del(data: any): void {
+    if (uneditable) return;
+    deleteCaller(variableMapper.delete(data));
   }
-}
+  if (loading) return <span>Loading</span>;
+  return (
+    <Table
+      onRowAdd={add}
+      onRowDelete={del}
+      onRowUpdate={edit}
+      data={data.map(filter ? filter : (d) => ({ ...d, refetch }))}
+      columns={columns}
+      title={title}
+      onRowClick={onRowClick}
+      style={style}
+      editable={uneditable === false}
+      body={{ editRow: { deleteText: `Remove the ${title}?` } }}
+      detailPanel={inner && inner(refetch)}
+    />
+  );
+};
+
 export { TableBase as Table };

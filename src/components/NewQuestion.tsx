@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { TextField, Paper, Button, Grid, Radio } from '@material-ui/core'
-import { green } from '@material-ui/core/colors'
-import { Dropdown, PreviewCard } from './index'
-import { withStyles } from '@material-ui/core/styles'
-import { graphql, withApollo } from '@apollo/react-hoc'
-import { compose } from 'recompose'
-import gql from 'graphql-tag'
+import React, { Component } from 'react';
+import { TextField, Paper, Button, Grid, Radio } from '@material-ui/core';
+import { green } from '@material-ui/core/colors';
+import { Dropdown, PreviewCard } from './index';
+import { withStyles } from '@material-ui/core/styles';
+import { graphql, withApollo } from '@apollo/react-hoc';
+import { compose } from 'recompose';
+import gql from 'graphql-tag';
 
 const COURSES = gql`
   query Courses($name: String, $branch: String) {
@@ -13,7 +13,7 @@ const COURSES = gql`
       name
     }
   }
-`
+`;
 
 const ADD_QUESTION = gql`
   mutation AddQuestion(
@@ -40,15 +40,15 @@ const ADD_QUESTION = gql`
       id
     }
   }
-`
+`;
 
-const styles = {
+const styles: Record<string, React.CSSProperties> = {
   paper: {
     outline: 'none',
     width: '80%',
     maxWidth: 1000,
     padding: '30px',
-    overflow: 'auto'
+    overflow: 'auto',
   },
   container: {
     display: 'flex',
@@ -56,28 +56,28 @@ const styles = {
     alignItems: 'center',
     width: '100vw',
     height: '100vh',
-    position: 'fixed'
+    position: 'fixed',
   },
   answer: {
-    display: 'flex'
+    display: 'flex',
   },
   radioWrap: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: '100%'
+    height: '100%',
   },
   radio: { marginRight: '5px', width: '20px', height: '20px' },
-  action: { width: '100%' }
-}
-const GreenRadio = withStyles({
+  action: { width: '100%' },
+};
+const GreenRadio: any = withStyles({
   root: {
     '&$checked': {
-      color: green[400]
-    }
+      color: green[400],
+    },
   },
-  checked: {}
-})(props => <Radio color='default' {...props} />)
+  checked: {},
+})((props) => <Radio color='default' {...props} />);
 const makeDefaults = () => ({
   name: '',
   desc: '',
@@ -85,54 +85,60 @@ const makeDefaults = () => ({
     a: '',
     b: '',
     c: '',
-    d: ''
+    d: '',
   },
-  answer: ''
-})
-class NewQuestionBase extends Component {
-  state = { ...makeDefaults(), courses: [], picture: null, exp: '' }
+  answer: '',
+});
+class NewQuestionBase extends Component<any, any> {
+  state: any = {
+    ...makeDefaults(),
+    courses: [],
+    picture: null,
+    exp: '',
+    course: { label: '' },
+  };
   onChange = ({ target }) => {
     this.setState({
       picture: target.files[0],
-      preview: URL.createObjectURL(target.files[0])
-    })
-  }
+      preview: URL.createObjectURL(target.files[0]),
+    });
+  };
   handleRadioChange = (e, v) => {
-    this.setState({ answer: e.target.value })
-  }
+    this.setState({ answer: e.target.value });
+  };
   onInputChange = ({ target }) => {
-    let newstate = this.state
-    newstate[target.name] = target.value
-    this.setState(newstate)
-  }
+    let newstate = this.state;
+    newstate[target.name] = target.value;
+    this.setState(newstate);
+  };
   onOptionInputChange = ({ target }) => {
-    let newstate = this.state
-    newstate.options[target.name] = target.value
-    this.setState(newstate)
-  }
+    let newstate = this.state;
+    newstate.options[target.name] = target.value;
+    this.setState(newstate);
+  };
   checkQuestion = () => {
-    let flag = true
-    let defaults = makeDefaults()
+    let flag = true;
+    let defaults = makeDefaults();
     if (flag) {
-      Object.keys(this.state).map(k => {
+      Object.keys(this.state).map((k) => {
         if (k != 'options' && k in defaults && this.state[k] == defaults[k]) {
-          flag = false
+          flag = false;
         }
-      })
+      });
     }
     if (flag) {
-      Object.keys(this.state.options).map(k => {
+      Object.keys(this.state.options).map((k) => {
         if (this.state.options[k] === defaults.options[k]) {
-          flag = false
+          flag = false;
         }
-      })
+      });
     }
-    return flag
-  }
-  onSubmit = e => {
-    let { picture, desc, name, options, exp, course, answer } = this.state
+    return flag;
+  };
+  onSubmit = (e) => {
+    let { picture, desc, name, options, exp, course, answer } = this.state;
     if (this.props.coordinator) {
-      course = this.props.course
+      course = this.props.course;
     }
     if (this.checkQuestion()) {
       this.props
@@ -144,38 +150,38 @@ class NewQuestionBase extends Component {
             desc,
             name,
             course: this.props.coordinator ? course : course.label,
-            exp
-          }
+            exp,
+          },
         })
-        .then(data => {
-          console.log(data)
-          this.props.close(true)
-        })
+        .then((data) => {
+          console.log(data);
+          this.props.close(true);
+        });
     }
-  }
+  };
   onDropdownChange = (value, e) => {
-    let newstate = this.state
-    newstate[e.name] = value
-    let { client } = this.props
+    let newstate = this.state;
+    newstate[e.name] = value;
+    let { client } = this.props;
     client
       .query({
         query: COURSES,
-        variables: { branch: value.value }
+        variables: { branch: value.value },
       })
       .then(({ data }) => {
-        this.setState({ courses: data.courses })
-      })
-    this.setState(newstate)
-  }
+        this.setState({ courses: data.courses });
+      });
+    this.setState(newstate);
+  };
   removeImage = () => {
-    this.setState({ picture: null, preview: undefined })
-  }
-  render () {
-    const courses = this.state.courses.map(d => ({
+    this.setState({ picture: null, preview: undefined });
+  };
+  render() {
+    const courses = this.state.courses.map((d: any) => ({
       label: d.name,
-      value: d.name
-    }))
-    const { answer } = this.state
+      value: d.name,
+    }));
+    const { answer } = this.state;
     return (
       <Paper style={styles.paper}>
         <Grid container spacing={3} style={{ height: 'auto' }}>
@@ -229,7 +235,6 @@ class NewQuestionBase extends Component {
           <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
-                inputProps={{ 'aria-label': 'Radio A' }}
                 style={styles.radio}
                 checked={answer === 'a'}
                 onChange={this.handleRadioChange}
@@ -251,7 +256,6 @@ class NewQuestionBase extends Component {
           <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
-                inputProps={{ 'aria-label': 'Radio A' }}
                 style={styles.radio}
                 checked={answer === 'b'}
                 onChange={this.handleRadioChange}
@@ -273,7 +277,6 @@ class NewQuestionBase extends Component {
           <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
-                inputProps={{ 'aria-label': 'Radio A' }}
                 style={styles.radio}
                 checked={answer === 'c'}
                 onChange={this.handleRadioChange}
@@ -295,7 +298,6 @@ class NewQuestionBase extends Component {
           <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
-                inputProps={{ 'aria-label': 'Radio A' }}
                 style={styles.radio}
                 checked={answer === 'd'}
                 onChange={this.handleRadioChange}
@@ -320,7 +322,7 @@ class NewQuestionBase extends Component {
               <div
                 style={{
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}
               >
                 <img
@@ -328,7 +330,7 @@ class NewQuestionBase extends Component {
                   style={{
                     marginRight: '15px',
                     maxHeight: '500px',
-                    maxWidth: '500px'
+                    maxWidth: '500px',
                   }}
                   alt=''
                 />
@@ -402,11 +404,11 @@ class NewQuestionBase extends Component {
           </Grid>
         </Grid>
       </Paper>
-    )
+    );
   }
 }
 
 export const NewQuestion = compose(
   withApollo,
   graphql(ADD_QUESTION)
-)(NewQuestionBase)
+)(NewQuestionBase);

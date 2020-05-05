@@ -1,17 +1,17 @@
-import React from 'react'
-import { Modal, Paper, Grid, Button, Fab, Icon } from '@material-ui/core'
-import { Dropdown } from './index'
-import { Send } from '@material-ui/icons'
-import { graphql, withApollo } from '@apollo/react-hoc'
-import { compose } from 'recompose'
-import gql from 'graphql-tag'
+import React from 'react';
+import { Modal, Paper, Grid, Button, Fab, Icon } from '@material-ui/core';
+import { Dropdown } from './index';
+import { Send } from '@material-ui/icons';
+import { graphql, withApollo } from '@apollo/react-hoc';
+import { compose } from 'recompose';
+import gql from 'graphql-tag';
 const BRANCHES = gql`
   query Branches {
     branches {
       name
     }
   }
-`
+`;
 const FACULTIES = gql`
   query Faculties {
     faculties {
@@ -20,7 +20,7 @@ const FACULTIES = gql`
       username
     }
   }
-`
+`;
 
 const COURSES = gql`
   query Courses($name: String, $branch: String) {
@@ -28,84 +28,83 @@ const COURSES = gql`
       name
     }
   }
-`
+`;
 const REQUEST_COURSE = gql`
   mutation RequestCourse($course: String!, $facultyID: String!) {
     requestCourse(course: $course, facultyID: $facultyID) {
       total
     }
   }
-`
+`;
 
-class RequestCourseBase extends React.Component {
-  state = {
+class RequestCourseBase extends React.Component<any, any> {
+  state: any = {
     branch: {},
     courses: [],
-    faculties: []
-  }
+    faculties: [],
+  };
   onBranchChange = (value, e) => {
-    let newstate = this.state
-    newstate[e.name] = value
-    let { client } = this.props
+    let newstate = this.state;
+    newstate[e.name] = value;
+    let { client } = this.props;
     client
       .query({
         query: COURSES,
-        variables: { branch: value.value }
+        variables: { branch: value.value },
       })
       .then(({ data }) => {
-        this.setState({ courses: data.courses })
-      })
-    this.setState(newstate)
-  }
+        this.setState({ courses: data.courses });
+      });
+    this.setState(newstate);
+  };
   onChange = (value, e) => {
-    let newstate = this.state
-    newstate[e.name] = value
-    this.setState(newstate)
-  }
-  shouldComponentUpdate (nextProps, nextState) {
+    let newstate = this.state;
+    newstate[e.name] = value;
+    this.setState(newstate);
+  };
+  shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.faculties.faculties) {
-      nextState.faculties = nextProps.faculties.faculties.map(d => ({
+      nextState.faculties = nextProps.faculties.faculties.map((d) => ({
         label: `${d.name} - ${d.username}`,
-        value: d.id
-      }))
+        value: d.id,
+      }));
     }
-    return true
+    return true;
   }
-  handleRequestSubmit = e => {
+  handleRequestSubmit = (e) => {
     this.props
       .requestCourse({
         variables: {
           facultyID: this.state.faculty.value,
-          course: this.state.course.label
-        }
+          course: this.state.course.label,
+        },
       })
       .then(({ data }) => {
-        console.log(data)
-        this.props.close(true, this.props.refetch)
-      })
-  }
-  render () {
-    let branches = []
+        console.log(data);
+        this.props.close(true, this.props.refetch);
+      });
+  };
+  render() {
+    let branches = [];
     if (this.props.branches.branches) {
-      branches = this.props.branches.branches.map(d => ({
+      branches = this.props.branches.branches.map((d) => ({
         label: d.name,
-        value: d.name
-      }))
+        value: d.name,
+      }));
     }
-    const courses = this.state.courses.map(d => ({
+    const courses = this.state.courses.map((d) => ({
       label: d.name,
-      value: d.name
-    }))
-    const { faculties } = this.state
+      value: d.name,
+    }));
+    const { faculties } = this.state;
     return (
       <Paper
         style={{
-          padding: '20px 0',
           flexDirection: 'column',
           display: 'flex',
           width: '90%',
           maxWidth: '400px',
-          padding: 20
+          padding: 20,
         }}
         tabIndex={-1}
       >
@@ -137,10 +136,10 @@ class RequestCourseBase extends React.Component {
           <Grid item md={6} xs={12}>
             <Button
               style={{
-                width: '100%'
+                width: '100%',
               }}
               variant='text'
-              onClick={e => this.props.close()}
+              onClick={(e) => this.props.close()}
             >
               Cancel
             </Button>
@@ -148,7 +147,7 @@ class RequestCourseBase extends React.Component {
           <Grid item md={6} xs={12}>
             <Button
               style={{
-                width: '100%'
+                width: '100%',
               }}
               variant='contained'
               color='primary'
@@ -157,14 +156,14 @@ class RequestCourseBase extends React.Component {
               Request
               <Send
                 style={{
-                  marginLeft: '5px'
+                  marginLeft: '5px',
                 }}
               />
             </Button>
           </Grid>
         </Grid>
       </Paper>
-    )
+    );
   }
 }
 export const RequestCourse = compose(
@@ -172,7 +171,7 @@ export const RequestCourse = compose(
   graphql(REQUEST_COURSE, { name: 'requestCourse' }),
   graphql(BRANCHES, {
     name: 'branches',
-    options: { fetchPolicy: 'network-only' }
+    options: { fetchPolicy: 'network-only' },
   }),
   graphql(FACULTIES, { name: 'faculties' })
-)(RequestCourseBase)
+)(RequestCourseBase);

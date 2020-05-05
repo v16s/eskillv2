@@ -1,5 +1,5 @@
-import React from "react";
-import { withStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { withStyles, createStyles } from '@material-ui/core/styles';
 import {
   TextField,
   Typography,
@@ -8,13 +8,13 @@ import {
   Tabs,
   Tab,
   IconButton,
-} from "@material-ui/core";
-import { Dropdown } from "../components";
-import { graphql } from "@apollo/react-hoc";
-import { compose } from "recompose";
-import gql from "graphql-tag";
-import { find } from "lodash";
-import { Tonality } from "@material-ui/icons";
+} from '@material-ui/core';
+import { Dropdown } from '../components';
+import { graphql } from '@apollo/react-hoc';
+import { compose } from 'recompose';
+import gql from 'graphql-tag';
+import { find } from 'lodash';
+import { Tonality } from '@material-ui/icons';
 
 const GET_CAMPUSES = gql`
   query Campus {
@@ -73,62 +73,60 @@ const REGISTER = gql`
 
 const styles = (theme) => ({
   root: {
-    overflow: "hidden",
+    overflow: 'hidden',
     padding: theme.spacing(0, 3),
-    width: "100vw",
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    boxSizing: "border-box",
-    flexDirection: "column",
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    flexDirection: 'column',
   },
   paper: {
-    width: "80%",
+    width: '80%',
     maxWidth: 400,
     margin: `${theme.spacing(1)}px auto`,
     padding: theme.spacing(2),
   },
   input: {
-    marginTop: "15px",
-    width: "100%",
+    marginTop: '15px',
+    width: '100%',
   },
   heading: {
-    textAlign: "center",
-    fontFamily: "monospace",
-    fontWeight: "500",
+    textAlign: 'center',
+    fontFamily: 'monospace',
+    fontWeight: '500',
   },
   button: {
-    width: "100%",
-    marginTop: "10px",
+    width: '100%',
+    marginTop: '10px',
   },
   login: {
-    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${
-      theme.palette.primary.dark
-    } 100%)`,
+    background: `linear-gradient( 135deg, ${theme.palette.primary.main} 40%, ${theme.palette.primary.dark} 100%)`,
   },
   textButton: {
-    width: "80%",
+    width: '80%',
     maxWidth: 400,
   },
   titleBar: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 
-class Register extends React.Component {
-  state = {
-    campus: { value: "" },
+class Register extends React.Component<any, any> {
+  state: any = {
+    campus: { value: '' },
     tab: 0,
     department: null,
-    username: "",
-    email: "",
-    password: "",
-    confirm: "",
-    name: "",
+    username: '',
+    email: '',
+    password: '',
+    confirm: '',
+    name: '',
   };
   onDropdownChange = (value, { name }) => {
     let newstate = this.state;
@@ -154,7 +152,7 @@ class Register extends React.Component {
       this.props
         .mutate({ variables: { ...data, type } })
         .then((data) => {
-          history.push("/");
+          history.push('/');
         })
         .catch((err) => {
           console.log(err);
@@ -164,29 +162,28 @@ class Register extends React.Component {
     }
   };
   checkDetails = () => {
-    let result = { success: true, error: "" };
+    let result = { success: true, error: '' };
     let {
       username,
       email,
       password,
       confirm,
-      campus,
-      department,
+      campus: { value: campus },
+      department: { value: department },
       name,
     } = this.state;
-    campus = campus.value;
-    department = department.value;
+
     let arr = [username, email, password, confirm, campus, department, name];
     arr.map((k) => {
-      if (!k || k == "") {
+      if (!k || k == '') {
         result.success = false;
-        result.error = "Null Field";
+        result.error = 'Null Field';
       }
     });
     if (result.success) {
       if (password != confirm) {
         result.success = false;
-        result.error = "Passwords not equal";
+        result.error = 'Passwords not equal';
       }
     }
     return {
@@ -227,14 +224,14 @@ class Register extends React.Component {
         <Paper className={classes.paper}>
           <div className={classes.titleBar}>
             <Typography
-              color="primary"
-              variant="h5"
+              color='primary'
+              variant='h5'
               className={classes.heading}
             >
               Register
             </Typography>
             <IconButton
-              color="primary"
+              color='primary'
               onClick={(e) => {
                 this.props.changeDark({ variables: { dark: !dark.dark } });
               }}
@@ -245,12 +242,12 @@ class Register extends React.Component {
           {(regs == true || regf == true) && (
             <Tabs
               value={tab}
-              indicatorColor="primary"
-              textColor="primary"
+              indicatorColor='primary'
+              textColor='primary'
               onChange={this.handleTabChange}
             >
-              {regs === true && <Tab value={0} label="Student" />}
-              {regf === true && <Tab value={regs ? 1 : 0} label="Faculty" />}
+              {regs === true && <Tab value={0} label='Student' />}
+              {regf === true && <Tab value={regs ? 1 : 0} label='Faculty' />}
             </Tabs>
           )}
           {regs == true || regf == true ? (
@@ -258,10 +255,10 @@ class Register extends React.Component {
               <div className={classes.input}>
                 <TextField
                   className={classes.input}
-                  variant="outlined"
-                  id="username"
-                  type="text"
-                  label={tab == 0 ? "Register Number" : "Faculty ID"}
+                  variant='outlined'
+                  id='username'
+                  type='text'
+                  label={tab == 0 ? 'Register Number' : 'Faculty ID'}
                   onChange={this.onInputChange}
                   value={username}
                 />
@@ -271,77 +268,77 @@ class Register extends React.Component {
                   options={campuses}
                   onChange={this.onDropdownChange}
                   value={campus}
-                  placeholder={"Select your campus"}
-                  label="College Campus"
-                  name="campus"
+                  placeholder={'Select your campus'}
+                  label='College Campus'
+                  name='campus'
                 />
                 <Dropdown
                   className={classes.input}
                   options={departments}
                   onChange={this.onDropdownChange}
                   value={department}
-                  placeholder={"Select your department"}
-                  label="College Department"
-                  name="department"
+                  placeholder={'Select your department'}
+                  label='College Department'
+                  name='department'
                 />
                 <TextField
                   className={classes.input}
-                  variant="outlined"
-                  id="name"
-                  type="text"
-                  label="Name"
+                  variant='outlined'
+                  id='name'
+                  type='text'
+                  label='Name'
                   onChange={this.onInputChange}
                   value={name}
                 />
                 <TextField
                   className={classes.input}
-                  variant="outlined"
-                  id="email"
-                  type="text"
-                  label="Email"
+                  variant='outlined'
+                  id='email'
+                  type='text'
+                  label='Email'
                   onChange={this.onInputChange}
                   value={email}
                 />
                 <TextField
                   className={classes.input}
-                  id="password"
-                  type="password"
-                  variant="outlined"
-                  label="Password"
+                  id='password'
+                  type='password'
+                  variant='outlined'
+                  label='Password'
                   onChange={this.onInputChange}
                   value={password}
                 />
                 <TextField
                   className={classes.input}
-                  id="confirm"
-                  type="password"
-                  variant="outlined"
-                  label="Confirm Password"
+                  id='confirm'
+                  type='password'
+                  variant='outlined'
+                  label='Confirm Password'
                   onChange={this.onInputChange}
                   value={confirm}
                 />
               </div>
               <Button
-                variant="contained"
-                color="primary"
-                size="medium"
+                variant='contained'
+                color='primary'
+                size='medium'
                 className={`${classes.button} ${classes.login}`}
-                type="submit"
-                style={{ color: "#fff" }}
+                type='submit'
+                style={{ color: '#fff' }}
               >
                 Register
               </Button>
             </form>
           ) : (
             <Typography
-              color="primary"
-              variant="p"
+              color='primary'
+              variant='body1'
               className={classes.heading}
               style={{
-                padding: "20px 0",
-                justifyContent: "center",
-                width: "100%",
-                display: "flex",
+                padding: '20px 0',
+                justifyContent: 'center',
+                width: '100%',
+                display: 'flex',
               }}
             >
               Registrations are currently closed
@@ -349,11 +346,11 @@ class Register extends React.Component {
           )}
         </Paper>
         <Button
-          size="medium"
-          color="primary"
+          size='medium'
+          color='primary'
           className={`${classes.textButton}`}
           onClick={(e) => {
-            history.push("/");
+            history.push('/');
           }}
         >
           Already have an account? Login
@@ -362,11 +359,11 @@ class Register extends React.Component {
     );
   }
 }
-Register = withStyles(styles)(Register);
-export default compose(
+const RegisterGraphql = compose(
   graphql(GET_CAMPUSES),
   graphql(REGISTER),
-  graphql(GET_DARK, { name: "dark" }),
-  graphql(CHANGE_DARK, { name: "changeDark" }),
-  graphql(GET_REGISTER_PERMIT, { name: "registerPermit" })
+  graphql(GET_DARK, { name: 'dark' }),
+  graphql(CHANGE_DARK, { name: 'changeDark' }),
+  graphql(GET_REGISTER_PERMIT, { name: 'registerPermit' })
 )(Register);
+export default withStyles(createStyles(styles))(RegisterGraphql);

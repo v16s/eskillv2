@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
-import { withStyles } from '@material-ui/styles'
-import { withRouter } from 'react-router-dom'
-import 'react-circular-progressbar/dist/styles.css'
+import React, { Component } from 'react';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { withStyles, createStyles } from '@material-ui/styles';
+import { withRouter } from 'react-router-dom';
+import 'react-circular-progressbar/dist/styles.css';
 import {
   Card,
   Grid,
@@ -11,36 +11,36 @@ import {
   CardMedia,
   CardActionArea,
   CardHeader,
-  CardContent
-} from '@material-ui/core'
-const styles = theme => ({
+  CardContent,
+} from '@material-ui/core';
+const styles = (theme) => ({
   cardcontent: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     height: '75%',
     padding: 10,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
-    margin: '15px 0'
+    margin: '15px 0',
   },
   card: {
     height: '100%',
-    maxWidth: '350px'
+    maxWidth: '350px',
   },
   griditem: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
-class CourseCardBase extends Component {
-  render () {
+    alignItems: 'center',
+  },
+});
+class CourseCardBase extends Component<any, any> {
+  render() {
     const {
       classes,
       course,
@@ -48,16 +48,16 @@ class CourseCardBase extends Component {
       completed,
       theme,
       correct,
-      history: { push }
-    } = this.props
+      history: { push },
+    } = this.props;
 
     return (
       <Grid className={classes.griditem} item md={3} lg={2} sm={4} xs={12}>
         <Card className={classes.card}>
           <CardActionArea
-            onClick={e => {
-              e.preventDefault()
-              push(`/course/${this.props.id}`)
+            onClick={(e) => {
+              e.preventDefault();
+              push(`/course/${this.props.id}`);
             }}
             style={{ height: '100%' }}
           >
@@ -75,7 +75,6 @@ class CourseCardBase extends Component {
                     trailColor: theme.palette.background.default,
                     textSize: '12px',
                     strokeLinecap: 'butt',
-                    maxWidth: '300px'
                   })}
                 />
               </div>
@@ -94,10 +93,10 @@ class CourseCardBase extends Component {
           </CardActionArea>
         </Card>
       </Grid>
-    )
+    );
   }
 }
 
 export const CourseCard = withRouter(
-  withStyles(styles, { withTheme: true })(CourseCardBase)
-)
+  withStyles(createStyles(styles), { withTheme: true })(CourseCardBase)
+);

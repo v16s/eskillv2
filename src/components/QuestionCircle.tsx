@@ -1,41 +1,41 @@
-import React, { Component } from 'react'
-import { Pie } from '@vx/shape'
-import { Group } from '@vx/group'
-import { Query } from '@apollo/react-components'
-import { withStyles } from '@material-ui/styles'
+import React, { Component } from 'react';
+import { Pie } from '@vx/shape';
+import { Group } from '@vx/group';
+import { Query } from '@apollo/react-components';
+import { withStyles, createStyles } from '@material-ui/styles';
 import {
   Paper,
   IconButton,
   List,
   ListItem,
   Divider,
-  ListItemText
-} from '@material-ui/core'
-import { withRouter } from 'react-router-dom'
-import { Loading } from './index'
-import { red, green, yellow } from '@material-ui/core/colors'
-import gql from 'graphql-tag'
-const styles = theme => ({
+  ListItemText,
+} from '@material-ui/core';
+import { withRouter } from 'react-router-dom';
+import { Loading } from './index';
+import { red, green, yellow } from '@material-ui/core/colors';
+import gql from 'graphql-tag';
+const styles = (theme) => ({
   paper: {
     display: 'flex',
     width: '95vw',
     justifyContent: 'center',
     margin: 'auto',
-    minHeight: '500px'
+    minHeight: '500px',
   },
   path: {
     '&:hover': {
       cursor: 'pointer',
-      fill: theme.palette.text.primary
-    }
+      fill: theme.palette.text.primary,
+    },
   },
   clickable: {
     '&:hover': {
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
-    padding: 15
-  }
-})
+    padding: 15,
+  },
+});
 const INSTANCE = gql`
   query Instance($id: String!) {
     instance(id: $id) {
@@ -48,54 +48,49 @@ const INSTANCE = gql`
       status
     }
   }
-`
-class QuestionCircleBase extends Component {
-  constructor (props) {
-    super(props)
-    this.state = { width: 0, height: 0 }
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
+`;
+class QuestionCircleBase extends Component<any, any> {
+  state: any = { width: 0, height: 0 };
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
   }
 
-  componentDidMount () {
-    this.updateWindowDimensions()
-    window.addEventListener('resize', this.updateWindowDimensions)
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
   }
 
-  componentWillUnmount () {
-    window.removeEventListener('resize', this.updateWindowDimensions)
-  }
-
-  updateWindowDimensions () {
-    this.setState({ width: window.innerWidth, height: window.innerHeight })
-  }
-  render () {
-    const { theme, classes, match } = this.props
-    let { width: windowWidth } = this.state
-    let width = 600
-    const id = match.params.name
-    let height = 600
-    let margin = { top: 10, bottom: 10, right: 10, left: 10 }
-    const radius = Math.min(width, height) / 2
-    const centerY = height / 2
-    const centerX = width / 2
+  updateWindowDimensions = () => {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
+  };
+  render() {
+    const { theme, classes, match } = this.props;
+    let { width: windowWidth } = this.state;
+    let width = 600;
+    const id = match.params.name;
+    let height = 600;
+    let margin = { top: 10, bottom: 10, right: 10, left: 10 };
+    const radius = Math.min(width, height) / 2;
+    const centerY = height / 2;
+    const centerX = width / 2;
     return (
       <Query query={INSTANCE} variables={{ id }} fetchPolicy='network-only'>
-        {({ data, loading }) => {
+        {({ data, loading }: any) => {
           if (loading) {
             return (
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'center',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}
               >
-                <Loading />
+                <Loading color='#1187ee' />
               </div>
-            )
+            );
           }
-          const { course, questions, status } = data.instance
-          if (!status) return "You aren't supposed to be here"
+          const { course, questions, status } = data.instance;
+          if (!status) return <span>You aren't supposed to be here</span>;
           if (windowWidth < 768) {
             return (
               <Paper>
@@ -103,7 +98,7 @@ class QuestionCircleBase extends Component {
                   style={{
                     width: '100%',
                     backgroundColor: 'transparent',
-                    padding: 0
+                    padding: 0,
                   }}
                 >
                   {questions.map((q, i) => {
@@ -114,7 +109,7 @@ class QuestionCircleBase extends Component {
                         ? green[400]
                         : q.ans === ''
                         ? '#3281ff'
-                        : yellow[400]
+                        : yellow[400];
                     return (
                       <div>
                         {' '}
@@ -122,7 +117,7 @@ class QuestionCircleBase extends Component {
                           key={q.id}
                           style={{ color }}
                           className={classes.clickable}
-                          onClick={e =>
+                          onClick={(e) =>
                             this.props.history.push(`${match.url}/${q.id}`)
                           }
                         >
@@ -130,38 +125,38 @@ class QuestionCircleBase extends Component {
                         </ListItem>
                         {i < questions.length - 1 && <Divider />}
                       </div>
-                    )
+                    );
                   })}
                 </List>
               </Paper>
-            )
+            );
           }
-          const piedata = questions.map(d => ({ ...d, usage: 1 }))
+          const piedata = questions.map((d) => ({ ...d, usage: 1 }));
           return (
             <Paper className={classes.paper}>
               <svg height={height} width={width}>
                 <Group top={centerY - margin.top} left={centerX}>
                   <Pie
                     data={piedata}
-                    pieValue={d => d.usage}
+                    pieValue={(d) => d.usage}
                     outerRadius={radius - radius / 3}
                     innerRadius={radius - radius / 6}
                     cornerRadius={0}
                     padAngle={0}
                   >
-                    {pie => {
+                    {(pie) => {
                       return pie.arcs.map((arc, i) => {
-                        const opacity = 1
-                        const [centroidX, centroidY] = pie.path.centroid(arc)
-                        const { startAngle, endAngle } = arc
+                        const opacity = 1;
+                        const [centroidX, centroidY] = pie.path.centroid(arc);
+                        const { startAngle, endAngle } = arc;
                         return (
                           <g key={`browser-${arc.data.id}-${i}`}>
                             <a
-                              onClick={e => {
-                                e.preventDefault()
+                              onClick={(e) => {
+                                e.preventDefault();
                                 this.props.history.push(
                                   `${match.url}/${arc.data.id}`
-                                )
+                                );
                               }}
                             >
                               <path
@@ -201,8 +196,8 @@ class QuestionCircleBase extends Component {
                               />
                             </a>
                           </g>
-                        )
-                      })
+                        );
+                      });
                     }}
                   </Pie>
                 </Group>
@@ -215,7 +210,7 @@ class QuestionCircleBase extends Component {
                   <text
                     style={{
                       fill: theme.palette.text.primary,
-                      ...theme.typography.h4
+                      ...theme.typography.h4,
                     }}
                     textAnchor='middle'
                     className='center-label'
@@ -225,13 +220,13 @@ class QuestionCircleBase extends Component {
                 </Group>
               </svg>
             </Paper>
-          )
+          );
         }}
       </Query>
-    )
+    );
   }
 }
 
 export const QuestionCircle = withRouter(
-  withStyles(styles, { withTheme: true })(QuestionCircleBase)
-)
+  withStyles(createStyles(styles), { withTheme: true })(QuestionCircleBase)
+);

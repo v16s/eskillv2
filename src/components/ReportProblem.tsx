@@ -1,9 +1,13 @@
-import React, { Component } from 'react'
-import { Paper, TextField, Grid, Button } from '@material-ui/core'
-import { withStyles } from '@material-ui/styles'
-import { Dropdown } from './index'
-import gql from 'graphql-tag'
-import { graphql } from '@apollo/react-hoc'
+import React, { Component } from 'react';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Dropdown } from './index';
+import gql from 'graphql-tag';
+import { graphql } from '@apollo/react-hoc';
+import { useMutation } from '@apollo/react-hooks';
 
 const CREATE_PROBLEM = gql`
   mutation CreateProblem(
@@ -15,111 +19,94 @@ const CREATE_PROBLEM = gql`
       id
     }
   }
-`
+`;
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     padding: 20,
     width: '95%',
-    maxWidth: '400px'
+    maxWidth: '400px',
   },
   textField: {
-    width: '100%'
+    width: '100%',
   },
   grid: {
-    marginTop: 15
+    marginTop: 15,
   },
   button: {
-    width: '100%'
-  }
-})
+    width: '100%',
+  },
+}));
 
-class ReportProblemBase extends Component {
-  state = {
-    option: {},
-    problem: ''
+export const ReportProblem = ({ course, question, close }) => {
+  const [option, setOption] = React.useState<number | null>(null);
+  const [problem, setProblem] = React.useState('');
+  const [mutate] = useMutation(CREATE_PROBLEM);
+  const classes = useStyles();
+
+  function onDropdownChange(opt) {
+    setOption(opt.value);
+    setProblem(opt.label);
   }
-  onDropdownChange = option => {
-    let value = option.label
-    if (option.label == 'Custom') {
-      value = ''
-    }
-    this.setState({ option, problem: value })
+  function onInputChange(e) {
+    setProblem(e.target.value);
   }
-  onInputChange = ({ target: { value } }) => {
-    this.setState({ problem: value })
-  }
-  submit = () => {
-    const { course, question } = this.props
-    console.log(this.state.problem)
-    if (this.state.problem != '') {
-      this.props
-        .mutate({
-          variables: {
-            queID: question,
-            course,
-            description: this.state.problem
-          }
-        })
-        .then(data => {
-          this.props.close()
-        })
-        .catch(err => {
-          // write a handler here
-        })
+  function submit() {
+    if (problem != '') {
+      mutate({
+        variables: {
+          queID: question,
+          course,
+          description: problem,
+        },
+      });
+      close();
     }
   }
-  render () {
-    const { classes, question, course } = this.props
-    const { option } = this.state
-    console.log(question, course)
-    return (
-      <Paper tabIndex={-1} className={classes.paper}>
-        <Dropdown
-          options={[
-            { label: 'Question Description is not defined', value: 1 },
-            { label: 'Question Description is not correct', value: 2 },
-            { label: 'Options are not defined', value: 3 },
-            { label: 'None of the options are correct', value: 4 },
-            { label: 'Error with displaying the question', value: 5 },
-            { label: 'Custom', value: 0 }
-          ]}
-          onChange={this.onDropdownChange}
-          label='Select a reason'
-          name='Reason'
+  return (
+    <Paper tabIndex={-1} className={classes.paper}>
+      <Dropdown
+        options={[
+          { label: 'Question Description is not defined', value: 1 },
+          { label: 'Question Description is not correct', value: 2 },
+          { label: 'Options are not defined', value: 3 },
+          { label: 'None of the options are correct', value: 4 },
+          { label: 'Error with displaying the question', value: 5 },
+          { label: 'Custom', value: 0 },
+        ]}
+        onChange={onDropdownChange}
+        label='Select a reason'
+        name='Reason'
+      />
+      {option == 0 && (
+        <TextField
+          id='outlined-textarea'
+          label='Custom Problem'
+          placeholder='Define your problem here'
+          multiline
+          className={classes.textField}
+          margin='normal'
+          variant='outlined'
+          onChange={onInputChange}
         />
-        {option.value == 0 && (
-          <TextField
-            id='outlined-textarea'
-            label='Custom Problem'
-            placeholder='Define your problem here'
-            multiline
-            className={classes.textField}
-            margin='normal'
-            variant='outlined'
-            onChange={this.onInputChange}
-          />
-        )}
-        <Grid container spacing={3} className={classes.grid}>
-          <Grid item xs={6}>
-            <Button className={classes.button} onClick={this.props.close}>
-              Cancel
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant='contained'
-              color='primary'
-              className={classes.button}
-              onClick={this.submit}
-            >
-              Submit
-            </Button>
-          </Grid>
+      )}
+      <Grid container spacing={3} className={classes.grid}>
+        <Grid item xs={6}>
+          <Button className={classes.button} onClick={close}>
+            Cancel
+          </Button>
         </Grid>
-      </Paper>
-    )
-  }
-}
-ReportProblemBase = withStyles(styles)(ReportProblemBase)
-export const ReportProblem = graphql(CREATE_PROBLEM)(ReportProblemBase)
+        <Grid item xs={6}>
+          <Button
+            variant='contained'
+            color='primary'
+            className={classes.button}
+            onClick={submit}
+          >
+            Submit
+          </Button>
+        </Grid>
+      </Grid>
+    </Paper>
+  );
+};

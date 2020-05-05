@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { TextField, Paper, Button, Grid, Radio } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
-import { Dropdown, PreviewCard } from "./index";
-import { withStyles } from "@material-ui/core/styles";
-import { graphql, withApollo } from "@apollo/react-hoc";
-import { compose } from "recompose";
-import gql from "graphql-tag";
+import React, { Component } from 'react';
+import { TextField, Paper, Button, Grid, Radio } from '@material-ui/core';
+import { green } from '@material-ui/core/colors';
+import { Dropdown, PreviewCard } from './index';
+import { withStyles } from '@material-ui/core/styles';
+import { graphql, withApollo } from '@apollo/react-hoc';
+import { compose } from 'recompose';
+import gql from 'graphql-tag';
 
 const COURSES = gql`
   query Courses($name: String, $branch: String) {
@@ -51,56 +51,56 @@ const GET_QUESTION_PICTURE = gql`
   }
 `;
 
-const styles = {
+const styles: Record<string, React.CSSProperties> = {
   paper: {
-    outline: "none",
-    width: "80%",
+    outline: 'none',
+    width: '80%',
     maxWidth: 1000,
-    padding: "30px",
-    overflow: "auto",
+    padding: '30px',
+    overflow: 'auto',
   },
   container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100vw",
-    height: "100vh",
-    position: "fixed",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100vw',
+    height: '100vh',
+    position: 'fixed',
   },
   answer: {
-    display: "flex",
+    display: 'flex',
   },
   radioWrap: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    height: "100%",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: '100%',
   },
-  radio: { marginRight: "5px", width: "20px", height: "20px" },
-  action: { width: "100%" },
+  radio: { marginRight: '5px', width: '20px', height: '20px' },
+  action: { width: '100%' },
 };
-const GreenRadio = withStyles({
+const GreenRadio: any = withStyles({
   root: {
-    "&$checked": {
+    '&$checked': {
       color: green[400],
     },
   },
   checked: {},
-})((props) => <Radio color="default" {...props} />);
+})((props) => <Radio color='default' {...props} />);
 
 const makeDefaults = () => ({
-  name: "",
-  desc: "",
+  name: '',
+  desc: '',
   options: {
-    a: "",
-    b: "",
-    c: "",
-    d: "",
+    a: '',
+    b: '',
+    c: '',
+    d: '',
   },
-  answer: "",
+  answer: '',
 });
 
-class EditQuestionBase extends Component {
+class EditQuestionBase extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -109,7 +109,7 @@ class EditQuestionBase extends Component {
       answer: props.question.ans,
       courses: [],
       picture: null,
-      exp: "",
+      exp: '',
       course: { value: props.question.course, label: props.question.course },
     };
   }
@@ -123,12 +123,12 @@ class EditQuestionBase extends Component {
     this.setState({ answer: e.target.value });
   };
   onInputChange = ({ target }) => {
-    let newstate = this.state;
+    let newstate: any = this.state;
     newstate[target.name] = target.value;
     this.setState(newstate);
   };
   onOptionInputChange = ({ target }) => {
-    let newstate = this.state;
+    let newstate: any = this.state;
     newstate.options[target.name] = target.value;
     this.setState(newstate);
   };
@@ -137,7 +137,7 @@ class EditQuestionBase extends Component {
     let defaults = makeDefaults();
     if (flag) {
       Object.keys(this.state).map((k) => {
-        if (k != "options" && k in defaults && this.state[k] == defaults[k]) {
+        if (k != 'options' && k in defaults && this.state[k] == defaults[k]) {
           flag = false;
         }
       });
@@ -196,7 +196,7 @@ class EditQuestionBase extends Component {
     }
   };
   onDropdownChange = (value, e) => {
-    let newstate = this.state;
+    let newstate: any = this.state;
     newstate[e.name] = value;
     let { client } = this.props;
     client
@@ -236,14 +236,14 @@ class EditQuestionBase extends Component {
     const { answer } = this.state;
     return (
       <Paper style={styles.paper}>
-        <Grid container spacing={3} style={{ height: "auto" }}>
+        <Grid container spacing={3} style={{ height: 'auto' }}>
           {!this.props.coordinator && (
             <Grid item sm={6}>
               <Dropdown
                 options={this.props.branches}
                 onChange={this.onDropdownChange}
-                label="Branch"
-                name="branch"
+                label='Branch'
+                name='branch'
               />
             </Grid>
           )}
@@ -252,35 +252,35 @@ class EditQuestionBase extends Component {
               <Dropdown
                 options={courses}
                 onChange={this.onDropdownChange}
-                label="Course"
-                name="course"
+                label='Course'
+                name='course'
                 value={this.state.course}
               />
             </Grid>
           )}
           <Grid item sm={12}>
             <TextField
-              label="Question Name"
-              placeholder="Question Name"
-              type="text"
-              margin="normal"
-              variant="outlined"
+              label='Question Name'
+              placeholder='Question Name'
+              type='text'
+              margin='normal'
+              variant='outlined'
               fullWidth
-              name="name"
+              name='name'
               onChange={this.onInputChange}
               value={this.state.name}
             />
           </Grid>
           <Grid item sm={12}>
             <TextField
-              label="Question Description"
-              type="text"
-              margin="normal"
-              variant="outlined"
+              label='Question Description'
+              type='text'
+              margin='normal'
+              variant='outlined'
               fullWidth
               multiline
-              name="desc"
-              placeholder="Question Description with an equation: $ x^2+2x+4 $"
+              name='desc'
+              placeholder='Question Description with an equation: $ x^2+2x+4 $'
               onChange={this.onInputChange}
               value={this.state.desc}
             />
@@ -288,21 +288,20 @@ class EditQuestionBase extends Component {
           <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
-                inputProps={{ "aria-label": "Radio A" }}
                 style={styles.radio}
-                checked={answer == "a"}
+                checked={answer == 'a'}
                 onChange={this.handleRadioChange}
-                value="a"
+                value='a'
               />
             </div>
             <TextField
-              label="Option A"
-              placeholder="Option A"
-              type="text"
-              margin="normal"
-              variant="outlined"
+              label='Option A'
+              placeholder='Option A'
+              type='text'
+              margin='normal'
+              variant='outlined'
               fullWidth
-              name="a"
+              name='a'
               onChange={this.onOptionInputChange}
               value={this.state.opt.a}
             />
@@ -310,21 +309,20 @@ class EditQuestionBase extends Component {
           <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
-                inputProps={{ "aria-label": "Radio A" }}
                 style={styles.radio}
-                checked={answer == "b"}
+                checked={answer == 'b'}
                 onChange={this.handleRadioChange}
-                value="b"
+                value='b'
               />
             </div>
             <TextField
-              label="Option B"
-              placeholder="Option B"
-              type="text"
-              margin="normal"
-              variant="outlined"
+              label='Option B'
+              placeholder='Option B'
+              type='text'
+              margin='normal'
+              variant='outlined'
               fullWidth
-              name="b"
+              name='b'
               onChange={this.onOptionInputChange}
               value={this.state.opt.b}
             />
@@ -332,21 +330,20 @@ class EditQuestionBase extends Component {
           <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
-                inputProps={{ "aria-label": "Radio A" }}
                 style={styles.radio}
-                checked={answer == "c"}
+                checked={answer == 'c'}
                 onChange={this.handleRadioChange}
-                value="c"
+                value='c'
               />
             </div>
             <TextField
-              label="Option C"
-              placeholder="Option C"
-              type="text"
-              margin="normal"
-              variant="outlined"
+              label='Option C'
+              placeholder='Option C'
+              type='text'
+              margin='normal'
+              variant='outlined'
               fullWidth
-              name="c"
+              name='c'
               onChange={this.onOptionInputChange}
               value={this.state.opt.c}
             />
@@ -354,21 +351,20 @@ class EditQuestionBase extends Component {
           <Grid style={styles.answer} item sm={6}>
             <div style={styles.radioWrap}>
               <GreenRadio
-                inputProps={{ "aria-label": "Radio A" }}
                 style={styles.radio}
-                checked={answer == "d"}
+                checked={answer == 'd'}
                 onChange={this.handleRadioChange}
-                value="d"
+                value='d'
               />
             </div>
             <TextField
-              label="Option D"
-              placeholder="Option D"
-              type="text"
-              margin="normal"
-              variant="outlined"
+              label='Option D'
+              placeholder='Option D'
+              type='text'
+              margin='normal'
+              variant='outlined'
               fullWidth
-              name="d"
+              name='d'
               onChange={this.onOptionInputChange}
               value={this.state.opt.d}
             />
@@ -378,24 +374,24 @@ class EditQuestionBase extends Component {
             {this.state.preview ? (
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
                 <img
                   src={this.state.preview}
                   style={{
-                    marginRight: "15px",
-                    maxHeight: "500px",
-                    maxWidth: "500px",
+                    marginRight: '15px',
+                    maxHeight: '500px',
+                    maxWidth: '500px',
                   }}
-                  alt=""
+                  alt=''
                 />
                 <Button
-                  style={{ color: "#fff" }}
-                  variant="contained"
-                  color="secondary"
-                  component="span"
+                  style={{ color: '#fff' }}
+                  variant='contained'
+                  color='secondary'
+                  component='span'
                   onClick={this.removeImage}
                 >
                   Remove
@@ -404,18 +400,18 @@ class EditQuestionBase extends Component {
             ) : (
               <div>
                 <input
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  id="raised-button-file"
-                  type="file"
+                  accept='image/*'
+                  style={{ display: 'none' }}
+                  id='raised-button-file'
+                  type='file'
                   onChange={this.onChange}
                 />
-                <label htmlFor="raised-button-file">
+                <label htmlFor='raised-button-file'>
                   <Button
-                    style={{ color: "#fff" }}
-                    variant="contained"
-                    color="primary"
-                    component="span"
+                    style={{ color: '#fff' }}
+                    variant='contained'
+                    color='primary'
+                    component='span'
                   >
                     Upload
                   </Button>
@@ -425,30 +421,35 @@ class EditQuestionBase extends Component {
           </Grid>
           <Grid item sm={12}>
             <TextField
-              label="Explanation"
-              placeholder="Explanation for the question"
-              type="text"
-              margin="normal"
-              variant="outlined"
+              label='Explanation'
+              placeholder='Explanation for the question'
+              type='text'
+              margin='normal'
+              variant='outlined'
               fullWidth
               multiline
-              name="exp"
+              name='exp'
               onChange={this.onInputChange}
               value={this.state.exp}
             />
           </Grid>
           <Grid item sm={12}>
             <PreviewCard
-              {...{
-                ...this.state,
-                answer: this.state.answer,
-                options: this.state.opt,
+              answer={this.state.answer}
+              options={{
+                a: this.state.opt.a,
+                b: this.state.opt.b,
+                c: this.state.opt.c,
+                d: this.state.opt.d,
               }}
+              name={this.state.name}
+              desc={this.state.desc}
+              exp={this.state.exp}
             />
           </Grid>
           <Grid item sm={6}>
             <Button
-              variant="contained"
+              variant='contained'
               onClick={this.props.close}
               style={styles.action}
             >
@@ -457,9 +458,9 @@ class EditQuestionBase extends Component {
           </Grid>
           <Grid item sm={6}>
             <Button
-              style={{ ...styles.action, color: "#fff" }}
-              variant="contained"
-              color="primary"
+              style={{ ...styles.action, color: '#fff' }}
+              variant='contained'
+              color='primary'
               onClick={this.onSubmit}
             >
               Submit

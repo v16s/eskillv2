@@ -1,94 +1,120 @@
-import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
-import {
-  List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  IconButton,
-  TextField,
-  Typography,
-  Button
-} from '@material-ui/core/'
-import {
-  DeleteOutline as DeleteIcon,
-  Edit as EditIcon,
-  Check,
-  Clear,
-  AddBox as Add
-} from '@material-ui/icons'
+import React from 'react';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
-const styles = theme => ({
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import EditIcon from '@material-ui/icons/Edit';
+import Check from '@material-ui/icons/Check';
+import Clear from '@material-ui/icons/Clear';
+import Add from '@material-ui/icons/AddBox';
+
+import { VariableMapper } from '../typings/misc';
+
+import { useMutation } from '@apollo/react-hooks';
+
+/**
+ * Props:
+ * mutation strings for add, edit and delete
+ * query string for base data
+ * Has a variable mapper that maps variables to required function name for mutation
+ * title (string)
+ */
+
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    maxWidth: 752
+    maxWidth: 752,
   },
   demo: {
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   title: {
-    paddingLeft: '15px'
+    paddingLeft: '15px',
   },
   textField: {
-    width: '100%'
+    width: '100%',
   },
   button: {
     color: '#fff',
     marginLeft: '15px',
-    marginBottom: '15px'
-  }
-})
+    marginBottom: '15px',
+  },
+}));
 
-class TableList extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      data: props.data || [],
-      editing: 0,
-      edit: false,
-      value: '',
-      addValue: '',
-      add: false
-    }
+const TableList: React.FC<{
+  data: any;
+  refetch: any;
+  title: string;
+  addMutation: any;
+  editMutation: any;
+  deleteMutation: any;
+  variableMapper: VariableMapper;
+}> = ({
+  data,
+  refetch,
+  title,
+  addMutation,
+  editMutation,
+  variableMapper,
+  deleteMutation,
+}) => {
+  // Hooks
+
+  const classes = useStyles();
+  const [editing, setEditing] = React.useState(-1);
+  const [value, setValue] = React.useState('');
+  const [adding, setAdding] = React.useState(false);
+  const [addCaller, { data: addData, error: addError }] = useMutation(
+    addMutation
+  );
+  const [editCaller, { data: editData, error: editError }] = useMutation(
+    editMutation
+  );
+  const [deleteCaller, { data: deleteData, error: deleteError }] = useMutation(
+    deleteMutation
+  );
+  React.useEffect(() => {
+    refetch();
+  }, [addData, addError, editData, editError, deleteData, deleteError]);
+
+  // Functions
+  function handleChange(e) {
+    setValue(e.target.value);
   }
-  edit = (d, i) => {
-    this.setState({ edit: true, editing: i, value: d })
+  function cancel() {
+    setEditing(-1);
+    setValue('');
   }
-  shouldComponentUpdate (nextProps, nextState) {
-    nextState.data = nextProps.data
-    return true
+  function edit(value, index) {
+    setValue(value);
+    setEditing(index);
   }
-  handleChange = e => {
-    this.setState({ value: e.target.value })
+  function finish(prevValue) {
+    editCaller(variableMapper.edit(prevValue, value));
+    setEditing(-1);
+    setValue('');
   }
-  handleAddChange = e => {
-    this.setState({ addValue: e.target.value })
+  function addInitiate() {
+    setAdding(true);
   }
-  finish = oldValue => {
-    this.props
-      .handleUpdate(this.props.current, oldValue, this.state.value)
-      .then(() => {
-        this.setState({ edit: false })
-      })
+  function add() {
+    addCaller(variableMapper.add(value));
+    setValue('');
+    setAdding(false);
   }
-  cancel = () => {
-    this.setState({ edit: false })
+  function del(value) {
+    deleteCaller(variableMapper.delete(value));
   }
-  delete = value => {
-    this.props.handleRemove(this.props.current, value)
-  }
-  addInitiate = () => {
-    this.setState({ add: true, addValue: '' })
-  }
-  add = () => {
-    this.props.handleAdd(this.props.current, this.state.addValue).then(() => {
-      this.setState({ add: false })
-    })
-  }
-  render () {
-    const { data, editing, edit, value } = this.state
-    const { title, classes } = this.props
-    return (
+
+  return (
+    <div style={{ display: 'flex', boxSizing: 'border-box' }}>
       <div style={{ width: '100%', padding: '10px' }}>
         {data && data.length > 0 && (
           <Typography variant='h6' className={classes.title}>
@@ -98,14 +124,14 @@ class TableList extends React.Component {
         <div className={classes.demo}>
           <List>
             {data.map((d, i) => {
-              if (edit && editing == i) {
+              if (editing == i) {
                 return (
                   <ListItem key={d}>
                     <IconButton
                       edge='start'
                       aria-label='Edit'
                       color='primary'
-                      onClick={e => this.finish(d)}
+                      onClick={(e) => finish(d)}
                     >
                       <Check />
                     </IconButton>
@@ -113,7 +139,7 @@ class TableList extends React.Component {
                       id='edit-value'
                       value={value}
                       className={classes.textField}
-                      onChange={this.handleChange}
+                      onChange={handleChange}
                       margin='normal'
                     />
                     <ListItemSecondaryAction>
@@ -121,20 +147,20 @@ class TableList extends React.Component {
                         edge='end'
                         aria-label='Delete'
                         color='secondary'
-                        onClick={e => this.cancel()}
+                        onClick={(e) => cancel()}
                       >
                         <Clear />
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                )
+                );
               }
               return (
                 <ListItem key={d}>
                   <IconButton
                     edge='start'
                     aria-label='Edit'
-                    onClick={e => this.edit(d, i)}
+                    onClick={(e) => edit(d, i)}
                   >
                     <EditIcon />
                   </IconButton>
@@ -144,34 +170,34 @@ class TableList extends React.Component {
                       edge='end'
                       aria-label='Delete'
                       color='secondary'
-                      onClick={e => this.delete(d)}
+                      onClick={(e) => del(d)}
                     >
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>
-              )
+              );
             })}
           </List>
-          {this.state.add ? (
+          {adding ? (
             <div
               style={{
                 display: 'flex',
-                padding: 15
+                padding: 15,
               }}
             >
               <TextField
                 id='edit-value'
-                value={this.state.addValue}
+                value={value}
                 style={{ flexGrow: 1, margin: 0 }}
-                onChange={this.handleAddChange}
+                onChange={handleChange}
                 margin='normal'
               />
               <Button
                 variant='contained'
                 color='primary'
                 className={classes.button}
-                onClick={this.add}
+                onClick={add}
               >
                 <Add />
               </Button>
@@ -181,7 +207,7 @@ class TableList extends React.Component {
               variant='contained'
               color='primary'
               className={classes.button}
-              onClick={this.addInitiate}
+              onClick={addInitiate}
             >
               <Add />
               Add
@@ -189,8 +215,8 @@ class TableList extends React.Component {
           )}
         </div>
       </div>
-    )
-  }
-}
-const TableListMod = withStyles(styles)(TableList)
-export { TableListMod as List }
+    </div>
+  );
+};
+
+export { TableList as List };

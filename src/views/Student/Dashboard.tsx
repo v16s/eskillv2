@@ -1,23 +1,23 @@
-import React from 'react'
-import gql from 'graphql-tag'
-import { Query } from '@apollo/react-components'
-import { CourseCard, RequestCourse, ApprovalCard } from '../../components'
-import { withStyles } from '@material-ui/styles'
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from '@apollo/react-components';
+import { CourseCard, RequestCourse, ApprovalCard } from '../../components';
+import { withStyles, createStyles } from '@material-ui/styles';
 import {
   Fab,
   Modal,
   InputBase as TextField,
   Typography,
-  Grid
-} from '@material-ui/core'
-import { Add } from '@material-ui/icons'
-import { withRouter } from 'react-router-dom'
-const styles = theme => ({
+  Grid,
+} from '@material-ui/core';
+import { Add } from '@material-ui/icons';
+import { withRouter } from 'react-router-dom';
+const styles = (theme) => ({
   root: {
     display: 'flex',
     color: '#fff',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   search: {
     width: '98%',
@@ -26,8 +26,8 @@ const styles = theme => ({
     '& input': {
       backgroundColor: theme.palette.background.paper,
       ...theme.shape,
-      padding: theme.spacing(1, 1, 1, 1)
-    }
+      padding: theme.spacing(1, 1, 1, 1),
+    },
   },
   cardcontent: {
     display: 'flex',
@@ -35,21 +35,21 @@ const styles = theme => ({
     alignItems: 'center',
     height: '75%',
     padding: 10,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   column: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
-    margin: '15px 0'
+    margin: '15px 0',
   },
   fab: {
     color: '#fff',
     position: 'fixed',
     bottom: '20px',
     right: '20px',
-    maxWidth: '200px'
+    maxWidth: '200px',
   },
   none: {
     width: '100%',
@@ -58,9 +58,9 @@ const styles = theme => ({
     alignItems: 'center',
     color: theme.palette.text.primary,
     flexGrow: 1,
-    height: 'calc(100vh - 64px)'
-  }
-})
+    height: 'calc(100vh - 64px)',
+  },
+});
 
 const COURSES = gql`
   query Instances {
@@ -73,31 +73,31 @@ const COURSES = gql`
       status
     }
   }
-`
+`;
 
-class Dashboard extends React.Component {
-  state = {
+class Dashboard extends React.Component<any, any> {
+  state: any = {
     show: false,
-    search: ''
-  }
-  onSearchChange = e => {
-    this.setState({ search: e.target.value })
-  }
+    search: '',
+  };
+  onSearchChange = (e) => {
+    this.setState({ search: e.target.value });
+  };
   close = (refresh, refetch) => {
     if (refresh) {
-      refetch()
+      refetch();
     }
-    this.setState({ show: !this.state.show })
-  }
-  render () {
-    const { classes } = this.props
+    this.setState({ show: !this.state.show });
+  };
+  render() {
+    const { classes } = this.props;
 
     return (
       <div>
         <div className={classes.root}>
           <Query query={COURSES} fetchPolicy='no-cache'>
             {({ data, loading, refetch }) => {
-              let instances = !loading ? data.instances || [] : []
+              let instances = !loading ? data.instances || [] : [];
               return (
                 <>
                   {instances.length > 0 && (
@@ -107,9 +107,8 @@ class Dashboard extends React.Component {
                         onChange={this.onSearchChange}
                         placeholder='Search'
                         style={{
-                          width: '100%'
+                          width: '100%',
                         }}
-                        variant='filled'
                       />
                     </div>
                   )}
@@ -126,11 +125,11 @@ class Dashboard extends React.Component {
                                   key={id}
                                   course={course}
                                   completed={completed}
-                                  complete={parseInt((completed / total) * 100)}
+                                  complete={Number((completed / total) * 100)}
                                   correct={correct}
                                   id={id}
                                 />
-                              )
+                              );
                             } else {
                               return (
                                 <ApprovalCard
@@ -138,10 +137,10 @@ class Dashboard extends React.Component {
                                   course={course}
                                   id={id}
                                 />
-                              )
+                              );
                             }
                           } else {
-                            return null
+                            return null;
                           }
                         }
                       )
@@ -159,7 +158,7 @@ class Dashboard extends React.Component {
                       variant='extended'
                       color='secondary'
                       aria-label='Add'
-                      onClick={e => this.close(e, refetch)}
+                      onClick={(e) => this.close(e, refetch)}
                     >
                       <Add />
                       Request
@@ -174,21 +173,21 @@ class Dashboard extends React.Component {
                       width: '100vw',
                       alignItems: 'center',
                       padding: 20,
-                      boxSizing: 'border-box'
+                      boxSizing: 'border-box',
                     }}
                     open={this.state.show}
-                    onClose={e => this.close(e, refetch)}
+                    onClose={(e) => this.close(e, refetch)}
                   >
                     <RequestCourse close={this.close} refetch={refetch} />
                   </Modal>
                 </>
-              )
+              );
             }}
           </Query>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default withStyles(styles)(withRouter(Dashboard))
+export default withStyles(createStyles(styles))(withRouter(Dashboard));

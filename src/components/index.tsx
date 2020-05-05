@@ -21,3 +21,5 @@ export * from './ProblemDisplay';
 export * from './Problems';
 export * from './ThemeWrapper';
 export * from './RouteHandler';
+export * from './CampusTable';
+export * from './CourseTable';

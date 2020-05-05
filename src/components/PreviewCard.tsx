@@ -63,7 +63,9 @@ export function PreviewCard({
           <Grid item md={6}>
             <Paper
               className={classes.paper}
-              style={{ backgroundColor: answer == 'a' && green[400] }}
+              style={{
+                backgroundColor: answer == 'a' ? green[400] : undefined,
+              }}
             >
               <Latex>{a == '' ? 'Option A' : a}</Latex>
             </Paper>
@@ -71,7 +73,9 @@ export function PreviewCard({
           <Grid item md={6}>
             <Paper
               className={classes.paper}
-              style={{ backgroundColor: answer == 'b' && green[400] }}
+              style={{
+                backgroundColor: answer == 'b' ? green[400] : undefined,
+              }}
             >
               <Latex>{b == '' ? 'Option B' : b}</Latex>
             </Paper>
@@ -79,7 +83,9 @@ export function PreviewCard({
           <Grid item md={6}>
             <Paper
               className={classes.paper}
-              style={{ backgroundColor: answer == 'c' && green[400] }}
+              style={{
+                backgroundColor: answer == 'c' ? green[400] : undefined,
+              }}
             >
               <Latex>{c == '' ? 'Option C' : c}</Latex>
             </Paper>
@@ -87,7 +93,9 @@ export function PreviewCard({
           <Grid item md={6}>
             <Paper
               className={classes.paper}
-              style={{ backgroundColor: answer == 'd' && green[400] }}
+              style={{
+                backgroundColor: answer == 'd' ? green[400] : undefined,
+              }}
             >
               <Latex>{d == '' ? 'Option D' : d}</Latex>
             </Paper>

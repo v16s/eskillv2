@@ -1,18 +1,18 @@
-import React from 'react'
-import gql from 'graphql-tag'
-import { graphql } from '@apollo/react-hoc'
-import { compose } from 'recompose'
-import { withStyles } from '@material-ui/styles'
-import { Grid, LinearProgress, IconButton, Button } from '@material-ui/core'
-import { DeleteForever } from '@material-ui/icons'
-import { AcceptRejectTable } from '../../components'
-const styles = theme => ({
+import React from 'react';
+import gql from 'graphql-tag';
+import { graphql } from '@apollo/react-hoc';
+import { compose } from 'recompose';
+import { withStyles } from '@material-ui/styles';
+import { Grid, LinearProgress, IconButton, Button } from '@material-ui/core';
+import { DeleteForever } from '@material-ui/icons';
+import { AcceptRejectTable } from '../../components';
+const styles = (theme) => ({
   root: {
     display: 'flex',
     color: theme.palette.text.primary,
-    padding: '30px'
-  }
-})
+    padding: '30px',
+  },
+});
 const REQUESTS = gql`
   query AcceptReject {
     acceptReject {
@@ -21,38 +21,38 @@ const REQUESTS = gql`
       studentName
     }
   }
-`
+`;
 const ACCEPT = gql`
   mutation($id: String!) {
     acceptCourseInstance(id: $id) {
       id
     }
   }
-`
+`;
 const REJECT = gql`
   mutation($id: String!) {
     rejectCourseInstance(id: $id) {
       id
     }
   }
-`
-class Dashboard extends React.Component {
-  state = {
-    show: false
-  }
+`;
+class Dashboard extends React.Component<any, any> {
+  state: any = {
+    show: false,
+  };
   close = () => {
-    this.setState({ show: !this.state.show })
-  }
+    this.setState({ show: !this.state.show });
+  };
   action = (type, id) => {
     if (type) {
-      this.props.accept({ variables: { id } })
+      this.props.accept({ variables: { id } });
     } else {
-      this.props.reject({ variables: { id } })
+      this.props.reject({ variables: { id } });
     }
-    this.props.data.refetch()
-  }
-  render () {
-    const { classes, data } = this.props
+    this.props.data.refetch();
+  };
+  render() {
+    const { classes, data } = this.props;
 
     return (
       <div className={classes.root}>
@@ -63,16 +63,16 @@ class Dashboard extends React.Component {
               { title: 'Name', field: 'studentName' },
               {
                 title: 'Action',
-                render: rowData => (
+                render: (rowData) => (
                   <div>
                     <Button
                       size='small'
                       variant='contained'
                       color='secondary'
                       style={{
-                        marginRight: 5
+                        marginRight: 5,
                       }}
-                      onClick={e => this.action(false, rowData.id)}
+                      onClick={(e) => this.action(false, rowData.id)}
                     >
                       Reject
                     </Button>
@@ -80,19 +80,19 @@ class Dashboard extends React.Component {
                       size='small'
                       variant='contained'
                       color='primary'
-                      onClick={e => this.action(true, rowData.id)}
+                      onClick={(e) => this.action(true, rowData.id)}
                     >
                       Accept
                     </Button>
                   </div>
-                )
-              }
+                ),
+              },
             ]}
             data={data.acceptReject || []}
           />
         </Grid>
       </div>
-    )
+    );
   }
 }
 
@@ -100,4 +100,4 @@ export default compose(
   graphql(REQUESTS),
   graphql(ACCEPT, { name: 'accept' }),
   graphql(REJECT, { name: 'reject' })
-)(withStyles(styles)(Dashboard))
+)(withStyles(styles)(Dashboard));

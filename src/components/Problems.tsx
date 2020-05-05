@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { graphql } from "@apollo/react-hoc";
-import gql from "graphql-tag";
-import { withStyles } from "@material-ui/styles";
-import { ProblemDisplay } from "../components";
+import React, { Component } from 'react';
+import { graphql } from '@apollo/react-hoc';
+import gql from 'graphql-tag';
+import { withStyles, createStyles } from '@material-ui/styles';
+import { ProblemDisplay } from '../components';
 const PROBLEMS = gql`
   {
     problems {
@@ -17,11 +17,11 @@ const PROBLEMS = gql`
 const styles = (theme) => ({
   root: {
     color: theme.palette.text.primary,
-    padding: "30px",
+    padding: '30px',
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    flexBasis: "33.33%",
+    flexBasis: '33.33%',
     flexShrink: 0,
   },
   secondaryHeading: {
@@ -30,13 +30,13 @@ const styles = (theme) => ({
   },
   expansionPanel: {
     backgroundColor:
-      theme.palette.type == "dark"
+      theme.palette.type == 'dark'
         ? theme.palette.grey[700]
         : theme.palette.grey[200],
   },
 });
 
-class Problems extends Component {
+class Problems extends Component<any, any> {
   render() {
     const { classes, data } = this.props;
     const { loading, problems, refetch } = data;
@@ -59,6 +59,6 @@ class Problems extends Component {
     );
   }
 }
-Problems = graphql(PROBLEMS)(Problems);
-Problems = withStyles(styles)(Problems);
-export { Problems };
+const GraphqlProblems = graphql(PROBLEMS)(Problems);
+const FinalProblems = withStyles(createStyles(styles))(GraphqlProblems);
+export { FinalProblems as Problems };

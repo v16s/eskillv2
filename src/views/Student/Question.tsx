@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { Modal } from '@material-ui/core'
-import { withStyles } from '@material-ui/styles'
-import { red, green } from '@material-ui/core/colors'
-import gql from 'graphql-tag'
-import { Query } from '@apollo/react-components'
-import { ReportProblem, Loading, QuestionView } from '../../components'
-import { withRouter } from 'react-router-dom'
+import React, { Component } from 'react';
+import { Modal } from '@material-ui/core';
+import { withStyles, createStyles } from '@material-ui/styles';
+import { red, green } from '@material-ui/core/colors';
+import gql from 'graphql-tag';
+import { Query } from '@apollo/react-components';
+import { ReportProblem, Loading, QuestionView } from '../../components';
+import { withRouter } from 'react-router-dom';
 
 const styles = ({ palette }) => ({
   griditem: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   appBar: {
     backgroundColor: 'transparent',
@@ -19,60 +19,60 @@ const styles = ({ palette }) => ({
     border: 'none',
     display: 'flex',
     justifyContent: 'space-between',
-    width: '100%'
+    width: '100%',
   },
   paper: {
-    margin: '20px 0'
+    margin: '20px 0',
   },
   danger: {
     color: '#fff',
     backgroundColor: red[500],
     '&:hover': {
-      backgroundColor: red[600]
-    }
+      backgroundColor: red[600],
+    },
   },
   answer: {
     display: 'flex',
     flexDirection: 'row',
-    margin: '5px 0'
+    margin: '5px 0',
   },
   radioWrap: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: '100%'
+    height: '100%',
   },
   radiopaper: {
     flexGrow: '1',
     marginLeft: '15px',
-    padding: '10px'
+    padding: '10px',
   },
   grey: {
     backgroundColor:
-      palette.type == 'dark' ? palette.grey[700] : palette.grey[200]
+      palette.type == 'dark' ? palette.grey[700] : palette.grey[200],
   },
   green: {
     backgroundColor: green[400],
     '&:checked': {
       '&:disabled': {
-        color: green[400]
+        color: green[400],
       },
-      color: green[400]
-    }
+      color: green[400],
+    },
   },
   primary: {
-    backgroundColor: palette.primary.main
+    backgroundColor: palette.primary.main,
   },
   red: {
     backgroundColor: red[400],
     '&:checked': {
       '&:disabled': {
-        color: red[400]
+        color: red[400],
       },
-      color: red[400]
-    }
-  }
-})
+      color: red[400],
+    },
+  },
+});
 
 const QUESTION = gql`
   query Question($id: String!, $cid: String!) {
@@ -97,16 +97,16 @@ const QUESTION = gql`
       }
     }
   }
-`
+`;
 
-class Question extends Component {
-  state = { open: false }
+class Question extends Component<any, any> {
+  state: any = { open: false };
   close = () => {
-    this.setState({ open: !this.state.open })
-  }
+    this.setState({ open: !this.state.open });
+  };
 
-  render () {
-    let { classes, match } = this.props
+  render() {
+    let { classes, match } = this.props;
     return (
       <div>
         <Query
@@ -122,19 +122,19 @@ class Question extends Component {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    minHeight: '600px'
+                    minHeight: '600px',
                   }}
                 >
-                  <Loading />
+                  <Loading color='#1187ee' />
                 </div>
-              )
+              );
             }
             const position = data.instance.questions.findIndex(
-              d => d.id == match.params.question
-            )
-            const current = data.instance.questions[position]
+              (d) => d.id == match.params.question
+            );
+            const current = data.instance.questions[position];
 
-            const last = data.instance.questions.length - 1
+            const last = data.instance.questions.length - 1;
             return (
               <QuestionView
                 question={match.params.question}
@@ -149,7 +149,7 @@ class Question extends Component {
                 ans={data.instance.questions[position].ans}
                 status={data.instance.questions[position].status}
               />
-            )
+            );
           }}
         </Query>
 
@@ -162,7 +162,7 @@ class Question extends Component {
             width: '100vw',
             alignItems: 'center',
             padding: 20,
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
           }}
           open={this.state.open}
           onClose={this.close}
@@ -174,8 +174,8 @@ class Question extends Component {
           />
         </Modal>
       </div>
-    )
+    );
   }
 }
 
-export default withRouter(withStyles(styles)(Question))
+export default withRouter(withStyles(createStyles(styles))(Question));

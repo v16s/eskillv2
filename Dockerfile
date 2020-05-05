@@ -4,7 +4,7 @@ ADD ./ /app
 ENV PARCEL_WORKERS 1
 RUN yarn
 ENV NODE_ENV production
-RUN yarn fbuild
-RUN rm -rf build && rm -rf frontend && mv ./dist ./build
+RUN yarn build
+RUN rm -rf frontend
 EXPOSE 6000
 CMD yarn serve

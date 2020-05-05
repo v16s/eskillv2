@@ -1,10 +1,20 @@
-import React from 'react'
-import { Table, RegisterControl } from '../../components'
-import gql from 'graphql-tag'
-import { Switch } from '@material-ui/core'
-import { graphql } from '@apollo/react-hoc'
-import { compose } from 'recompose'
+import React from 'react';
+import { CourseTable, RegisterControl, CampusTable } from '../../components';
+import gql from 'graphql-tag';
+import * as mutations from './mutations';
+import { useQuery } from '@apollo/react-hooks';
 
+const COURSES = gql`
+  {
+    courses {
+      branch
+      name
+      coordinator_id
+      automated
+      campus
+    }
+  }
+`;
 const CAMPUSES = gql`
   {
     campuses {
@@ -16,173 +26,69 @@ const CAMPUSES = gql`
       name
     }
   }
-`
-const COURSES = gql`
-  {
-    courses {
-      branch
-      name
-      coordinator_id
-      automated
-    }
-  }
-`
+`;
 
-const ADD_DEPARTMENT = gql`
-  mutation AddDepartment($name: String!, $id: String!, $tname: String!) {
-    addDepartment(name: $name, tag: { id: $id, name: $tname }) {
-      name
-    }
+const VERIFY = gql`
+  mutation {
+    reverify
   }
-`
-const UPDATE_DEPARTMENT = gql`
-  mutation UpdateDepartment($name: String!, $prev: String!, $next: String!) {
-    updateDepartment(
-      name: $name
-      update: {
-        where: { id: $prev, name: $prev }
-        data: { id: $next, name: $next }
-      }
-    ) {
-      name
-    }
-  }
-`
-const REMOVE_DEPARTMENT = gql`
-  mutation RemoveDepartment($name: String!, $deptname: String!) {
-    removeDepartment(name: $name, id: $deptname) {
-      name
-    }
-  }
-`
-const UPDATE_CAMPUS = gql`
-  mutation UpdateCampus($name: String!, $newName: String!) {
-    updateOwnCampus(name: $name, newName: $newName) {
-      name
-    }
-  }
-`
+`;
 
-const ADD_COURSE = gql`
-  mutation AddCourse($name: String!, $branch: String!) {
-    campusAddCourse(name: $name, branch: $branch) {
-      name
-    }
+const DANGEROUS__REMOVE_ALL_INSTANCES = gql`
+  mutation {
+    adminDeleteAllCourseInstances__DANGEROUS
   }
-`
-const TOGGLE = gql`
-  mutation ToggleAutomate($name: String!) {
-    toggleCourseAutomation(name: $name) {
-      name
-    }
-  }
-`
-const UPDATE_COURSE = gql`
-  mutation UpdateCourse(
-    $name: String!
-    $newName: String!
-    $branch: String!
-    $newBranch: String!
-  ) {
-    campusUpdateCourse(
-      name: $name
-      newName: $newName
-      branch: $branch
-      newBranch: $newBranch
-    ) {
-      name
-    }
-  }
-`
-const REMOVE_COURSE = gql`
-  mutation RemoveCourse($name: String!) {
-    campusRemoveCourse(name: $name) {
-      name
-    }
-  }
-`
+`;
 
-const CampusTable = compose(
-  graphql(CAMPUSES),
-  graphql(UPDATE_CAMPUS, { name: 'updateOutside' }),
-  graphql(ADD_DEPARTMENT, { name: 'addInside' }),
-  graphql(REMOVE_DEPARTMENT, { name: 'removeInside' }),
-  graphql(UPDATE_DEPARTMENT, { name: 'updateInside' })
-)(Table)
-const CourseTable = compose(
-  graphql(COURSES),
-  graphql(ADD_COURSE, { name: 'addOutside' }),
-  graphql(REMOVE_COURSE, { name: 'removeOutside' }),
-  graphql(UPDATE_COURSE, { name: 'updateOutside' })
-)(Table)
-class Dashboard extends React.Component {
-  render () {
-    return (
-      <div>
-        <RegisterControl />
-        <div
-          style={{
-            display: 'flex'
-          }}
-        >
-          <div style={{ width: '50%', padding: '20px' }}>
-            <CampusTable
-              columns={[
-                { title: 'Name', field: 'name' },
-                { title: 'Admin ID', field: 'admin_id', editable: 'never' }
-              ]}
-              inside='departments'
-              title='Campus'
-              name='campuses'
-              insideTitle='Departments'
-              uneditable={false}
-            />
-          </div>
-          <div style={{ width: '50%', padding: '20px' }}>
-            <CourseTable
-              columns={[
-                { title: 'Name', field: 'name' },
-                {
-                  title: 'Coordinator ID',
-                  field: 'coordinator_id',
-                  editable: 'never'
-                },
-                { title: 'Branch', field: 'branch' },
-                {
-                  title: 'Automated',
-                  render: rowdata => {
-                    if (rowdata != undefined) {
-                      const { automated, refetch, name } = rowdata
-                      return (
-                        <Switch
-                          checked={automated}
-                          onChange={() => {
-                            this.props
-                              .mutate({ variables: { name } })
-                              .then(data => {
-                                refetch()
-                              })
-                          }}
-                          value='faculty'
-                          color='primary'
-                        />
-                      )
-                    }
-                    return ''
-                  },
-                  editable: 'never'
-                }
-              ]}
-              title='Course'
-              name='courses'
-              isCourse
-              uneditable={false}
-            />
-          </div>
+const Dashboard: React.FC = () => {
+  const {
+    data: courses,
+    loading: coursesLoading,
+    refetch: coursesRefetch,
+  } = useQuery(COURSES);
+  const {
+    data: campuses,
+    loading: campusesLoading,
+    refetch: campusesRefetch,
+  } = useQuery(CAMPUSES);
+
+  return (
+    <div>
+      <RegisterControl />
+      <div
+        style={{
+          display: 'flex',
+        }}
+      >
+        <div style={{ width: '50%', padding: '20px' }}>
+          <CampusTable
+            uneditable
+            ADD={null}
+            UPDATE={null}
+            REMOVE={null}
+            ADD_INNER={mutations.ADD_DEPARTMENT}
+            UPDATE_INNER={mutations.UPDATE_DEPARTMENT}
+            REMOVE_INNER={mutations.REMOVE_DEPARTMENT}
+            variableMapper={mutations.variableMapperCampus}
+            data={campuses?.campuses}
+            refetch={campusesRefetch}
+            loading={campusesLoading}
+          />
+        </div>
+        <div style={{ width: '50%', padding: '20px' }}>
+          <CourseTable
+            data={courses?.courses}
+            refetch={coursesRefetch}
+            loading={coursesLoading}
+            ADD={mutations.ADD_COURSE}
+            REMOVE={mutations.REMOVE_COURSE}
+            UPDATE={mutations.UPDATE_COURSE}
+            TOGGLE={mutations.TOGGLE}
+            variableMapper={mutations.variableMapperCourse}
+          />
         </div>
       </div>
-    )
-  }
-}
-
-export default graphql(TOGGLE)(Dashboard)
+    </div>
+  );
+};
+export default Dashboard;

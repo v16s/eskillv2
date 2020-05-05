@@ -1,50 +1,50 @@
-import React from 'react'
-import gql from 'graphql-tag'
-import { graphql, withApollo } from '@apollo/react-hoc'
-import { compose } from 'recompose'
-import { Query } from '@apollo/react-components'
-import { withStyles } from '@material-ui/styles'
-import { Grid, LinearProgress, Paper, Button } from '@material-ui/core'
+import React from 'react';
+import gql from 'graphql-tag';
+import { graphql, withApollo } from '@apollo/react-hoc';
+import { compose } from 'recompose';
+import { Query } from '@apollo/react-components';
+import { withStyles, createStyles } from '@material-ui/styles';
+import { Grid, LinearProgress, Paper, Button } from '@material-ui/core';
 import {
   StudentProgressTable,
   Dropdown,
   Document,
-  DocumentAll
-} from '../../components'
-import { PDFDownloadLink } from '@react-pdf/renderer'
-import { withRouter } from 'react-router-dom'
-import { groupBy } from 'lodash'
+  DocumentAll,
+} from '../../components';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { withRouter } from 'react-router-dom';
+import { groupBy } from 'lodash';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     display: 'flex',
     color: theme.palette.text.primary,
-    padding: '30px'
+    padding: '30px',
   },
   outer: {
     display: 'flex',
     flexDirection: 'column',
-    minWidth: '60%'
+    minWidth: '60%',
   },
   paper: {
     padding: 10,
-    marginBottom: 20
-  }
-})
+    marginBottom: 20,
+  },
+});
 const BRANCHES = gql`
   query Branches {
     branches {
       name
     }
   }
-`
+`;
 const COURSES = gql`
   query Courses($name: String, $branch: String) {
     courses(where: { name: $name, branch: $branch }) {
       name
     }
   }
-`
+`;
 const PROGRESS = gql`
   query Progress($where: CourseInstanceWhereInput!) {
     progress(where: $where) {
@@ -56,7 +56,7 @@ const PROGRESS = gql`
       course
     }
   }
-`
+`;
 
 const FACULTIES = gql`
   query Faculties($where: FacultyWhereInput) {
@@ -66,46 +66,46 @@ const FACULTIES = gql`
       username
     }
   }
-`
-class Progress extends React.Component {
-  state = {
+`;
+class Progress extends React.Component<any, any> {
+  state: any = {
     show: false,
     courses: [],
     faculties: [],
     where: {
       course: {
         label: 'All',
-        value: 'All'
+        value: 'All',
       },
       faculty: {
         label: 'All',
-        value: 'All'
-      }
-    }
-  }
+        value: 'All',
+      },
+    },
+  };
   close = () => {
-    this.setState({ show: !this.state.show })
-  }
-  componentDidMount () {
-    let { client } = this.props
-    let newstate = this.state
+    this.setState({ show: !this.state.show });
+  };
+  componentDidMount() {
+    let { client } = this.props;
+    let newstate = this.state;
     client.query({ query: FACULTIES }).then(({ data }) => {
-      newstate.faculties = data.faculties
-      this.setState(newstate)
-    })
+      newstate.faculties = data.faculties;
+      this.setState(newstate);
+    });
   }
 
-  render () {
-    const { classes } = this.props
+  render() {
+    const { classes } = this.props;
 
     const faculties = [
-      ...this.state.faculties.map(d => ({
+      ...this.state.faculties.map((d: any) => ({
         label: `${d.username} - ${d.name}`,
-        value: d.id
+        value: d.id,
       })),
-      { label: 'All', value: 'All' }
-    ]
-    let { where } = this.state
+      { label: 'All', value: 'All' },
+    ];
+    let { where } = this.state;
     return (
       <div className={classes.root}>
         <Grid
@@ -117,7 +117,6 @@ class Progress extends React.Component {
             <Paper className={classes.paper}>
               <Dropdown
                 options={faculties}
-                onChange={this.onDropdownChange}
                 label='Faculty'
                 name='faculty'
                 value={this.state.where.faculty}
@@ -130,15 +129,15 @@ class Progress extends React.Component {
                   facultyID:
                     where.faculty.value != 'All'
                       ? where.faculty.value
-                      : undefined
-                }
+                      : undefined,
+                },
               }}
               fetchPolicy='network-only'
             >
-              {({ data, loading, error }) => {
-                console.log(data, error)
+              {({ data, loading, error }: any) => {
+                console.log(data, error);
                 if (loading) {
-                  return null
+                  return null;
                 } else {
                   return (
                     <>
@@ -149,13 +148,13 @@ class Progress extends React.Component {
                             <Document
                               data={
                                 data.progress
-                                  ? data.progress.map(d => ({
+                                  ? data.progress.map((d: any) => ({
                                       regNumber: d.studentReg,
                                       name: d.studentName,
-                                      percentage: parseInt(
-                                        (parseFloat(d.completed) * 100.0) /
-                                          parseFloat(d.total)
-                                      ).toString()
+                                      percentage: (
+                                        (Number(d.completed) * 100.0) /
+                                        Number(d.total)
+                                      ).toFixed(0),
                                     }))
                                   : []
                               }
@@ -164,19 +163,19 @@ class Progress extends React.Component {
                           }
                           fileName='report.pdf'
                         >
-                          {({ blob, url, loading, error }) =>
+                          {({ blob, url, loading, error }: any) =>
                             loading ? (
                               'Loading document...'
                             ) : (
                               <Button
                                 color='primary'
                                 variant='contained'
-                                onClick={e => {
-                                  window.location.href = url
+                                onClick={(e) => {
+                                  window.location.href = url;
                                 }}
                                 style={{
                                   width: '100%',
-                                  flexGrow: 1
+                                  flexGrow: 1,
                                 }}
                               >
                                 Print
@@ -192,16 +191,16 @@ class Progress extends React.Component {
                               data={
                                 data.progress
                                   ? groupBy(
-                                      data.progress.map(d => ({
+                                      data.progress.map((d: any) => ({
                                         regNumber: d.studentReg,
                                         name: d.studentName,
-                                        percentage: parseInt(
-                                          (parseFloat(d.completed) * 100.0) /
-                                            parseFloat(d.total)
-                                        ).toString(),
-                                        course: d.course
+                                        percentage: (
+                                          (Number(d.completed) * 100.0) /
+                                          Number(d.total)
+                                        ).toFixed(0),
+                                        course: d.course,
                                       })),
-                                      d => d.course
+                                      (d) => d.course
                                     )
                                   : []
                               }
@@ -209,19 +208,19 @@ class Progress extends React.Component {
                           }
                           fileName='report.pdf'
                         >
-                          {({ blob, url, loading, error }) =>
+                          {({ blob, url, loading, error }: any) =>
                             loading ? (
                               'Loading document...'
                             ) : (
                               <Button
                                 color='primary'
                                 variant='contained'
-                                onClick={e => {
-                                  window.location.href = url
+                                onClick={(e) => {
+                                  window.location.href = url;
                                 }}
                                 style={{
                                   width: '100%',
-                                  flexGrow: 1
+                                  flexGrow: 1,
                                 }}
                               >
                                 Print All
@@ -237,49 +236,51 @@ class Progress extends React.Component {
                           { title: 'Name', field: 'studentName' },
                           {
                             title: 'Progress',
-                            render: args => {
-                              const { completed, total } = args
+                            render: (args) => {
+                              const { completed, total } = args;
                               return (
                                 <LinearProgress
                                   variant='determinate'
-                                  value={parseInt(
-                                    (parseFloat(completed) * 100.0) /
-                                      parseFloat(total)
-                                  )}
+                                  value={
+                                    (Number(completed) * 100.0) / Number(total)
+                                  }
                                 />
-                              )
-                            }
+                              );
+                            },
                           },
                           {
                             title: 'Course',
-                            field: 'course'
+                            field: 'course',
                           },
                           {
                             title: '%',
                             render: ({ completed, total }) =>
-                              `${parseInt(
-                                (parseFloat(completed) * 100.0) /
-                                  parseFloat(total)
-                              )}`
-                          }
+                              `${(
+                                (Number(completed) * 100.0) /
+                                Number(total)
+                              ).toFixed(0)}`,
+                          },
                         ]}
                         data={(data && data.progress) || []}
                       />
                     </>
-                  )
+                  );
                 }
               }}
             </Query>
           </div>
         </Grid>
       </div>
-    )
+    );
   }
 }
 
 export default withRouter(
   compose(
     withApollo,
-    graphql(BRANCHES, { name: 'branchQuery', fetchOptions: 'network-only' })
-  )(withStyles(styles)(Progress))
-)
+    graphql(BRANCHES, {
+      name: 'branchQuery',
+      options: { fetchPolicy: 'network-only' },
+    })
+  )(withStyles(createStyles(styles))(Progress))
+);

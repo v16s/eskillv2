@@ -46,7 +46,7 @@ const RESET = gql`
 
 export default ({ noshadow }) => {
   const [reset, { data }] = useMutation(RESET);
-  const [error, setError] = React.useState();
+  const [error, setError] = React.useState<string | null>(null);
   const [values, handleChange] = React.useReducer(
     (_values, e) => ({ ..._values, [e.target.name]: e.target.value }),
     { username: '', password: '', confirm: '' }

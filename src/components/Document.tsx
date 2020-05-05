@@ -1,49 +1,49 @@
-import React from 'react'
-import { Page, Text, Document, StyleSheet } from '@react-pdf/renderer'
+import React from 'react';
+import { Page, Text, Document, StyleSheet } from '@react-pdf/renderer';
 import {
   Table,
   TableHeader,
   TableCell,
   TableBody,
-  DataTableCell
-} from '@david.kucsai/react-pdf-table'
+  DataTableCell,
+} from '@david.kucsai/react-pdf-table';
 
 // Create styles
 const styles = StyleSheet.create({
   body: {
     paddingTop: 35,
     paddingBottom: 65,
-    paddingHorizontal: 35
+    paddingHorizontal: 35,
   },
   title: {
     fontSize: 24,
     textAlign: 'center',
-    marginBottom: 35
+    marginBottom: 35,
   },
   author: {
     fontSize: 12,
     textAlign: 'right',
-    color: '#666'
+    color: '#666',
   },
   subtitle: {
     fontSize: 18,
-    margin: 12
+    margin: 12,
   },
   text: {
     margin: 12,
     fontSize: 14,
     textAlign: 'justify',
-    fontFamily: 'Times-Roman'
+    fontFamily: 'Times-Roman',
   },
   image: {
     marginVertical: 15,
-    marginHorizontal: 100
+    marginHorizontal: 100,
   },
   header: {
     fontSize: 12,
     marginBottom: 20,
     textAlign: 'center',
-    color: 'grey'
+    color: 'grey',
   },
   pageNumber: {
     position: 'absolute',
@@ -52,12 +52,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: 'center',
-    color: 'grey'
-  }
-})
+    color: 'grey',
+  },
+});
 
 // Create Document Component
-const DocumentBase = ({ data, faculty, department, course }) => {
+const DocumentBase: React.FC<{
+  data: any;
+  faculty?: any;
+  department?: any;
+  course?: any;
+}> = ({ data, faculty, department, course }) => {
   return (
     <Document>
       <Page style={styles.body}>
@@ -76,13 +81,13 @@ const DocumentBase = ({ data, faculty, department, course }) => {
             <TableCell>Percentage Completed</TableCell>
           </TableHeader>
           <TableBody>
-            <DataTableCell getContent={r => r.regNumber} />
-            <DataTableCell getContent={r => r.name} />
-            <DataTableCell getContent={r => r.percentage} />
+            <DataTableCell getContent={(r) => r.regNumber} />
+            <DataTableCell getContent={(r) => r.name} />
+            <DataTableCell getContent={(r) => r.percentage} />
           </TableBody>
         </Table>
       </Page>
     </Document>
-  )
-}
-export { DocumentBase as Document }
+  );
+};
+export { DocumentBase as Document };

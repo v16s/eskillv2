@@ -158,7 +158,7 @@ export const QuestionView = ({
                 checked={answer === 'a'}
                 onClick={(e) => {
                   handleRadioChange(
-                    e.currentTarget.querySelector('input').value
+                    e.currentTarget.querySelector('input')?.value
                   );
                 }}
                 value='a'
@@ -182,7 +182,7 @@ export const QuestionView = ({
                 checked={answer === 'b'}
                 onClick={(e) => {
                   handleRadioChange(
-                    e.currentTarget.querySelector('input').value
+                    e.currentTarget.querySelector('input')?.value
                   );
                 }}
                 value='b'
@@ -205,7 +205,7 @@ export const QuestionView = ({
                 checked={answer === 'c'}
                 onClick={(e) => {
                   handleRadioChange(
-                    e.currentTarget.querySelector('input').value
+                    e.currentTarget.querySelector('input')?.value
                   );
                 }}
                 value='c'
@@ -228,7 +228,7 @@ export const QuestionView = ({
                 checked={answer === 'd'}
                 onClick={(e) => {
                   handleRadioChange(
-                    e.currentTarget.querySelector('input').value
+                    e.currentTarget.querySelector('input')?.value
                   );
                 }}
                 value='d'

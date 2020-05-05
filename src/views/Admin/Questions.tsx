@@ -175,7 +175,6 @@ const Questions: React.FC = () => {
     },
   ];
 
-  
   return (
     <div>
       <div
@@ -202,17 +201,16 @@ const Questions: React.FC = () => {
             value={selectedCourse}
           />
           <div className={classes.padded}>
-            {questionQueryCalled && questionQueryData?.questions.length > 0 && (
+            {/* {questionQueryCalled && questionQueryData?.questions.length > 0 && (
               <Table
                 data={questionQueryData?.questions}
                 columns={columns}
-                table='questions'
                 title={selectedCourse.value}
                 style={{ boxShadow: 'none' }}
                 uneditable
                 onRowClick={editQuestion}
               />
-            )}
+            )} */}
           </div>
           {!newModal && (
             <Fab
