@@ -8,6 +8,11 @@ Repository is undergoing a long overdue refactor that aims to do the following:
 - Use Hooks and Functional Components
 - Eliminate long compile times and useless dependancies
 
+### Todos
+
+- Fix CourseTable functionality
+- ~~Fix CampusTable functionality~~
+
 ### Components that need to be refactored
 
 - ~~./src/index.tsx~~

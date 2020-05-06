@@ -97,6 +97,7 @@ const Dashboard: React.FC = () => {
             UPDATE_INNER={mutations.UPDATE_DEPARTMENT}
             REMOVE_INNER={mutations.REMOVE_DEPARTMENT}
             variableMapper={mutations.variableMapperCampus}
+            variableMapperInner={mutations.variableMapperDepartment}
             data={campuses?.campuses}
             refetch={campusesRefetch}
             loading={campusesLoading}

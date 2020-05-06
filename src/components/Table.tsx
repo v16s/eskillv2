@@ -129,7 +129,7 @@ const TableBase: React.FC<{
       title={title}
       onRowClick={onRowClick}
       style={style}
-      editable={uneditable === false}
+      editable={!uneditable}
       body={{ editRow: { deleteText: `Remove the ${title}?` } }}
       detailPanel={inner && inner(refetch)}
     />

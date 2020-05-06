@@ -56,6 +56,7 @@ const TableList: React.FC<{
   editMutation: any;
   deleteMutation: any;
   variableMapper: VariableMapper;
+  name: string
 }> = ({
   data,
   refetch,
@@ -64,6 +65,7 @@ const TableList: React.FC<{
   editMutation,
   variableMapper,
   deleteMutation,
+  name
 }) => {
   // Hooks
 
@@ -97,7 +99,7 @@ const TableList: React.FC<{
     setEditing(index);
   }
   function finish(prevValue) {
-    editCaller(variableMapper.edit(prevValue, value));
+    editCaller(variableMapper.edit({id: prevValue, name}, value));
     setEditing(-1);
     setValue('');
   }
@@ -105,12 +107,12 @@ const TableList: React.FC<{
     setAdding(true);
   }
   function add() {
-    addCaller(variableMapper.add(value));
+    addCaller(variableMapper.add({name, tname: value, id: value}));
     setValue('');
     setAdding(false);
   }
   function del(value) {
-    deleteCaller(variableMapper.delete(value));
+    deleteCaller(variableMapper.delete({name, id: value}));
   }
 
   return (

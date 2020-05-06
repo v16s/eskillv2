@@ -14,10 +14,9 @@ export const CampusTable = ({
   UPDATE_INNER,
   REMOVE_INNER,
   variableMapper,
+  variableMapperInner,
   uneditable = false,
 }) => {
-  const [selected, setSelected] = React.useState('');
-  console.log(selected);
   return (
     <Table
       columns={[
@@ -33,23 +32,22 @@ export const CampusTable = ({
       uneditable={uneditable}
       refetch={refetch}
       loading={loading}
-      onRowClick={(_e, rowData) => {
-        setSelected(rowData.name);
-      }}
-      inner={
-        selected !== ''
-          ? (refetch) => (data) => (
+      
+      inner={(refetch) => (data) => {
+        console.log(data)
+            return(
               <List
+                name={data.name}
                 title='Departments'
-                data={data[selected].map((d) => d.name)}
+                data={data.departments.map((d) => d.name)}
                 refetch={refetch}
                 editMutation={UPDATE_INNER}
                 deleteMutation={REMOVE_INNER}
                 addMutation={ADD_INNER}
-                variableMapper={variableMapper}
+                variableMapper={variableMapperInner}
               ></List>
-            )
-          : null
+            )}
+       
       }
     ></Table>
   );

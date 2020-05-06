@@ -49,11 +49,13 @@ export const REMOVE_CAMPUS = gql`
   }
 `;
 export const variableMapperCampus = {
-  add: (data) => ({
+  add: (data) => {
+    console.log(data)
+    return({
     variables: {
       name: data.name,
     },
-  }),
+  })},
   edit: (prev, next) => ({
     variables: {
       name: prev.name,
@@ -66,7 +68,24 @@ export const variableMapperCampus = {
     },
   }),
 };
-
+export const variableMapperDepartment = {
+  add: (data) => ({
+    variables: data,
+  }),
+  edit: (prev, next) => ({
+    variables: {
+      name: prev.name,
+      next: next,
+      prev: prev.id
+    },
+  }),
+  delete: (data) => ({
+    variables: {
+      name: data.name,
+      deptname: data.id
+    },
+  }),
+};
 export const REMOVE_COURSE = gql`
   mutation RemoveCourse($name: String!, $campus: String!) {
     removeCourse(name: $name, campus: $campus) {
@@ -117,12 +136,13 @@ export const variableMapperCourse = {
       branch: data.branch,
     },
   }),
-  edit: (prev, next) => ({
+  edit: (prev, next) => 
+    ({
     variables: {
       name: prev.name,
       newName: next.name,
       branch: prev.branch,
-      newBranch: prev.newBranch,
+      newBranch: next.branch,
       campus: prev.campus,
     },
   }),

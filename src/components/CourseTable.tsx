@@ -54,7 +54,7 @@ export const CourseTable = ({
       deleteMutation={REMOVE}
       addMutation={ADD}
       variableMapper={variableMapper}
-      title='Campuses'
+      title='Courses'
     ></Table>
   );
 };
