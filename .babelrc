@@ -12,6 +12,7 @@
   ],
   "plugins": [
     ["@babel/plugin-proposal-class-properties", false, "class-props"],
-    ["@babel/proposal-object-rest-spread", false, "transform-rest-spread"]
+    ["@babel/proposal-object-rest-spread", false, "transform-rest-spread"],
+    ["@babel/plugin-proposal-optional-chaining", false, "optional-training"]
   ]
 }
